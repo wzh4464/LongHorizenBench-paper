@@ -1,0 +1,111 @@
+\section{User Interfaces}
+\label{sec:user_interfaces}
+
+The preceding sections described the agent's reasoning pipeline, tool ecosystem, and context management strategies. This section explores how these capabilities are surfaced to users. \name provides two distinct user interfaces (a terminal-based interactive UI and a web-based browser UI), and we examine the challenges of supporting multiple presentation modes, the abstraction that enables consistent agent behavior across interfaces, and lessons learned from maintaining dual-interface parity.
+
+\subsection{The Dual-Interface Design Challenge}
+\label{sec:dual_interface_challenge}
+
+Different users prefer different interaction modes. Terminal users want lightweight, keyboard-driven interfaces that integrate with existing workflows (scripts, SSH, tmux). Web users want rich visual interfaces with mouse interaction, remote access, and easier discoverability. Supporting both without duplicating agent logic requires a clean separation between agent execution and UI presentation.
+
+\paragraph{Design goal.} Single agent implementation, multiple presentation layers. Agent remains UI-agnostic; UIs implement common interface.
+
+\paragraph{Key challenge: Execution model mismatch.} Terminal and web have fundamentally different execution models:
+
+\begin{packeditemize}
+\item \textbf{Terminal:} Synchronous, single-user, can block on user input. Foreground process model natural for CLI.
+\item \textbf{Web:} Asynchronous, potentially multi-user, cannot block main thread. Event-driven model required.
+\end{packeditemize}
+
+This mismatch affects critical operations like approval workflows. Terminal can present modal dialog and block until user decides. Web must broadcast approval request, continue execution, and poll for resolution.
+
+\subsection{Shared Callback Abstraction}
+\label{sec:uicallback}
+
+\paragraph{Event protocol.} A callback interface separates agent execution from UI presentation:
+
+\begin{packeditemize}
+\item Stream assistant text to user
+\item Display tool invocations and results
+\item Show reasoning traces (when visible)
+\item Present error messages
+\item Request approval for dangerous operations
+\end{packeditemize}
+
+\textbf{Benefits of abstraction}:
+
+\begin{packeditemize}
+\item \textbf{Agent UI-agnostic:} Agent emits events without knowing rendering implementation. Same agent code serves terminal and web.
+\item \textbf{Testability:} Can test agent logic with mock UI implementation. No need for actual UI infrastructure in tests.
+\item \textbf{Extensibility:} New UI frontends can be added by implementing callback interface. No changes to agent layer required.
+\end{packeditemize}
+
+\paragraph{Handling execution model differences.} While callback interface is shared, implementations differ to match execution model:
+
+\begin{packeditemize}
+\item \textbf{Terminal approval:} Modal dialog with blocking semantics. User must respond before execution continues. Natural for foreground process.
+\item \textbf{Web approval:} WebSocket broadcast to client, polling for resolution. Agent continues in background thread, periodically checking for user decision. Matches asynchronous web execution.
+\end{packeditemize}
+
+\textbf{Key insight}: Same approval semantics (request, wait, resolve), different implementation mechanisms. Abstraction hides difference from agent.
+
+\subsection{Terminal Interface Design}
+\label{sec:tui}
+
+The terminal interface provides a rich interactive experience within the terminal environment:
+
+\paragraph{Component organization.}
+\begin{packeditemize}
+\item Main application managing layout and widget lifecycle
+\item Scrollable message display with syntax highlighting and markdown rendering
+\item Input area with command autocomplete and history navigation
+\item Status bar showing current mode, model, and token usage
+\item Real-time progress tracking for multi-step agent operations
+\end{packeditemize}
+
+\paragraph{Interactive features.}
+\begin{packeditemize}
+\item \textbf{Command discovery:} Slash command prefix triggers autocomplete for available commands (mode switching, undo, clear, etc.)
+\item \textbf{Blocking approval:} When agent requests approval, present inline modal dialog. Execution blocks until user decides.
+\item \textbf{Nested visualization:} Parallel subagent outputs displayed in separate visual panels, tracking concurrent execution.
+\item \textbf{Dynamic configuration:} Interactive dialogs for switching models and modes without leaving interface.
+\item \textbf{External tool inspection:} Dedicated panel for viewing connected external servers and their capabilities.
+\end{packeditemize}
+
+The terminal UI is lightweight, scriptable, works over SSH, integrates with existing terminal workflows (tmux, screen), and has fast startup.
+
+\subsection{Web Interface Design}
+\label{sec:webui}
+
+The web interface provides a browser-based alternative with different interaction affordances:
+
+\paragraph{Server architecture.}
+\begin{packeditemize}
+\item Web framework serving static files and API endpoints
+\item WebSocket protocol for bidirectional real-time communication
+\item Event broadcaster for tool calls and results
+\item Agent execution bridge running in background thread
+\end{packeditemize}
+
+\paragraph{Key features.}
+\begin{packeditemize}
+\item \textbf{Real-time streaming:} Assistant responses and tool results stream to browser via WebSocket. Immediate visual feedback.
+\item \textbf{Asynchronous approval:} Broadcast approval requests as interactive web dialogs. Agent polls for resolution without blocking main thread.
+\item \textbf{Automatic port discovery:} Handle port allocation and discovery for seamless startup.
+\item \textbf{Session continuity:} Share session management with terminal. Enable cross-interface resumption - start in terminal, continue in web.
+\end{packeditemize}
+
+The web UI offers rich visual affordances, easier discoverability through mouse interaction, remote access without SSH, and shareable URLs.
+
+\subsection{Shared Patterns Across Interfaces}
+\label{sec:ui_components}
+
+Both interfaces adopt common architectural patterns:
+
+\begin{packeditemize}
+\item \textbf{Event-driven updates:} Subscribe to agent events via callback protocol. React to state changes without polling. Efficient and responsive.
+\item \textbf{Visual consistency:} Shared design tokens (colors, spacing) ensure consistent visual language despite different rendering technologies.
+\item \textbf{Structured logging:} Dedicated debug logging infrastructure captures UI events for troubleshooting without polluting user-visible output.
+\end{packeditemize}
+
+\paragraph{Design evolution.} The initial design embedded UI-specific code in agent logic, making testing difficult and preventing dual-interface support. Introducing the callback abstraction cleanly separated concerns: the same agent code now serves both UIs without modification. We initially tried to make approval workflows identical across interfaces but found that blocking (terminal) and polling (web) are fundamentally different execution models; embracing the difference rather than fighting it led to a cleaner design. Session storage was originally separate per interface; unifying it enabled cross-interface workflows where users can start a conversation in the terminal and continue in the browser.

@@ -1,0 +1,252 @@
+\section{Study Design}\label{sec:study-design}
+
+We design a controlled experiment to assess coding agent capabilities on
+real feature implementation tasks drawn from production repositories.
+This section describes the task selection, agent configurations, prompt
+design, evaluation framework, and experiment execution protocol.
+
+%% ------------------------------------------------------------------
+\subsection{Task Selection}\label{sec:tasks}
+
+We select 12 tasks from four open-source repositories that are actively
+maintained by Huawei and the broader community.  Each task corresponds
+to a merged pull request or commit that implements a complete feature or
+bug fix.  Table~\ref{tab:tasks} summarises the task registry.
+
+\begin{table}[t]
+  \caption{Task registry.  GT = ground truth (merged code).  Complexity
+    is classified by file count, cross-component coordination required,
+    and domain-specific knowledge.}
+  \label{tab:tasks}
+  \centering
+  \small
+  \begin{tabular}{llllrr}
+    \toprule
+    \textbf{ID} & \textbf{Repository} & \textbf{Complexity} & \textbf{Lang} & \textbf{GT Files} & \textbf{GT Lines} \\
+    \midrule
+    C1 & cann-ops-adv  & Low    & C++          &   1 &       3 \\
+    C2 & cann-ops      & Low    & C++          &   4 &       9 \\
+    M1 & MindSpeed     & Low    & Python       &   3 &      19 \\
+    K1 & kubernetes    & Low    & Go           &  13 &   1{,}010 \\
+    \midrule
+    C3 & torch\_npu    & Medium & Python       &   9 &     637 \\
+    C4 & cann-ops      & Medium & C++/AscendC  &  24 &   1{,}273 \\
+    M2 & MindSpeed     & Medium & Python       &   6 &     150 \\
+    K2 & kubernetes    & Medium & Go           &  35 &   3{,}759 \\
+    K3 & kubernetes    & Medium & Go           &  49 &  11{,}000 \\
+    \midrule
+    C5 & cann-ops      & High   & C++/AscendC  &  27 &   3{,}372 \\
+    M3 & MindSpeed     & High   & Python       &  10 &     948 \\
+    K4 & kubernetes    & High   & Go           &  98 &   6{,}507 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\textbf{Selection criteria.}
+Every task was drawn from a real, merged contribution to a production
+repository.  CANN tasks (C1--C5) and MindSpeed tasks (M1--M3) come from
+Huawei's Ascend NPU software stack---operator kernels, training
+framework features, and precision fixes that represent typical
+industrial workloads.  Kubernetes tasks (K1--K4) come from the
+Kubernetes project and cover KEP-driven feature gates, API types,
+controllers, and authorization changes, representing large-scale
+open-source engineering.
+
+\textbf{Complexity classification.}
+We classify tasks into three tiers based on the number of ground-truth
+files, cross-component coordination requirements, and domain-specific
+knowledge needed:
+\begin{itemize}
+  \item \emph{Low} (C1, C2, M1, K1): 1--13 files, localised changes
+    within a single module or subsystem.
+  \item \emph{Medium} (C3, C4, M2, K2, K3): 6--49 files, requiring
+    coordination across multiple components (e.g., host and device code,
+    API types and controllers).
+  \item \emph{High} (C5, M3, K4): 10--98 files, demanding architectural
+    understanding, multi-module orchestration, and extensive testing.
+\end{itemize}
+
+The tasks span four languages (C++, AscendC, Python, Go) and three
+complexity tiers, providing a diverse substrate for evaluating agent
+capabilities across different engineering contexts.
+
+%% ------------------------------------------------------------------
+\subsection{Agent Configurations}\label{sec:configs}
+
+We evaluate five primary agent configurations, summarised in
+Table~\ref{tab:configs}.  Each configuration pairs a foundation model
+with an agent framework and, optionally, an execution harness.
+
+\begin{table}[t]
+  \caption{Agent configurations.  ``Harness'' indicates whether a
+    validation feedback loop (syntax checking, structure verification)
+    is active during generation.}
+  \label{tab:configs}
+  \centering
+  \small
+  \begin{tabular}{lllll}
+    \toprule
+    \textbf{ID} & \textbf{Model} & \textbf{Framework} & \textbf{Harness} & \textbf{$N$} \\
+    \midrule
+    A1 & Claude Sonnet 4  & Claude Code & None  & 24 \\
+    A2 & Claude Opus 4.6  & Claude Code & None  & 23 \\
+    A3 & Claude Opus 4.6  & Claude Code & Loops & 24 \\
+    Codex & GPT-5.4       & Codex CLI   & Built-in & 23 \\
+    MiniMax & MiniMax-M2.5 & MiniMax Agent & None & 22 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\textbf{Core comparison: A2 vs.\ A3.}
+A2 and A3 share the same model (Opus~4.6) and framework (Claude Code),
+differing only in whether the Loops harness---a syntax-checking and
+structure-validation feedback loop---is active.  This is the only
+single-variable comparison in the study and provides the cleanest
+evidence for the effectiveness of harness engineering
+(\S\ref{sec:harness}).
+
+\textbf{Cross-product comparisons.}
+A1 uses a different model (Sonnet~4) within the same framework, so
+A1~vs.~A2 confounds model capability with evaluation timing.
+Codex pairs a different model (GPT-5.4) with a different framework
+(OpenAI's Codex CLI, which includes built-in web search and repository
+analysis capabilities).  MiniMax pairs yet another model (M2.5) with
+its own agent framework.  These comparisons are best understood as
+\emph{product-level} assessments---comparing the capabilities of
+commercially available agent tools---rather than controlled ablations.
+We discuss this confound further in \S\ref{sec:threats}.
+
+\textbf{Additional configurations.}
+Three Huawei-internal models (CodeArts, Lingxi, OpenCodeGLM) and
+OpenCode~(GLM-5) were evaluated on a limited subset of tasks (2--4
+experiments each).  Due to their small sample sizes, we report their
+results but exclude them from primary statistical comparisons.
+
+%% ------------------------------------------------------------------
+\subsection{Prompt Design}\label{sec:prompts}
+
+Each task is paired with two prompt variants that differ in the level
+of specification detail provided to the agent:
+
+\begin{itemize}
+  \item \textbf{Short prompt}: contains a \emph{Summary} (one-sentence
+    problem statement) and a \emph{Proposal} (one-sentence solution
+    direction).  Typically 2--4 sentences.
+  \item \textbf{Long prompt}: extends the short prompt with
+    \emph{Motivation} (why the change is needed) and \emph{Design
+    Details} (numbered list of implementation considerations).
+    Typically 15--30 sentences.
+\end{itemize}
+
+\textbf{Design principle.}
+Both prompt levels describe \emph{what} to implement and \emph{why},
+but never reveal specific file paths, function names, or code
+snippets from the ground truth.  This ensures that agents must
+independently navigate the codebase to locate relevant files and design
+their implementation.
+
+\textbf{Example (C1, buffer alias fix).}
+The short prompt reads: ``\emph{ScaledMaskedSoftmaxGradV2 has a tensor
+lifetime violation in ComputeSoftmaxGrad---a buffer is used after its
+queue resource is freed.  Replace the reference with an equivalent
+surviving buffer.}''  The long prompt adds three numbered design
+details: root cause analysis of the data flow, the fix strategy
+(identify a shape/dtype-compatible live buffer), and the impact scope
+(NormHeadDim variant only).
+
+This two-level design allows us to measure the \emph{prompt
+granularity effect}: the extent to which richer specification
+compensates for agent limitations in codebase understanding and
+architectural reasoning.
+
+%% ------------------------------------------------------------------
+\subsection{Evaluation Framework}\label{sec:eval-framework}
+
+\textbf{Ground truth.}
+For each task, the ground truth is the actual merged code from the
+repository (commit or pull request).  This provides a concrete, human-reviewed
+reference implementation against which we compare agent output.
+
+\textbf{Scoring dimensions.}
+Each experiment is scored by an LLM evaluator on three dimensions, each
+on a 0--5 scale:
+\begin{itemize}
+  \item \textbf{Score~A (Functional Correctness)}: Does the generated
+    code correctly implement the intended functionality?
+  \item \textbf{Score~B (Completeness \& Coverage)}: Does the
+    implementation cover all required files and components?
+  \item \textbf{Score~C (Behavioral Equivalence)}: Does the
+    implementation match the ground truth's design decisions, API
+    conventions, and architectural approach?
+\end{itemize}
+
+\textbf{Verdict rules.}
+We assign a three-level verdict based on the dimension scores:
+\begin{itemize}
+  \item \textsc{pass}: $A \geq 4$ \textbf{and} $B \geq 4$ \textbf{and} $C \geq 3$.
+  \item \textsc{fail}: $A < 2$ \textbf{or} $B < 2$ \textbf{or} $C < 2$ (any dimension critically deficient).
+  \item \textsc{partial}: all other cases.
+\end{itemize}
+
+\textbf{File coverage metric.}
+We additionally compute file-level overlap between the agent's generated
+files and the ground-truth file set:
+$\mathit{coverage} = |\mathit{generated} \cap \mathit{GT}| \;/\;
+|\mathit{GT}|$.  This provides a coarse quantitative complement to the
+expert-scored dimensions.
+
+\textbf{Evaluation scope.}
+Our evaluation measures \emph{production-level equivalence} to the merged implementation, not purely functional correctness.
+An agent solution that correctly addresses the requirement but uses different file organization, naming conventions, or architectural patterns than the ground truth will score lower on Behavioral Equivalence~(C) and file coverage.
+This design choice reflects our industrial interest: we assess whether agent output could replace the human-authored PR, not merely whether it compiles and passes tests.
+As a consequence, our \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally incorrect.''
+Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: the majority of non-PASS cases stem from engineering completeness gaps, not semantic misunderstanding.
+
+\textbf{Evaluator assignment.}
+A2 and A3 experiments were evaluated by Claude Sonnet~4.  Codex and
+MiniMax experiments were evaluated by MiniMax-M2.5 to avoid
+self-evaluation bias within the Anthropic model family.  A1 experiments
+were evaluated in a separate earlier session.  We acknowledge that
+cross-evaluator calibration differences may exist
+(\S\ref{sec:threats}).
+
+%% ------------------------------------------------------------------
+\subsection{Experiment Execution}\label{sec:execution}
+
+\textbf{Sanitization protocol.}
+To prevent agents from extracting ground-truth code from repository
+history, we apply a strict sanitization procedure to each experiment
+repository:
+\begin{enumerate}
+  \item The repository is rebased to a single commit immediately before
+    the target feature, removing all commits that contain ground-truth
+    code.
+  \item All git remotes are stripped and the \texttt{gh} CLI is blocked,
+    preventing agents from fetching upstream history or pull request
+    contents.
+  \item Agents retain access to the full codebase (for context) and to
+    web search (for documentation), but cannot access the specific PR or
+    commit that constitutes the ground truth.
+\end{enumerate}
+
+\textbf{Anti-cheating audit.}
+During evaluation of initial Codex runs on task~K4, we discovered that
+the agent had executed \texttt{git log} and \texttt{git cherry-pick}
+commands to extract ground-truth commits from an insufficiently
+sanitized repository.  The K4 repository was re-sanitized (all target
+commits removed from history) and the affected experiments were re-run.
+Post-sanitization results were confirmed genuine through inspection of
+agent trajectories and comparison of generated file counts and
+implementation details against ground truth.
+This incident underscores a critical finding: frontier models actively
+search for shortcuts in version control history, making thorough
+sanitization essential for any benchmark using real repositories.
+
+\textbf{Experiment scale.}
+In total, we executed 116 experiments across 12~tasks $\times$
+5~primary configurations $\times$ 2~prompt levels.  The full
+$12 \times 5 \times 2 = 120$ matrix has four missing cells
+(A2$\times$K1-short, Codex$\times$K3-short, MiniMax$\times$K3-long,
+MiniMax$\times$K3-short) due to infrastructure failures during execution.
+Each remaining task--config--prompt combination was run exactly once.
+The full results are reported in \S\ref{sec:results}.

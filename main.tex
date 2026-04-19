@@ -1,0 +1,43 @@
+% NOTE: ASE 2026 Industry Showcase CFP states "not double-blind",
+% so the anonymous option may need to be removed before submission.
+% Keeping it for now; toggle by removing ",anonymous" below.
+\documentclass[sigconf,review,anonymous]{acmart}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{subcaption}
+
+\newcommand{\finding}[1]{\smallskip\noindent\textit{\textbf{Finding:} #1}\smallskip}
+
+\begin{document}
+
+\title{Not Ready Yet: An Industrial Assessment of Coding Agents\\for Feature Implementation and the Promise of Harness Engineering}
+
+\author{Anonymous}
+\affiliation{\institution{Anonymous Institution}}
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\maketitle
+
+\input{sections/01-introduction}
+\input{sections/02-industrial-context}
+\input{sections/03-study-design}
+\input{sections/04-results}
+\input{sections/05-root-cause}
+\input{sections/06-harness}
+\input{sections/07-related-work}
+\input{sections/08-threats}
+\input{sections/10-conclusion}
+
+\section*{Data Availability}
+\input{sections/09-data-availability}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}

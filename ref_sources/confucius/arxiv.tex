@@ -1,0 +1,96 @@
+\documentclass[]{arxiv/fairmeta}
+% Option "twocolumn" available, but please prioritize single-column
+
+\input{arxiv/math_commands}
+
+
+
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\input{macro}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red!70!black},
+    commentstyle=\color{gray},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    xleftmargin=0.5em,
+    framexleftmargin=0.5em
+}
+
+\title{
+Confucius Code Agent: Scalable Agent Scaffolding for Real-World Codebases
+}
+
+\author[1,*]{\textcolor{metablue}{Sherman Wong}}
+\author[2,*]{\textcolor{metablue}{Zhenting Qi}}
+\author[1,*]{\textcolor{metablue}{Zhaodong Wang}}
+\author[1,*]{\textcolor{metablue}{Nathan Hu}}
+\author[1]{\\Samuel Lin}
+\author[1]{Jun Ge}
+\author[1]{Erwin Gao}
+\author[1]{Wenlin Chen}
+\author[2]{Yilun Du}
+\author[1,2]{Minlan Yu}
+\author[1]{Ying Zhang}
+\affiliation[1]{Meta}
+\affiliation[2]{Harvard}
+
+
+
+\contribution[*]{\textcolor{metablue}{\textbf{Core Contributors}}}
+
+\abstract{
+Real-world software engineering tasks require coding agents that can operate on massive repositories, sustain long-horizon sessions, and reliably coordinate complex toolchains at test time. Existing research-grade coding agents offer transparency but struggle when scaled to heavier, production-level workloads, while production-grade systems achieve strong practical performance but provide limited extensibility, interpretability, and controllability.
+We introduce the \textbf{Confucius Code Agent (CCA)}, a software engineering agent that can operate at large-scale codebases. CCA is built on top of the \textbf{Confucius SDK}, an agent development platform structured around three complementary perspectives: Agent Experience (AX), User Experience (UX), and Developer Experience (DX). The SDK supports a unified orchestrator with advanced context management for long-context reasoning, a persistent note-taking system for cross-session continual learning, and a modular extension system for reliable tool use.
+In addition, we introduce a \textbf{meta-agent} that automates the construction, evaluation, and refinement of agents through a build-test-improve cycle, enabling rapid agent development on new tasks and tool stacks.
+Instantiated on the Confucius SDK using the meta-agent, CCA demonstrates strong performance on real-world software engineering tasks. On SWE-Bench-Pro, CCA achieves a Resolve@1 of \textbf{59\%}, exceeding prior research baselines as well as commercial results, under identical repositories, model backends, and tool access.
+}
+
+\date{\today}
+\correspondence{Zhenting Qi at \email{zhentingqi@g.harvard.edu}}
+\github{https://github.com/facebookresearch/cca-swebench}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figs/bar.pdf}
+    \caption{\textbf{Performance comparison on SWE-Bench-Pro benchmark.} (* reported from Anthropic's Claude Opus 4.5 system card / OpenAI's GPT-5.2-Codex system card.)}
+    \label{fig:teaser}
+\end{figure*}
+
+\input{sections/intro}
+\input{sections/method}
+\input{sections/exp}
+\input{sections/rw}
+\input{sections/conclusion}
+
+\clearpage
+\newpage
+
+\bibliographystyle{assets/plainnat}
+\bibliography{ref}
+
+\clearpage
+\newpage
+
+\beginappendix
+
+\input{sections/appendix}
+
+\end{document}
+

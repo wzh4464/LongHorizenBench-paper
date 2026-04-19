@@ -1,0 +1,703 @@
+\begin{thebibliography}{100}
+
+\bibitem{anthropic2024mcp}
+Anthropic.
+\newblock Model context protocol.
+\newblock \url{https://modelcontextprotocol.io}, 2024.
+\newblock Accessed: 2025-01-15.
+
+\bibitem{anthropic2025claudecode}
+Anthropic.
+\newblock Claude code: An agentic coding tool.
+\newblock
+  \url{https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview},
+  2025.
+\newblock Accessed: 2025-01-15.
+
+\bibitem{anthropic2025context_engineering}
+Anthropic.
+\newblock Effective context engineering for ai agents.
+\newblock
+  \url{https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents},
+  2025.
+
+\bibitem{cursor2025}
+{Anysphere}.
+\newblock Cursor: The ai code editor.
+\newblock \url{https://cursor.com}, 2025.
+
+\bibitem{asai2023self}
+Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi.
+\newblock Self-rag: Learning to retrieve, generate, and critique through
+  self-reflection.
+\newblock {\em International Conference on Learning Representations}, 2024.
+
+\bibitem{austin2021programsynthesislargelanguage}
+Jacob Austin et~al.
+\newblock Program synthesis with large language models.
+\newblock {\em arXiv preprint arXiv:2108.07732}, 2021.
+
+\bibitem{baddeley1992working}
+Alan Baddeley.
+\newblock Working memory.
+\newblock {\em Science}, 255(5044):556--559, 1992.
+
+\bibitem{besta2023graph}
+Maciej Besta, Nils Blach, Ale{\v{s}} Kub{\'\i}{\v{c}}ek, Robert Gerstenberger,
+  Lukas Gianinazzi, Joanna Gajda, Tomasz Lehmann, Michal Podstawski, Hubert
+  Niewiadomski, Piotr Nyczyk, and Torsten Hoefler.
+\newblock Graph of thoughts: Solving elaborate problems with large language
+  models.
+\newblock {\em AAAI Conference on Artificial Intelligence}, 2024.
+
+\bibitem{blackington2025bmad}
+Adam Blackington.
+\newblock {BMAD-METHOD}: Breakthrough method for agile {AI}-driven development.
+\newblock \url{https://github.com/bmad-code-org/BMAD-METHOD}, 2025.
+
+\bibitem{block2025goose}
+Block.
+\newblock Goose: An open-source ai agent.
+\newblock \url{https://github.com/block/goose}, 2025.
+
+\bibitem{bui2023codetf}
+Nghi D.~Q. Bui, Hung Le, Yue Wang, Junnan Li, Akhilesh~Deepak Gotmare, and
+  Steven C.~H. Hoi.
+\newblock Codetf: One-stop transformer library for state-of-the-art code llm.
+\newblock {\em arXiv preprint arXiv:2306.00029}, 2023.
+
+\bibitem{MLEBench}
+Jun~Shern Chan, Neil Chowdhury, Oliver Jaffe, James Aung, Dane Sherburn, Evan
+  Mays, Giulio Starace, Kevin Liu, Leon Maksin, Tejal Patwardhan, et~al.
+\newblock {MLE}-bench: Evaluating machine learning agents on machine learning
+  engineering.
+\newblock In {\em The Thirteenth International Conference on Learning
+  Representations}, 2025.
+
+\bibitem{charmbracelet2025crush}
+Charm.
+\newblock Crush: An agentic coding tool for the terminal.
+\newblock \url{https://github.com/charmbracelet/crush}, 2025.
+
+\bibitem{chen2024coderissueresolvingmultiagent}
+et~al. Chen.
+\newblock Coder: Issue resolving with multi-agent and task graphs.
+\newblock {\em arXiv preprint arXiv:2406.01304}, 2024.
+
+\bibitem{chen2021evaluatinglargelanguagemodels}
+Mark Chen et~al.
+\newblock Evaluating large language models trained on code.
+\newblock {\em arXiv preprint arXiv:2107.03374}, 2021.
+
+\bibitem{specrover}
+Yuhao Chen, Xin Zhang, Tao Wang, et~al.
+\newblock Specrover: Specification-guided patch generation.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{agent_populations}
+Jeff Clune, Kenneth Stanley, et~al.
+\newblock Diverse agent populations for more robust exploration.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{cognition2024devin}
+Cognition.
+\newblock Introducing devin, the first ai software engineer.
+\newblock \url{https://cognition.ai/blog/introducing-devin}, 2024.
+
+\bibitem{opencode2025}
+OpenCode Contributors.
+\newblock Opencode: Ai-powered terminal assistant.
+\newblock \url{https://github.com/opencode-ai/opencode}, 2025.
+
+\bibitem{contamination_modern}
+Chunyuan Deng, Yilun Zhao, Xiangru Tang, Mark Gerstein, and Arman Cohan.
+\newblock Investigating data contamination in modern benchmarks for large
+  language models.
+\newblock {\em NAACL}, pages 8706--8719, 2024.
+
+\bibitem{Deng2025SWEBenchPC}
+Xiang Deng, Jeff Da, Edwin Pan, Yannis~Yiming He, Charles Ide, Kanak Garg,
+  Niklas Lauffer, et~al.
+\newblock Swe-bench pro: Can ai agents solve long-horizon software engineering
+  tasks?
+\newblock {\em arXiv preprint arXiv:2509.16941}, 2025.
+
+\bibitem{nl2repo_bench}
+Jingzhe Ding, Shengda Long, Changxin Pu, Huan Zhou, Hongwan Gao, Xiang Gao,
+  Chao He, Yue Hou, Fei Hu, Zhaojian Li, et~al.
+\newblock Nl2repo-bench: Towards long-horizon repository generation evaluation
+  of coding agents, 2025.
+
+\bibitem{classeval}
+Xueying Du, Mingwei Liu, Kaixin Wang, Hanlin Wang, Junwei Liu, Yixuan Chen,
+  Jiayi Feng, Chaofeng Sha, Xin Peng, and Yiling Lou.
+\newblock Evaluating large language models in class-level code generation.
+\newblock In {\em Proceedings of the 46th IEEE/ACM International Conference on
+  Software Engineering (ICSE 2024)}, pages 81:1--81:13. ACM, 2024.
+
+\bibitem{eliseevaEnvBenchBenchmarkAutomated2025}
+Aleksandra Eliseeva, Alexander Kovrigin, Ilia Kholkin, Egor Bogomolov, and
+  Yaroslav Zharov.
+\newblock Envbench: A benchmark for automated environment setup.
+\newblock In {\em ICLR 2025 Third Workshop on Deep Learning for Code}, 2025.
+
+\bibitem{longcli_bench}
+Yukang Feng, Jianwen Sun, Zelai Yang, et~al.
+\newblock Longcli-bench: A preliminary benchmark and study for long-horizon
+  agentic programming in command-line interfaces.
+\newblock {\em arXiv preprint}, 2025.
+
+\bibitem{fission2025openspec}
+{Fission AI}.
+\newblock {OpenSpec}: Spec-driven development framework.
+\newblock \url{https://github.com/Fission-AI/OpenSpec}, 2025.
+
+\bibitem{gao2023pal}
+Luyu Gao et~al.
+\newblock Pal: Program-aided language models.
+\newblock In {\em ICML}, 2023.
+
+\bibitem{aider2024}
+Paul Gauthier.
+\newblock Aider: Ai pair programming in your terminal.
+\newblock \url{https://aider.chat}, 2024.
+\newblock Accessed: 2025-01-15.
+
+\bibitem{ge2023context}
+Tao Ge, Jing Hu, Xun Wang, Si-Qing Chen, and Furu Wei.
+\newblock In-context autoencoder for context compression in a large language
+  model.
+\newblock {\em International Conference on Learning Representations}, 2024.
+
+\bibitem{github2025copilot_agent}
+GitHub.
+\newblock Github copilot: Meet the new coding agent.
+\newblock
+  \url{https://github.blog/news-insights/product-news/github-copilot-meet-the-new-coding-agent/},
+  2025.
+
+\bibitem{github2025speckit}
+GitHub.
+\newblock Spec kit: Toolkit for spec-driven development.
+\newblock \url{https://github.com/github/spec-kit}, 2025.
+
+\bibitem{google2025geminicli}
+Google.
+\newblock Gemini cli.
+\newblock \url{https://github.com/google-gemini/gemini-cli}, 2025.
+
+\bibitem{deepseek_coder}
+Daya Guo et~al.
+\newblock Deepseek-coder: When the large language model meets programming.
+\newblock {\em arXiv preprint arXiv:2401.14196}, 2024.
+
+\bibitem{gutierrez2024hipporag}
+Bernal~Jimenez Gutierrez, Yiheng Shu, Yu~Gu, Michihiro Yasunaga, and Yu~Su.
+\newblock Hipporag: Neurobiologically inspired long-term memory for large
+  language models.
+\newblock {\em Advances in Neural Information Processing Systems}, 37, 2024.
+
+\bibitem{sase_survey}
+Ahmed~E. Hassan, Hao Li, Dayi Lin, Bram Adams, Tse-Hsun Chen, Yutaro Kashiwa,
+  and Dong Qiu.
+\newblock Agentic software engineering, foundational pillars and a research
+  roadmap.
+\newblock {\em arXiv preprint arXiv:2509.06216}, 2025.
+
+\bibitem{ehragent}
+Wenqi He, Zonghai Chen, Xianwei Li, et~al.
+\newblock Ehragent: Code empowers large language models for few-shot complex
+  tabular reasoning on electronic health records.
+\newblock {\em arXiv preprint arXiv:2401.07128}, 2024.
+
+\bibitem{apps}
+Dan Hendrycks, Steven Basart, Saurav Kadavath, Mantas Mazeika, Akul Arora,
+  Ethan Guo, Collin Burns, Samir Puranik, Horace He, and Dawn Song.
+\newblock Measuring coding challenge competence with apps.
+\newblock {\em arXiv preprint arXiv:2105.09938}, 2021.
+
+\bibitem{hu2025memory}
+Yuyang Hu, Shichun Liu, Yanwei Yue, Guibin Zhang, Boyang Liu, Fangyi Zhu,
+  Jiahang Lin, Honglin Guo, Shihan Dou, Zhiheng Xi, et~al.
+\newblock Memory in the age of ai agents.
+\newblock {\em arXiv preprint arXiv:2512.13564}, 2025.
+
+\bibitem{hua2025context}
+Qishuo Hua, Lyumanshan Ye, Dayuan Fu, Yang Xiao, Xiaojie Cai, Yunze Wu, Jifan
+  Lin, Junfei Wang, and Pengfei Liu.
+\newblock Context engineering 2.0: The context of context engineering.
+\newblock {\em arXiv preprint arXiv:2510.26493}, 2025.
+
+\bibitem{jimenez2024swebenchlanguagemodelsresolve}
+Carlos~E Jimenez et~al.
+\newblock Swe-bench: Can language models resolve real-world github issues?
+\newblock In {\em ICLR}, 2024.
+
+\bibitem{kang2025acon}
+Minki Kang, Wei-Ning Chen, Dongge Han, Huseyin~A. Inan, Lukas Wutschitz, Yanzhi
+  Chen, Robert Sim, and Saravan Rajmohan.
+\newblock Acon: Optimizing context compression for long-horizon llm agents.
+\newblock {\em arXiv preprint arXiv:2510.00615}, 2025.
+
+\bibitem{long_task_measurement}
+Thomas Kwa, Ben West, Joel Becker, Amy Deng, Katharyn Garcia, Max Hasin, Sami
+  Jawhar, Megan Kinniment, Nate Rush, Sydney von Arx, et~al.
+\newblock Measuring ai ability to complete long tasks.
+\newblock {\em arXiv preprint arXiv:2503.14499}, 2025.
+
+\bibitem{kwaMeasuringAIAbility2025}
+Thomas Kwa, Ben West, Joel Becker, Amy Deng, Katharyn Garcia, Max Hasin, Sami
+  Jawhar, Megan Kinniment, Nate Rush, Sydney von Arx, et~al.
+\newblock Measuring ai ability to complete long tasks.
+\newblock {\em arXiv preprint arXiv:2503.14499}, 2025.
+
+\bibitem{lewis2020rag}
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
+  Karpukhin, Naman Goyal, Heinrich K{\"u}ttler, Mike Lewis, Wen-tau Yih, Tim
+  Rockt{\"a}schel, Sebastian Riedel, and Douwe Kiela.
+\newblock Retrieval-augmented generation for knowledge-intensive nlp tasks.
+\newblock In {\em NeurIPS}, 2020.
+
+\bibitem{DevEval}
+Bowen Li, Wenhan Wu, Ziwei Tang, Lin Shi, John Yang, Jinyang Li, Shunyu Yao,
+  Chen Qian, Binyuan Hui, Qicheng Zhang, et~al.
+\newblock Prompting large language models to tackle the full software
+  development lifecycle: A case study.
+\newblock In {\em Proceedings of the 31st International Conference on
+  Computational Linguistics}, pages 7511--7531, Abu Dhabi, UAE, 2025.
+  Association for Computational Linguistics.
+
+\bibitem{issue_resolution_survey}
+Caihua Li et~al.
+\newblock Advances and frontiers of llm-based issue resolution in software
+  engineering: A comprehensive survey.
+\newblock {\em arXiv preprint}, 2025.
+
+\bibitem{code_survey}
+Caihua Li et~al.
+\newblock From code foundation models to agents and applications, a
+  comprehensive survey and practical guide to code intelligence.
+\newblock {\em arXiv preprint}, 2025.
+
+\bibitem{starcoder}
+Raymond Li et~al.
+\newblock Starcoder: May the source be with you!
+\newblock {\em arXiv preprint arXiv:2305.06161}, 2023.
+
+\bibitem{fea_bench}
+Wei Li, Xin Zhang, Zhongxin Guo, Shaoguang Mao, Wen Luo, Guangyue Peng, Yangyu
+  Huang, Houfeng Wang, and Scarlett Li.
+\newblock Fea-bench: A benchmark for evaluating repository-level code
+  generation for feature implementation.
+\newblock {\em arXiv preprint arXiv:2503.06680}, 2025.
+
+\bibitem{codecontests}
+Yujia Li, David Choi, Junyoung Chung, Nate Kushman, Julian Schrittwieser,
+  R{\'e}mi Leblond, Tom Eccles, James Keeling, Felix Gimeno, Agustin Dal~Lago,
+  et~al.
+\newblock Competition-level code generation with alphacode.
+\newblock {\em Science}, 378(6624):1092--1097, 2022.
+
+\bibitem{aegis}
+Yuntong Li, Yanjie Zhou, Zheng Liu, et~al.
+\newblock Aegis: Automated environment setup for bug reproduction.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{cap}
+Jacky Liang, Wenlong Huang, Fei Xia, Peng Xu, Karol Hausman, Brian Ichter, Pete
+  Florence, and Andy Zeng.
+\newblock Code as policies: Language model programs for embodied control.
+\newblock {\em ICRA}, 2023.
+
+\bibitem{process_rewards}
+Hunter Lightman, Vineet Kosaraju, Yura Burda, Harri Edwards, Bowen Baker, Teddy
+  Lee, Jan Leike, John Schulman, Ilya Sutskever, and Karl Cobbe.
+\newblock Let's verify step by step.
+\newblock {\em arXiv preprint arXiv:2305.20050}, 2023.
+
+\bibitem{reasoning_bank}
+Tianyu Liu, Daoguang Zan, Bei Chen, et~al.
+\newblock Reasoning bank: Learning from trajectories for program repair.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{efficiency_metrics}
+Yuchen Liu, Tianyi Zhang, Yiming Wang, et~al.
+\newblock Efficient evaluation of llm agents: Cost, latency, and token
+  consumption.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{mei2025survey}
+Lingrui Mei, Jiayu Yao, Yuyao Ge, Yiwei Wang, Baolong Bi, Yujun Cai, Jiazhi
+  Liu, Mingyu Li, Zhong-Zhi Li, Duzhen Zhang, et~al.
+\newblock A survey of context engineering for large language models.
+\newblock {\em arXiv preprint arXiv:2507.13334}, 2025.
+
+\bibitem{terminal_bench}
+Mike~A. Merrill, Alexander~G. Shaw, Nicholas Carlini, et~al.
+\newblock Terminal-bench: Benchmarking agents on hard, realistic tasks in
+  command line interfaces.
+\newblock {\em arXiv preprint}, 2025.
+
+\bibitem{microsoft2016lsp}
+Microsoft.
+\newblock Language server protocol specification.
+\newblock \url{https://microsoft.github.io/language-server-protocol/}, 2016.
+\newblock Accessed: 2025-01-15.
+
+\bibitem{SWELancer}
+Samuel Miserendino, Michele Wang, Tejal Patwardhan, and Johannes Heidecke.
+\newblock {SWE}-lancer: Can frontier {LLM}s earn \$1 million from real-world
+  freelance software engineering?
+\newblock In {\em Forty-second International Conference on Machine Learning},
+  2025.
+
+\bibitem{SWTBench}
+Niels M{\"u}ndler, Mark~Niklas Mueller, Jingxuan He, and Martin Vechev.
+\newblock {SWT}-bench: Testing and validating real-world bug-fixes with code
+  agents.
+\newblock In {\em The Thirty-eighth Annual Conference on Neural Information
+  Processing Systems}, 2024.
+
+\bibitem{mlgym}
+Deepak Nathani, Lovish Madaan, Nicholas Roberts, Nikolay Bashlykov, Ajay Menon,
+  Vincent Moens, Mikhail Plekhanov, et~al.
+\newblock {MLG}ym: A new framework and benchmark for advancing {AI} research
+  agents.
+\newblock In {\em Second Conference on Language Modeling}, 2025.
+
+\bibitem{ong2024routellm}
+Isaac Ong, Amjad Almahairi, Vincent Wu, Wei-Lin Chiang, Tianhao Wu, Joseph~E
+  Gonzalez, M~Waleed Kadous, and Ion Stoica.
+\newblock Routellm: Learning to route llms with preference data.
+\newblock {\em arXiv preprint arXiv:2406.18665}, 2024.
+
+\bibitem{openInterpreter}
+{Open Interpreter}.
+\newblock Open interpreter.
+\newblock \url{https://github.com/OpenInterpreter/open-interpreter}, 2023.
+\newblock Accessed: 2025-01-15.
+
+\bibitem{swebench_verified}
+OpenAI.
+\newblock Introducing swe-bench verified.
+\newblock \url{https://openai.com/index/introducing-swe-bench-verified/}, 2024.
+
+\bibitem{openai2025codex}
+OpenAI.
+\newblock Introducing codex.
+\newblock \url{https://openai.com/index/introducing-codex/}, 2025.
+
+\bibitem{packer2023memgpt}
+Charles Packer et~al.
+\newblock Memgpt: Towards llms as operating systems.
+\newblock {\em arXiv preprint arXiv:2310.08560}, 2023.
+
+\bibitem{patil2025bfcl}
+Shishir~G. Patil, Huanzhi Mao, Charlie Cheng-Jie~Ji, Fanjia Yan, Vishnu Suresh,
+  Ion Stoica, and Joseph E.~Gonzalez.
+\newblock The berkeley function calling leaderboard (bfcl): From tool use to
+  agentic evaluation of large language models.
+\newblock In {\em Forty-second International Conference on Machine Learning},
+  2025.
+
+\bibitem{pham2025swe}
+Minh~VT Pham, Huy~N Phan, Hoang~N Phan, Cuong~Le Chi, Tien~N Nguyen, and
+  Nghi~DQ Bui.
+\newblock Swe-synth: Synthesizing verifiable bug-fix data to enable large
+  language models in resolving real-world bugs.
+\newblock {\em arXiv preprint arXiv:2504.14757}, 2025.
+
+\bibitem{phan2024hyperagent}
+Huy~Nhat Phan, Tien~N Nguyen, Phong~X Nguyen, and Nghi~DQ Bui.
+\newblock Hyperagent: Generalist software engineering agents to solve coding
+  tasks at scale.
+\newblock {\em arXiv preprint arXiv:2409.16299}, 2024.
+
+\bibitem{press2022measuring}
+Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt, Noah~A. Smith, and Mike
+  Lewis.
+\newblock Measuring and narrowing the compositionality gap in language models.
+\newblock {\em arXiv preprint arXiv:2210.03350}, 2022.
+
+\bibitem{qiao2023taskweaver}
+Bo~Qiao et~al.
+\newblock Taskweaver: A code-first agent framework.
+\newblock {\em arXiv preprint arXiv:2311.17541}, 2023.
+
+\bibitem{codellama}
+Baptiste Rozi\`{e}re et~al.
+\newblock Code llama: Open foundation models for code.
+\newblock {\em arXiv preprint arXiv:2308.12950}, 2023.
+
+\bibitem{sarthi2024raptor}
+Parth Sarthi, Salman Abdullah, Aditi Tuli, Shubh Khanna, Anna Goldie, and
+  Christopher~D. Manning.
+\newblock Raptor: Recursive abstractive processing for tree-organized
+  retrieval.
+\newblock {\em International Conference on Learning Representations}, 2024.
+
+\bibitem{shinn2023reflexion}
+Noah Shinn, Federico Cassano, Ashwin Gopinath, Karthik Narasimhan, and Shunyu
+  Yao.
+\newblock Reflexion: Language agents with verbal reinforcement learning.
+\newblock {\em Advances in Neural Information Processing Systems},
+  36:8634--8652, 2023.
+
+\bibitem{COREBench}
+Zachary~S Siegel, Sayash Kapoor, Nitya Nadgir, Benedikt Stroebl, and Arvind
+  Narayanan.
+\newblock {CORE}-bench: Fostering the credibility of published research through
+  a computational reproducibility agent benchmark.
+\newblock {\em Transactions on Machine Learning Research}, 2024.
+
+\bibitem{sun2025scaling}
+Weiwei Sun, Miao Lu, Zhan Ling, Kang Liu, Xuesong Yao, Yiming Yang, and Jiecao
+  Chen.
+\newblock Scaling long-horizon llm agent via context-folding.
+\newblock {\em arXiv preprint arXiv:2510.11967}, 2025.
+
+\bibitem{codeagents}
+Zhiyu Tang, Yue Wang, Xu~Zhou, Xin~Eric Wang, et~al.
+\newblock Codeagents: Interactive code generation through multi-agent
+  programming.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{tao2024magisllmbasedmultiagent}
+Wei Tao et~al.
+\newblock Magis: Llm-based multi-agent framework for github issue resolution.
+\newblock {\em arXiv preprint arXiv:2403.17927}, 2024.
+
+\bibitem{thai2025swe}
+Minh~VT Thai, Tue Le, Dung~Nguyen Manh, Huy~Phan Nhat, and Nghi~DQ Bui.
+\newblock Swe-evo: Benchmarking coding agents in long-horizon software
+  evolution scenarios.
+\newblock {\em arXiv preprint arXiv:2512.18470}, 2025.
+
+\bibitem{trivedi2022interleaving}
+Harsh Trivedi, Niranjan Balasubramanian, Tushar Khot, and Ashish Sabharwal.
+\newblock Interleaving retrieval with chain-of-thought reasoning for
+  knowledge-intensive multi-step questions.
+\newblock {\em arXiv preprint arXiv:2212.10509}, 2022.
+
+\bibitem{voyager}
+Guanzhi Wang et~al.
+\newblock Voyager: An open-ended embodied agent with large language models.
+\newblock {\em arXiv preprint arXiv:2305.16291}, 2023.
+
+\bibitem{issue2test}
+Shuang Wang, Bowen Li, Yong Chen, et~al.
+\newblock Issue2test: From issue reports to test cases.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{wang2024codeact}
+Xingyao Wang et~al.
+\newblock Executable code actions elicit better llm agents.
+\newblock {\em arXiv preprint arXiv:2402.01030}, 2024.
+
+\bibitem{openhands}
+Xingyao Wang et~al.
+\newblock Openhands: An open platform for ai software developers as generalist
+  agents.
+\newblock {\em arXiv preprint arXiv:2407.16741}, 2024.
+
+\bibitem{experience_banks}
+Yiming Wang, Jun Zhang, Yizhe Li, et~al.
+\newblock Experience-driven monte carlo tree search.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{codemonkeys}
+Yiming Wang, Tianyi Zhang, Zhengyang Chen, et~al.
+\newblock Codemonkeys: Massively parallel state machines for inference-time
+  scaling.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{wang2023codet5p}
+Yue Wang, Hung Le, Akhilesh~Deepak Gotmare, Nghi D.~Q. Bui, Junnan Li, and
+  Steven C.~H. Hoi.
+\newblock Codet5+: Open code large language models for code understanding and
+  generation.
+\newblock In {\em Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}, 2023.
+
+\bibitem{wei2026agentic}
+Tianxin Wei, Ting-Wei Li, Zhining Liu, Xuying Ning, Ze~Yang, Jiaru Zou, Zhichen
+  Zeng, Ruizhong Qiu, Xiao Lin, Dongqi Fu, et~al.
+\newblock Agentic reasoning for large language models.
+\newblock {\em arXiv preprint arXiv:2601.12538}, 2026.
+
+\bibitem{xia2024agentless}
+Chunqiu~Steven Xia et~al.
+\newblock Agentless: Demystifying llm-based software engineering agents.
+\newblock {\em arXiv preprint arXiv:2407.01489}, 2024.
+
+\bibitem{xieOSWorldBenchmarkingMultimodal2024}
+Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng
+  Cao, Toh~Jing Hua, Zhoujun Cheng, Dongchan Shin, Fangyu Lei, et~al.
+\newblock {OSW}orld: Benchmarking multimodal agents for open-ended tasks in
+  real computer environments.
+\newblock In {\em The Thirty-eight Conference on Neural Information Processing
+  Systems Datasets and Benchmarks Track}, 2024.
+
+\bibitem{curriculum_learning}
+Benfeng Xu, Licheng Zhang, Zhendong Mao, Quan Wang, Hongtao Xie, and Yongdong
+  Zhang.
+\newblock Curriculum learning for natural language understanding.
+\newblock {\em ACL}, 2020.
+
+\bibitem{xu2023rewoo}
+Binfeng Xu et~al.
+\newblock Rewoo: Decoupling reasoning from observations for efficient augmented
+  language models.
+\newblock {\em arXiv preprint arXiv:2305.18323}, 2023.
+
+\bibitem{contamination_survey}
+Cheng Xu, Shuhao Guan, Derek Greene, and M-Tahar Kechadi.
+\newblock Benchmark data contamination of large language models: A survey.
+\newblock {\em arXiv preprint arXiv:2406.04244}, 2024.
+
+\bibitem{yang2024sweagentagentcomputerinterfacesenable}
+John Yang et~al.
+\newblock Swe-agent: Agent-computer interfaces enable automated software
+  engineering.
+\newblock {\em arXiv preprint arXiv:2405.15793}, 2024.
+
+\bibitem{yang2024swe}
+John Yang, Carlos~E Jimenez, Alexander Wettig, Kilian Lieret, Shunyu Yao,
+  Karthik Narasimhan, and Ofir Press.
+\newblock Swe-agent: Agent-computer interfaces enable automated software
+  engineering.
+\newblock {\em Advances in Neural Information Processing Systems},
+  37:50528--50652, 2024.
+
+\bibitem{yang2024swebenchmultimodalaisystems}
+John Yang, Carlos~E Jimenez, Alex~L Zhang, Kilian Lieret, Joyce Yang, Xindi Wu,
+  Ori Press, Niklas Muennighoff, Gabriel Synnaeve, Karthik~R Narasimhan, et~al.
+\newblock {SWE}-bench multimodal: Do {AI} systems generalize to visual software
+  domains?
+\newblock In {\em The Thirteenth International Conference on Learning
+  Representations}, 2025.
+
+\bibitem{taubench}
+Shunyu Yao, Noah Shinn, Pedram Razavi, and Karthik~R Narasimhan.
+\newblock \{\${\textbackslash}tau\$\}-bench: A benchmark for
+  {\textbackslash}underline\{T\}ool-{\textbackslash}underline\{A\}gent-{\textbackslash}underline\{U\}ser
+  interaction in real-world domains.
+\newblock In {\em The Thirteenth International Conference on Learning
+  Representations}, 2025.
+
+\bibitem{yao2023tree}
+Shunyu Yao, Dian Yu, Jeffrey Zhao, Izhak Shafran, Thomas~L. Griffiths, Yuan
+  Cao, and Karthik Narasimhan.
+\newblock Tree of thoughts: Deliberate problem solving with large language
+  models.
+\newblock {\em Advances in Neural Information Processing Systems}, 36, 2023.
+
+\bibitem{yao2023react}
+Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan,
+  and Yuan Cao.
+\newblock React: Synergizing reasoning and acting in language models.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2023.
+
+\bibitem{ye2025replicationbenchaiagentsreplicate}
+Christine Ye, Sihan Yuan, Suchetha Cooray, Steven Dillmann, Ian L.~V. Roque,
+  Dalya Baron, Philipp Frank, Sergio Martin-Alvarez, et~al.
+\newblock Replicationbench: Can ai agents replicate astrophysics research
+  papers?
+\newblock {\em arXiv preprint arXiv:2510.24591}, 2025.
+
+\bibitem{ye2026meta}
+Haoran Ye, Xuning He, Vincent Arak, Haonan Dong, and Guojie Song.
+\newblock Meta context engineering via agentic skill evolution.
+\newblock {\em arXiv preprint arXiv:2601.21557}, 2026.
+
+\bibitem{anthropic2025harness}
+Justin Young.
+\newblock Effective harnesses for long-running agents.
+\newblock
+  \url{https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents},
+  2025.
+\newblock Anthropic Engineering Blog.
+
+\bibitem{zaharia2024compound}
+Matei Zaharia, Omar Khattab, Lingjiao Chen, Jared~Quincy Davis, Heather Miller,
+  Chris Potts, James Zou, Michael Carbin, Jonathan Frankle, Naveen Rao, and Ali
+  Ghodsi.
+\newblock The shift from models to compound ai systems.
+\newblock \url{https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/},
+  2024.
+
+\bibitem{multi_swebench}
+Daoguang Zan, Zhirong Huang, Wei Liu, Hanwu Chen, Shulin Xin, Linhao Zhang,
+  Qi~Liu, Aoyan Li, Lu~Chen, Xiaojian Zhong, et~al.
+\newblock Multi-swe-bench: A multilingual benchmark for issue resolving.
+\newblock {\em arXiv preprint arXiv:2504.02605}, 2025.
+
+\bibitem{zhang2025adaptive}
+Genghan Zhang, Weixin Liang, Olivia Hsu, and Kunle Olukotun.
+\newblock Adaptive self-improvement llm agentic system for ml library
+  development.
+\newblock {\em arXiv preprint arXiv:2502.02534}, 2025.
+
+\bibitem{experepair}
+Lei Zhang, Weizheng Chen, Yuting Liu, et~al.
+\newblock Experepair: Dual-memory architecture for autonomous program repair.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{zhang2025agentic}
+Qizheng Zhang, Changran Hu, Shubhangi Upasani, Boyuan Ma, Fenglu Hong,
+  Vamsidhar Kamanuru, Jay Rainton, Chen Wu, Mengmeng Ji, Hanchen Li, et~al.
+\newblock Agentic context engineering: Evolving contexts for self-improving
+  language models.
+\newblock {\em The Fourteenth International Conference on Learning
+  Representations (ICLR)}, 2026.
+
+\bibitem{zhang2024autocoderoverautonomousprogramimprovement}
+Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, and Abhik Roychoudhury.
+\newblock Autocoderover: Autonomous program improvement.
+\newblock In {\em Proceedings of the 33rd ACM SIGSOFT International Symposium
+  on Software Testing and Analysis}, pages 1592--1604. ACM, 2024.
+
+\bibitem{otter}
+Yuting Zhang, Zhiyuan Fan, Wei Liu, et~al.
+\newblock Otter: Generating failing tests from issue descriptions.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{zheng2023judging}
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao
+  Zhuang, Zi~Lin, Zhuohan Li, Dacheng Li, Eric Xing, et~al.
+\newblock Judging {LLM}-as-a-judge with {MT}-bench and chatbot arena.
+\newblock In {\em Thirty-seventh Conference on Neural Information Processing
+  Systems Datasets and Benchmarks Track}, 2023.
+
+\bibitem{zhong2023memorybank}
+Wanjun Zhong, Lianghong Guo, Qiqi Gao, He~Ye, and Yanlin Wang.
+\newblock Memorybank: Enhancing large language models with long-term memory.
+\newblock {\em AAAI Conference on Artificial Intelligence}, 2024.
+
+\bibitem{mcts_planning}
+Jieyi Zhou, Shreyas Agarwal, Kiante Brantley, et~al.
+\newblock Tree search for language model agents.
+\newblock {\em arXiv preprint arXiv:2407.01476}, 2024.
+
+\bibitem{zhouWebArenaRealisticWeb2024}
+Shuyan Zhou, Frank~F. Xu, Hao Zhu, Xuhui Zhou, Robert Lo, Abishek Sridhar,
+  Xianyi Cheng, Tianyue Ou, Yonatan Bisk, Daniel Fried, Uri Alon, and Graham
+  Neubig.
+\newblock Webarena: A realistic web environment for building autonomous agents.
+\newblock In {\em The Twelfth International Conference on Learning
+  Representations}, 2024.
+
+\bibitem{agenticbenchmarkchecklist}
+Yuxuan Zhu, Tengjun Jin, Yada Pruksachatkun, Andy Zhang, Shu Liu, Sasha Cui,
+  Sayash Kapoor, et~al.
+\newblock Establishing best practices for building rigorous agentic benchmarks.
+\newblock {\em arXiv preprint arXiv:2507.02825}, 2025.
+
+\bibitem{zhuEstablishingBestPractices2025}
+Yuxuan Zhu, Tengjun Jin, Yada Pruksachatkun, Andy Zhang, Shu Liu, Sasha Cui,
+  Sayash Kapoor, et~al.
+\newblock Establishing {{Best Practices}} for {{Building Rigorous Agentic
+  Benchmarks}}, 2025.
+
+\end{thebibliography}

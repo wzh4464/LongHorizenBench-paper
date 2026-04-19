@@ -1,0 +1,79 @@
+\section{Analysis}
+
+In this section, we provide additional analysis for model performance on \benchmarkname. We include analysis of performance on different types of issues, failure modes of agent trajectories for different models, and the efficacy of human augmentations for improving task resolvability. For compute constraints, analysis is done on trajectories with a max turn limit of 50 and max cost of \$2. Corresponding results are in Table \ref{table:results-capped}.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{@{}l c c@{}}
+\toprule
+\textsc{Model} & \makecell{\textsc{Problem Statement,} \\ \textsc{Requirements, Interface}} & \makecell{\textsc{Problem Statement} \\ \textsc{Only}} \\
+\midrule
+\textsc{OpenAI GPT-5 (high)} & 25.9\% & 8.40\% \\
+\textsc{Claude Opus 4.1} & 22.7\% & 8.20\% \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of model performance with and without human augmentations. The setting \textsc{Problem Statement Only} is without human augmentation. Without these augmentations, unit test verifiers are susceptible to false negatives.}
+\label{table:comparison_results}
+\end{table}
+
+\subsection{Analysis on Model Performance on \benchmarkname}
+
+\textbf{Difficulty varies across programming languages.} As shown in Figure \ref{fig:languages_repos} (left), resolve rates differ markedly across programming languages. Go and Python generally show higher resolve rates across most models, with some models achieving resolve rates above 30\% in these languages. JavaScript (JS) and TypeScript (TS) present more variable performance, with resolve rates ranging from near 0\% to over 30\% depending on the model.
+
+\textbf{Resolve rate varies across repositories.} Figure \ref{fig:languages_repos} (right) demonstrates that resolve rates also vary considerably among different repositories in \benchmarkname. Some repositories show consistently low resolve rates across all models (below 10\%), while others allow certain models to achieve resolve rates exceeding 50\%. This suggests that repository-specific factors such as codebase complexity, documentation quality, or problem types significantly impact model performance.
+
+% \textbf{Repository characteristics show domain-specific model strengths.} The repository-level analysis (Figure \ref{fig:languages_repos}, bottom right) uncovers specialized competencies across models. Mathematical and algorithmic repositories (e.g., projecteuler) show consistently high resolve rates for GPT-5 but moderate performance for Claude Opus 4.1, suggesting differences in mathematical reasoning capabilities. Conversely, web development repositories (e.g., Node.js, elements-web) demonstrate more uniform performance across frontier models, indicating that web technologies represent a well-understood domain. The extreme variance in waterline.js performance—ranging from near 0\% to over 50\%—suggests that certain codebases may align particularly well or poorly with specific model training distributions.
+
+\textbf{Model behavior correlates with task complexity.} The relationship between file count and resolve rate (Figure \ref{fig:languages_repos}, top left) reveals distinct performance degradation patterns. Models maintain relatively stable performance for single-file problems but exhibit sharp declines as file count increases. Notably, the performance gap between frontier and smaller models widens dramatically beyond 3 files, with Claude Opus 4.1 and OpenAI GPT-5 maintaining above 10\% resolve rates even for problems involving 10+ files, while open-source alternatives approach near-zero performance. This suggests that handling multi-file contexts requires capacity that current open-source models lack.
+
+\textbf{Frontier models show more consistent cross-domain performance.} Claude Opus 4.1 and OpenAI GPT-5 maintain relatively high performance across most repositories and languages compared to smaller models, which show more erratic performance patterns that yield near-zero resolve rates on certain repositories.
+
+\subsection{Ablation: Removing Human Augmentations}
+
+We perform an ablation in the importance of augmentations in \benchmarkname, namely the requirements and interface. These augmentations provide the agent with enough information to mitigate false negatives from unit tests that expect specific APIs, signatures, or functional behavior. Table \ref{table:comparison_results} shows results in two settings: our default setting (where we include the problem statement, requirements, and interface), and another setting where we include only the problem statement. Without the requirements and interface, both models tested (\textsc{GPT-5} and \textsc{Claude Opus 4.1}) show significantly degraded performance. In this setting, agents are less constrained and can submit more diverse solutions (particularly for feature additions). Since unit tests expect a narrow set of solutions, verifiers are prone to false negatives, resulting in lower pass rates. Our human augmentations mitigate these false negatives by constraining the agent's solution space such that verifiers are robust, providing appropriate context for measuring task resolution.
+
+\subsection{Trajectory Failure Modes}
+
+We conduct an LLM-as-a-judge analysis for failure modes of different models, utilizing \textsc{GPT-5} as the judge. Our work follows \citet{yang2024sweagent}, who demonstrate 87\% alignment of automated judgments with human categorization of failure modes. 
+
+\textbf{Method.} We begin by hand-curating buckets for common failure patterns of agents in software engineering tasks, as determined by heuristics and a random sample of agent trajectories. These buckets are shown in Table \ref{table:failure-analysis}. For each of the models in Table \ref{table:failure-analysis}, we programmatically filter to only unresolved instances of \benchmarkname~ and collect the last $20$ turns of each rollout. We determined $20$ turns to have the highest correspondence with human validations of failure mode compared to $10$ turns and $40$ turns. With a system prompt providing strict descriptions of the failure buckets and overall SWE-Agent format, we feed the trajectory input and prompt the GPT-5 judge to first produce a 1-paragraph reasoning and then an ultimate selection of one failure mode per instance.
+
+\textbf{Categories.} Here, we detail several of the common categories of failure modes. For the full category descriptions, view the Appendix. \textbf{Wrong solution.} The agent produces a syntactically valid patch that is functionally incorrect, incomplete, or fails to address the core problem. \textbf{Tool-Use.} Failure is attributed to the agent's incorrect use of its available tools. This misuse prevents the agent from gathering necessary information or applying changes correctly. \textbf{Syntax error.} The agent successfully modifies the target files but introduces syntactic errors that render the codebase uncompilable or unrunnable. \textbf{Incorrect file.} This failure occurs when the agent correctly understands the high-level goal but fails to locate the correct source file or function for modification.
+
+\textbf{Results.} Table \ref{table:failure-analysis} shows the results. Frontier models fail on \benchmarkname~for several reasons. \textsc{Opus 4.1} primarily fails on semantic understanding, with wrong solutions accounting for 35.9\% of failures and syntax errors at 24.2\%, suggesting strong technical execution but challenges in problem comprehension and algorithmic correctness. \textsc{GPT-5} indicates potential differences in effective-tool-use, but fewer wrong solutions. Other models reveal distinct operational challenges. \textsc{Sonnet 4} has context overflow as its primary failure mode (35.6\%) and substantial endless file reading behaviors (17.0\%), suggesting limitations in context management and file navigation strategies. \textsc{Gemini 2.5} demonstrates more balanced failures across tool errors (38.8\%), syntax errors (30.5\%), and wrong solutions (18.0\%), maintaining competence across multiple dimensions. \textsc{Qwen3 32B}, as an open-source model, exhibits the highest tool error rate (42.0\%) which highlights the importance of integrated tool-use for effective agents.
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{|l|cc|cccccc|ccc|}
+\hline
+& \multicolumn{2}{c|}{\textbf{Overall}} & \multicolumn{6}{c|}{\textbf{Submitted}} & \multicolumn{3}{c|}{\textbf{Not-Submitted}} \\
+\cline{2-12}
+\textbf{Model} & \textbf{Submitted} & \textbf{Not-Submitted} & \textbf{Wrong} & \textbf{Syntax} & \textbf{Incorrect} & \textbf{Instruction} & \textbf{Edge} & \textbf{Other} & \textbf{Tool-Use} & \textbf{Long-} & \textbf{Stuck} \\
+& & & \textbf{Solution} & \textbf{Error} & \textbf{File} & \textbf{Following} & \textbf{Case} & & & \textbf{Context} & \textbf{in Loop} \\
+\hline
+\textsc{Claude Opus 4.1}   & \textbf{74.2\%} & 25.8\% & \textbf{50.3\%} & 31.3\% & 4.9\% & 2.7\% & 0.8\% & 10.0\% & \textbf{68.0\%} & 28.7\% & 3.4\% \\
+           & (511)  & (178)  & (257)  & (160)  & (25)  & (14)  & (4)   & (51)   & (121)  & (51)   & (6)    \\
+\hline
+\textsc{GPT-5 (high)}      & 27.2\% & \textbf{72.8\%} & 39.5\% & 29.3\% & 8.8\% & 4.8\% & 0.0\% & \textbf{17.7\%} & \textbf{96.4\%} & 2.5\%  & 1.0\%  \\
+           & (147)  & (394)  & (58)   & (43)   & (13)  & (7)   & (0)   & (26)   & (380)  & (10)   & (4)    \\
+\hline
+\textsc{Claude Sonnet 4}   & 44.1\% & \textbf{55.9\%} & 25.5\% & 7.7\%  & 2.1\% & 2.1\% & 0.0\% & \textbf{62.6\%} & 8.7\%  & \textbf{57.4\%} & 33.9\% \\
+           & (235)  & (298)  & (60)   & (18)   & (5)   & (5)   & (0)   & (147)  & (26)   & (171)  & (101)  \\
+\hline
+\textsc{Gemini 2.5} & \textbf{52.9\%} & 47.1\% & 35.0\% & \textbf{56.5\%} & 4.0\% & 1.9\% & 0.0\% & 2.7\%  & \textbf{83.6\%} & 14.3\% & 2.1\%  \\
+           \textsc{Pro Preview} & (377)  & (335)  & (132)  & (213)  & (15)  & (7)   & (0)   & (10)   & (280)  & (48)   & (7)    \\
+\hline
+\textsc{GPT-4o}     & \textbf{72.1\%} & 27.9\% & \textbf{45.2\%} & 36.7\% & 11.2\% & 6.2\% & 0.0\% & 0.7\%  & \textbf{100.0\%} & 0.0\%  & 0.0\%  \\
+           & (569)  & (220)  & (257)  & (209)  & (64)  & (35)  & (0)   & (4)    & (220)  & (0)    & (0)    \\
+\hline
+\textsc{Qwen3 32B}  & 47.3\% & \textbf{52.7\%} & 25.0\% & \textbf{48.7\%} & 19.7\% & 1.6\% & 0.7\% & 4.3\%  & \textbf{78.8\%} & 1.5\%  & 19.8\% \\
+           & (304)  & (339)  & (76)   & (148)  & (60)  & (5)   & (2)   & (13)   & (267)  & (5)    & (67)   \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{Failure mode analysis for models on SWE-BENCH PRO public set. We use LLM-as-a-judge to classify failing trajectories into buckets. Top LLMs, such as Opus 4.1 and GPT-5, are strong agents but struggle to produce solutions on high-complexity tasks. Weaker models, such as smaller open-source models, struggle with syntax, formatting, and tool-use.}
+\label{table:failure-analysis}
+\end{table}

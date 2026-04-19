@@ -1,0 +1,185 @@
+{
+   "sources" : [
+      {
+         "usage" : "toplevel",
+         "filename" : "main.tex"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "example_paper.bib"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "example_paper.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/1-Compare.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/1-Misunderstood_the_problem.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/2-Compare.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/2-Context_Confusion.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/2-python-libs-used-in-code.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/3-Compare.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/3-Syntax_Error_Incomplete_Type.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/3-python-main-problem-example.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/4-Compare.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/4-Syntax_Error_Redefinition.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/4-python-sub-problem-example-1.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/5-python-sub-problem-example-2.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/7-matlab-main-problem-example.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/8-matlab-sub-problem-example.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/bar_chart.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/cmp__1_.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/model_industry_bar_chart.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix/model_industry_line_chart.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix2/appendix_all.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/appendix2/python_library.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/error1.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/error_1_1.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/example_liucheng.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/gemini_pic.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/liucheng.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/main_acc.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/main_dis.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/main_domain.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/main_sub.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/picture1.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/picture2.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/picture3.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/picture4.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/picture5.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/sub_dis.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/sub_domain.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/workflow.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/workflow2.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/workflow_3.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "figures/workflow_shu.pdf"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "icml_numpapers.pdf"
+      }
+   ],
+   "spec_version" : 1,
+   "texlive_version" : "2025",
+   "process" : {
+      "compiler" : "pdflatex"
+   }
+}

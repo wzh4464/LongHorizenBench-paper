@@ -1,0 +1,24 @@
+\begin{table}[]
+\resizebox{\columnwidth}{!}{
+    \begin{tabular}{llc}
+    \rowcolor{gray!50}
+    \hline
+    Filtering Criteria & Justification & Phase
+    
+    \\ \hline
+    Patch size limit & \begin{tabular}[c]{@{}l@{}}Limits patch sizes to \textless{}150 lines of code for tractability.\end{tabular} & 2      
+    \\ \rowcolor{gray!25}
+    No multimedia & \begin{tabular}[c]{@{}l@{}}Excludes bugs with multimedia  content in the description.\end{tabular} & 2
+    \\
+    \begin{tabular}[c]{@{}l@{}}Execution-based \\ Test Adequacy\end{tabular} & \begin{tabular}[c]{@{}l@{}}Confirms that tests associated with the fix reveal the bug, \\ are not flaky, and validate the fix.\end{tabular} & 3                                   
+    \\ \rowcolor{gray!25}
+    \begin{tabular}[c]{@{}l@{}}No magic constant  \end{tabular} & \begin{tabular}[c]{@{}l@{}}Excludes bugs where fix requires new literals or code symbols\\that cannot be inferred from context.\end{tabular} & 3 \\ \hline                 
+
+    \rowcolor{gray!50}
+    \multicolumn{3}{l}{Filtering Criteria for Human-Reported Bugs}                                                                                            \\ \hline
+    Long-running tests & \begin{tabular}[c]{@{}l@{}}Excludes bugs with links to our internal integration \\ test platform (likely indicating long test runs).\end{tabular} & 2 \\ \hline
+    \end{tabular}
+}
+\caption{Phase 2 and 3 Filters}
+\label{tab:phase2-filtering-criteria}
+\end{table}

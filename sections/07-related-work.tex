@@ -1,0 +1,17 @@
+\section{Related Work}
+\label{sec:related-work}
+
+\textbf{Code generation benchmarks.}
+SWE-bench~\cite{jimenez2024swebench} evaluates bug fixing in open-source Python repositories; frontier agents now resolve $>$70\% of its Verified subset.
+HumanEval~\cite{chen2021humaneval}, MBPP~\cite{austin2021mbpp}, DevBench~\cite{li2024devbench}, and RepoEval~\cite{zhang2023repocodecompletion} extend evaluation to function- and repository-level code generation but do not incorporate industrial engineering constraints.
+Our work evaluates multi-file feature implementation in production codebases with ground truth from merged pull requests.
+
+\textbf{Industrial agent evaluations.}
+Mundhra et al.~\cite{mundhra2025EvaluatingLLMsASML} found LLM-generated code on ASML's EUV lithography codebase insufficient for production use; Liu et al.~\cite{liu2026EvaluatingLLMsAerospace} identified LLM capability boundaries in aerospace anomaly detection---both aligned with our ``Not Ready Yet'' thesis regarding autonomous deployment.
+A Google RCT reported 21\% developer speedup with AI-assisted coding~\cite{google2025rct}, but the DORA~2025 report found a slight throughput decrease with high AI adoption~\cite{dora2025}, and a Copilot study found 19\% slower task completion on mature codebases~\cite{metr2025copilot}.
+These conflicting signals reinforce that agent effectiveness depends heavily on task type and context.
+
+\textbf{Agent frameworks and harness engineering.}
+Modern coding agents---SWE-agent~\cite{yang2024sweagent}, Aider~\cite{aider2024}, Claude Code, Codex CLI---embed iterative repair loops, planning, and tool-use orchestration.
+Our trajectory analysis (\S\ref{sec:tool-use}) shows that framework-level tool-use strategy can matter as much as model capability.
+To our knowledge, no prior work has systematically evaluated \emph{harness engineering} effects on coding agent performance across a controlled benchmark; our A2~vs.~A3 comparison provides the first single-variable evidence for output-side validation, and our prompt comparison quantifies the input-side effect.

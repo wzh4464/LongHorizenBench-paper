@@ -1,0 +1,283 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{13}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Austin et~al\mbox{.}(2021)]%
+        {austin2021mbpp}
+\bibfield{author}{\bibinfo{person}{Jacob Austin}, \bibinfo{person}{Augustus
+  Odena}, \bibinfo{person}{Maxwell Nye}, \bibinfo{person}{Maarten Bosma},
+  \bibinfo{person}{Henryk Michalewski}, \bibinfo{person}{David Dohan},
+  \bibinfo{person}{Ellen Jiang}, \bibinfo{person}{Carrie Cai},
+  \bibinfo{person}{Michael Terry}, \bibinfo{person}{Quoc Le}, {and}
+  \bibinfo{person}{Charles Sutton}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Program Synthesis with Large Language Models}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2108.07732}}
+  (\bibinfo{year}{2021}).
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2108.07732}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Becker et~al\mbox{.}(2025)]%
+        {metr2025copilot}
+\bibfield{author}{\bibinfo{person}{Joel Becker}, \bibinfo{person}{Nate Rush},
+  \bibinfo{person}{Elizabeth Barnes}, {and} \bibinfo{person}{David Rein}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Measuring the Impact of Early-2025 {AI} on
+  Experienced Open-Source Developer Productivity}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2507.09089}}
+  (\bibinfo{year}{2025}).
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2507.09089}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{RCT with 16 experienced OSS developers; AI increased task time by
+  19\% despite self-reported 20\% speedup}.
+
+
+\bibitem[Chen et~al\mbox{.}(2021)]%
+        {chen2021humaneval}
+\bibfield{author}{\bibinfo{person}{Mark Chen}, \bibinfo{person}{Jerry Tworek},
+  \bibinfo{person}{Heewoo Jun}, \bibinfo{person}{Qiming Yuan},
+  \bibinfo{person}{Henrique~Ponde de Oliveira~Pinto}, \bibinfo{person}{Jared
+  Kaplan}, \bibinfo{person}{Harri Edwards}, \bibinfo{person}{Yuri Burda},
+  \bibinfo{person}{Nicholas Joseph}, \bibinfo{person}{Greg Brockman},
+  \bibinfo{person}{Alex Ray}, \bibinfo{person}{Raul Puri},
+  \bibinfo{person}{Gretchen Krueger}, \bibinfo{person}{Michael Petrov},
+  \bibinfo{person}{Heidy Khlaaf}, \bibinfo{person}{Girish Sastry},
+  \bibinfo{person}{Pamela Mishkin}, \bibinfo{person}{Brooke Chan},
+  \bibinfo{person}{Scott Gray}, \bibinfo{person}{Nick Ryder},
+  \bibinfo{person}{Mikhail Pavlov}, \bibinfo{person}{Alethea Power},
+  \bibinfo{person}{Lukasz Kaiser}, \bibinfo{person}{Mohammad Bavarian},
+  \bibinfo{person}{Clemens Winter}, \bibinfo{person}{Philippe Tillet},
+  \bibinfo{person}{Felipe~Petroski Such}, \bibinfo{person}{Dave Cummings},
+  \bibinfo{person}{Matthias Plappert}, \bibinfo{person}{Fotios Chantzis},
+  \bibinfo{person}{Elizabeth Barnes}, \bibinfo{person}{Ariel Herbert-Voss},
+  \bibinfo{person}{William~Hebgen Guss}, \bibinfo{person}{Alex Nichol},
+  \bibinfo{person}{Alex Paino}, \bibinfo{person}{Nikolas Tezak},
+  \bibinfo{person}{Jie Tang}, \bibinfo{person}{Igor Babuschkin},
+  \bibinfo{person}{Suchir Balaji}, \bibinfo{person}{Shantanu Jain},
+  \bibinfo{person}{William Saunders}, \bibinfo{person}{Christopher Hesse},
+  \bibinfo{person}{Andrew~N. Carr}, \bibinfo{person}{Jan Leike},
+  \bibinfo{person}{Josh Achiam}, \bibinfo{person}{Vedant Misra},
+  \bibinfo{person}{Evan Morikawa}, \bibinfo{person}{Alec Radford},
+  \bibinfo{person}{Matthew Knight}, \bibinfo{person}{Miles Brundage},
+  \bibinfo{person}{Mira Murati}, \bibinfo{person}{Katie Mayer},
+  \bibinfo{person}{Peter Welinder}, \bibinfo{person}{Bob McGrew},
+  \bibinfo{person}{Dario Amodei}, \bibinfo{person}{Sam McCandlish},
+  \bibinfo{person}{Ilya Sutskever}, {and} \bibinfo{person}{Wojciech Zaremba}.}
+  \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Evaluating Large Language Models Trained on Code}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2107.03374}}
+  (\bibinfo{year}{2021}).
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2107.03374}
+\showURL{%
+\tempurl}
+
+
+\bibitem[DeBellis et~al\mbox{.}(2024)]%
+        {dora2025}
+\bibfield{author}{\bibinfo{person}{Derek DeBellis}, \bibinfo{person}{Kevin
+  Storer}, \bibinfo{person}{Amanda Lewis}, \bibinfo{person}{Ben Good},
+  \bibinfo{person}{Daniella Villalba}, \bibinfo{person}{Eric Maxwell},
+  \bibinfo{person}{Kim Castillo}, \bibinfo{person}{Michelle Irvine}, {and}
+  \bibinfo{person}{Nathen Harvey}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Accelerate State of {DevOps} Report 2024}.
+\newblock
+  \bibinfo{howpublished}{\url{https://dora.dev/research/2024/dora-report/}}.
+\newblock
+\newblock
+\shownote{DORA/Google Cloud; +25\% AI adoption correlated with $-$1.5\%
+  delivery throughput}.
+
+
+\bibitem[Gauthier(2024)]%
+        {aider2024}
+\bibfield{author}{\bibinfo{person}{Paul Gauthier}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Aider: {AI} Pair Programming in Your Terminal}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/Aider-AI/aider}}.
+\newblock
+\newblock
+\shownote{Open-source AI coding assistant}.
+
+
+\bibitem[{GitHub}(2024)]%
+        {github2024survey}
+\bibfield{author}{\bibinfo{person}{{GitHub}}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Survey: The {AI} Wave Continues to Grow on Software
+  Development Teams}.
+\newblock
+  \bibinfo{howpublished}{\url{https://github.blog/news-insights/research/survey-ai-wave-grows/}}.
+\newblock
+\newblock
+\shownote{Survey of 2,000 enterprise developers across four countries; 97\%
+  reported using AI coding tools}.
+
+
+\bibitem[Jimenez et~al\mbox{.}(2024)]%
+        {jimenez2024swebench}
+\bibfield{author}{\bibinfo{person}{Carlos~E. Jimenez}, \bibinfo{person}{John
+  Yang}, \bibinfo{person}{Alexander Wettig}, \bibinfo{person}{Shunyu Yao},
+  \bibinfo{person}{Kexin Pei}, \bibinfo{person}{Ofir Press}, {and}
+  \bibinfo{person}{Karthik Narasimhan}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{SWE}-bench: Can Language Models Resolve Real-World
+  {GitHub} Issues?}. In \bibinfo{booktitle}{\emph{Proceedings of the Twelfth
+  International Conference on Learning Representations ({ICLR})}}.
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2310.06770}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Li et~al\mbox{.}(2024)]%
+        {li2024devbench}
+\bibfield{author}{\bibinfo{person}{Bowen Li}, \bibinfo{person}{Wenhan Wu},
+  \bibinfo{person}{Ziwei Tang}, \bibinfo{person}{Lin Shi},
+  \bibinfo{person}{John Yang}, \bibinfo{person}{Jinyang Li},
+  \bibinfo{person}{Shunyu Yao}, \bibinfo{person}{Chen Qian},
+  \bibinfo{person}{Binyuan Hui}, \bibinfo{person}{Qicheng Zhang},
+  \bibinfo{person}{Zhiyin Yu}, \bibinfo{person}{He Du}, \bibinfo{person}{Ping
+  Yang}, \bibinfo{person}{Dahua Lin}, \bibinfo{person}{Chao Peng}, {and}
+  \bibinfo{person}{Kai Chen}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{DevBench}: A Comprehensive Benchmark for Software
+  Development}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2403.08604}}
+  (\bibinfo{year}{2024}).
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2403.08604}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Later versions renamed to DevEval}.
+
+
+\bibitem[Liu et~al\mbox{.}(2026)]%
+        {liu2026EvaluatingLLMsAerospace}
+\bibfield{author}{\bibinfo{person}{Yang Liu}, \bibinfo{person}{Yixing Luo},
+  \bibinfo{person}{Xiaofeng Li}, \bibinfo{person}{Xiaogang Dong},
+  \bibinfo{person}{Bin Gu}, {and} \bibinfo{person}{Zhi Jin}.}
+  \bibinfo{year}{2026}\natexlab{}.
+\newblock \showarticletitle{Evaluating Large Language Models for Time Series
+  Anomaly Detection in Aerospace Software}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2601.12448}}
+  (\bibinfo{year}{2026}).
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2601.12448}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Mundhra et~al\mbox{.}(2025)]%
+        {mundhra2025EvaluatingLLMsASML}
+\bibfield{author}{\bibinfo{person}{Yash Mundhra}, \bibinfo{person}{Max Valk},
+  {and} \bibinfo{person}{Maliheh Izadi}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Evaluating Large Language Models for Functional and
+  Maintainable Code in Industrial Settings: A Case Study at {ASML}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 40th {IEEE/ACM} International
+  Conference on Automated Software Engineering ({ASE}), Industry Track}}.
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2509.12395}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Paradis et~al\mbox{.}(2024)]%
+        {google2025rct}
+\bibfield{author}{\bibinfo{person}{Elise Paradis}, \bibinfo{person}{Kate Grey},
+  \bibinfo{person}{Quinn Madison}, \bibinfo{person}{Daye Nam},
+  \bibinfo{person}{Andrew Macvean}, \bibinfo{person}{Vahid Meimand},
+  \bibinfo{person}{Nan Zhang}, \bibinfo{person}{Ben Ferrari-Church}, {and}
+  \bibinfo{person}{Satish Chandra}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{How Much Does {AI} Impact Development Speed? {An}
+  Enterprise-Based Randomized Controlled Trial}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2410.12944}}
+  (\bibinfo{year}{2024}).
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2410.12944}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{RCT with 96 Google engineers; AI features shortened task time by
+  $\sim$21\%}.
+
+
+\bibitem[Yang et~al\mbox{.}(2024)]%
+        {yang2024sweagent}
+\bibfield{author}{\bibinfo{person}{John Yang}, \bibinfo{person}{Carlos~E.
+  Jimenez}, \bibinfo{person}{Alexander Wettig}, \bibinfo{person}{Kilian
+  Lieret}, \bibinfo{person}{Shunyu Yao}, \bibinfo{person}{Karthik Narasimhan},
+  {and} \bibinfo{person}{Ofir Press}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{SWE}-agent: Agent-Computer Interfaces Enable
+  Automated Software Engineering}. In \bibinfo{booktitle}{\emph{Advances in
+  Neural Information Processing Systems 37 ({NeurIPS})}}.
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2405.15793}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Zhang et~al\mbox{.}(2023)]%
+        {zhang2023repocodecompletion}
+\bibfield{author}{\bibinfo{person}{Fengji Zhang}, \bibinfo{person}{Bei Chen},
+  \bibinfo{person}{Yue Zhang}, \bibinfo{person}{Jacky Keung},
+  \bibinfo{person}{Jin Liu}, \bibinfo{person}{Daoguang Zan},
+  \bibinfo{person}{Yi Mao}, \bibinfo{person}{Jian-Guang Lou}, {and}
+  \bibinfo{person}{Weizhu Chen}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{{RepoCoder}: Repository-Level Code Completion
+  Through Iterative Retrieval and Generation}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 2023 Conference on Empirical
+  Methods in Natural Language Processing ({EMNLP})}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Singapore}, \bibinfo{pages}{2471--2484}.
+\newblock
+\href{https://doi.org/10.18653/v1/2023.emnlp-main.151}{doi:\nolinkurl{10.18653/v1/2023.emnlp-main.151}}
+
+
+\end{thebibliography}

@@ -1,0 +1,36 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Under our benchmark of 12 industrial feature-implementation tasks
+spanning four languages and three complexity tiers, no agent
+configuration achieves reliable autonomous feature implementation.
+The best configuration (Codex with GPT-5.4) reaches 26.1\% PASS
+under our rubric; the overall rate across 116 experiments is 12.1\%.
+Task complexity exposes a steep capability cliff: top agents pass
+37.5\% of low-complexity tasks but 0\% of high-complexity ones.
+Root-cause analysis shows that 76.5\% of non-PASS outcomes stem from
+engineering-addressable gaps---incomplete coverage, wrong structure,
+missing tests, stub code---rather than fundamental model-capability
+limitations.
+
+These findings carry a concrete industrial consequence.
+This research informed our team's decision to adopt
+\emph{agent-assisted} rather than agent-autonomous workflows, with
+mandatory human review gates for API design, test coverage, and
+feature lifecycle decisions.
+At the same time, the harness engineering results are encouraging:
+detailed input specifications improve pass rates by up to 16.7
+percentage points, and output-side validation wins the majority of
+head-to-head comparisons on convention-heavy codebases.
+
+Future work should pursue three directions:
+(1)~\emph{stronger harness}---fix-cycle loops that feed validation
+failures back as repair instructions, and enforced test-generation
+mandates that close the most frequent engineering gap;
+(2)~\emph{broader evaluation}---a larger and more diverse task set
+covering additional languages, repository types, and complexity
+ranges to test generalizability;
+(3)~\emph{human--agent collaboration modes}---measuring productivity
+and quality when agents operate under human supervision rather than
+autonomously, which better reflects the workflow our industrial
+experience suggests is practical today.

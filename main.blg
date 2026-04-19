@@ -1,0 +1,77 @@
+This is BibTeX, Version 0.99e (TeX Live 2026)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: references.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--no number and no volume in austin2021mbpp
+Warning--page numbers missing in both pages and numpages fields in austin2021mbpp
+Warning--no number and no volume in metr2025copilot
+Warning--page numbers missing in both pages and numpages fields in metr2025copilot
+Warning--no number and no volume in chen2021humaneval
+Warning--page numbers missing in both pages and numpages fields in chen2021humaneval
+Warning--empty publisher in jimenez2024swebench
+Warning--empty address in jimenez2024swebench
+Warning--page numbers missing in both pages and numpages fields in jimenez2024swebench
+Warning--no number and no volume in li2024devbench
+Warning--page numbers missing in both pages and numpages fields in li2024devbench
+Warning--no number and no volume in liu2026EvaluatingLLMsAerospace
+Warning--page numbers missing in both pages and numpages fields in liu2026EvaluatingLLMsAerospace
+Warning--empty publisher in mundhra2025EvaluatingLLMsASML
+Warning--empty address in mundhra2025EvaluatingLLMsASML
+Warning--page numbers missing in both pages and numpages fields in mundhra2025EvaluatingLLMsASML
+Warning--no number and no volume in google2025rct
+Warning--page numbers missing in both pages and numpages fields in google2025rct
+Warning--empty publisher in yang2024sweagent
+Warning--empty address in yang2024sweagent
+Warning--page numbers missing in both pages and numpages fields in yang2024sweagent
+You've used 13 entries,
+            6273 wiz_defined-function locations,
+            1595 strings with 23262 characters,
+and the built_in function-call counts, 17999 in all, are:
+= -- 1990
+> -- 1223
+< -- 0
++ -- 436
+- -- 431
+* -- 1744
+:= -- 2128
+add.period$ -- 68
+call.type$ -- 13
+change.case$ -- 193
+chr.to.int$ -- 13
+cite$ -- 34
+duplicate$ -- 1169
+empty$ -- 843
+format.name$ -- 475
+if$ -- 4054
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 44
+newline$ -- 188
+num.names$ -- 91
+pop$ -- 623
+preamble$ -- 1
+purify$ -- 297
+quote$ -- 0
+skip$ -- 394
+stack$ -- 0
+substring$ -- 779
+swap$ -- 68
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 306
+warning$ -- 21
+while$ -- 50
+width$ -- 0
+write$ -- 320
+(There were 21 warnings)

@@ -1,0 +1,60 @@
+\section{Evaluating Agent-Generated Repairs}\label{sec:metrics}
+
+
+
+
+
+
+
+
+
+We evaluate Passerine on GITS-Eval considering dimensions of overall patch correctness and trajectory dynamics.
+
+\cheapsubsection{Patch Correctness} Consistent with prior APR work, we distinguish
+between \emph{plausible} and \emph{valid} patches. In our work, a \emph{plausible} patch is
+defined as patch that enables successful execution of the bug-reproducing test suite
+associated with the repair task. A \emph{valid} patch~\cite{plausible1, plausible2, plausible3}, in turn, 
+is defined as patch that implements a fix that is semantically equivalent to the one in the ground-truth patch~\cite{efficiencyofrepair,laregscalecorrectness}. In cases where ground-truth patches include additional actions like adding or modifying tests, we focus solely on whether the plausible patch addresses the bug-fixing logic.  (Generating regression tests is beyond the scope of this evaluation.)
+We determine this correctness through manual analysis performed by three of the authors. During the process, one reviewer analyzed each patch, consulting with the other two authors for assessment of complex cases.
+In a practical deployment of Passerine, patches could additionally be tested using Google's internal continuous integration platform, which runs extensive project-specific tests. However,
+for our evaluation we focus on manual grading of validity, as  project-specific tests, like all testing, are generally insufficient for establishing or rejecting equivalence.
+Note that we do not evaluate the textual similarity of the generated patches to the ground truths.
+%
+
+
+
+
+
+
+
+
+
+
+
+
+\cheapsubsection{Trajectory Dynamics} We analyze and compare Passerine's repair trajectories across several dimensions:
+\begin{itemize}
+
+    \item \textit{Trajectory Strategies}: We investigate the types and sequences of commands
+    that Passerine employs during the repair process. This helps us understand how the agent approaches different bug types and whether there are distinct patterns in its actions.
+    
+    \item \textit{Localization}: We examine how effectively Passerine pinpoints the correct file(s) to modify by measuring the filesystem distance between the files modified by Passerine and the actual location of the ground truth bug fix.
+    
+    \item \textit{Trajectory Smells}: We analyze the presence of potentially suboptimal or unusual patterns within the trajectories, which we refer to as ``trajectory smells,'' inspired by code smells~\cite{fowler2018refactoring}. We consider four specific ``smells'': 
+    (i) \texttt{NO\_TEST\_SMELL}: trajectory does not include any test execution commands (i.e., agent never confirmed the bug nor tested the patch);
+    (ii) \texttt{NO\_OP\_CAT\_SMELL}: trajectory contains instances where a file is re-read without any intervening modifications to that file (i.e., agent made an unnecessary read);
+    (iii) \texttt{CONSECUTIVE\_SEARCH}: trajectory contains
+    at least three code search commands in a sequence (i.e., agent is repeatedly searching);
+    (iv) \texttt{CONSECUTIVE\_EDITS}: trajectory contains
+    at least 3 edits to the same file in a sequence (i.e., agent is repeatedly editing the same file);
+\end{itemize}
+
+
+
+
+
+
+
+
+
+

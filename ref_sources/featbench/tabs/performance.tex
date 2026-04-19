@@ -1,0 +1,22 @@
+\begin{table}[t!]
+    \centering
+    \caption{Performance comparison across different agents \& LLMs on
+    FeatBench. }
+    \begin{adjustbox}
+        {width=\textwidth}
+        \setlength{\tabcolsep}{3pt}
+        \begin{tabular}{ccccccc|cccccc}
+            \toprule \multirow{2}{*}{\textbf{Model}}                                 & \multicolumn{6}{c}{\textbf{Trae-agent}} & \multicolumn{6}{c}{\textbf{Agentless}} \\
+            \cmidrule{2-13}                                                          & \textbf{Resolved\%}                     & \textbf{Applied\%}                    & \textbf{RT\%}    & \textbf{FV\%}    & \textbf{File\%}  & \textbf{\#Token} & \textbf{Resolved\%} & \textbf{Applied\%} & \textbf{RT\%}    & \textbf{FV\%}    & \textbf{File\%}  & \textbf{\#Token} \\
+            \midrule \multicolumn{13}{c}{\cellcolor{lb} \textbf{Open-Source Model}}   \\
+            \textbf{DeepSeek V3.1}                                                   & 22.29\%                                 & \textbf{100.00\%}                     & 42.68\%          & 46.50\%          & 79.11\%          & 2.21M            & 9.55\%              & 70.70\%            & 32.48\%          & 19.11\%          & 42.28\%          & 0.05M            \\
+            \midrule \multicolumn{13}{c}{\cellcolor{lb} \textbf{Closed-Source Model}} \\
+            \midrule \textbf{Doubao-Seed-1.6}                                        & 15.92\%                                 & \textbf{100.00\%}                     & 41.40\%          & 26.75\%          & 65.77\%          & 1.07M            & 10.19\%             & 91.72\%            & 26.75\%          & 19.11\%          & 49.30\%          & 0.08M            \\
+            \textbf{Qwen3-Coder-Flash}                                               & 20.38\%                                 & \textbf{100.00\%}                     & \textbf{50.32\%} & 37.58\%          & 74.37\%          & 1.72M            & 7.00\%              & 71.34\%            & 24.84\%          & 14.01\%          & 36.49\%          & 0.05M            \\
+            \textbf{GPT-5}                                                           & \textbf{29.94\%}                        & \textbf{100.00\%}                     & \textbf{50.32\%} & \textbf{56.05\%} & \textbf{86.43\%} & 2.90M            & \textbf{16.56\%}    & \textbf{98.09\%}   & \textbf{35.67\%} & \textbf{34.39\%} & \textbf{67.54\%} & 0.07M            \\
+            \midrule\midrule \textbf{Average}                                        & 22.13\%                                 & 100.00\%                              & 46.18\%          & 41.72\%          & 76.42\%          & 1.98M            & 10.83\%             & 82.96\%            & 29.94\%          & 21.66\%          & 48.90\%          & 0.06M            \\
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \label{tab:performance}
+\end{table}

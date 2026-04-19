@@ -1,0 +1,47 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Software engineering teams are rapidly integrating AI into their development workflows.
+Industry surveys report that over 80\% of professional developers now use AI-assisted coding tools~\cite{github2024survey}, and frontier coding agents---autonomous systems that navigate codebases, write code, and run tests---have demonstrated remarkable progress on established benchmarks.
+On SWE-bench Verified, the most widely cited evaluation for coding agents, top systems now resolve over 70\% of tasks~\cite{jimenez2024swebench}.
+These results have generated significant enthusiasm for deploying coding agents on increasingly ambitious engineering tasks, including full feature implementation in enterprise codebases.
+
+However, SWE-bench and similar benchmarks overwhelmingly evaluate \emph{bug fixing}: localized edits to 1--3 files, typically under 50 lines of change, in well-documented open-source Python repositories.
+Feature implementation in industrial settings is a fundamentally different class of task.
+It requires API design, feature gate lifecycle management, cross-module coordination, backward compatibility constraints, test suite construction, and adherence to project-specific conventions---engineering activities that demand architectural reasoning, not just code generation.
+A Kubernetes feature gate, for example, touches API types, validation, defaulting, conversion, controllers, and dozens of generated files across 50--100 files; a CANN operator implementation requires host code, device kernels, tiling engines, and framework integration layers spanning C++, AscendC, and Python.
+No systematic evaluation exists for how coding agents perform on this class of tasks in production codebases.
+
+We present the first industrial-scale capability assessment of coding agents on feature implementation tasks.
+Our benchmark comprises 12 tasks drawn from four production repositories---Kubernetes (Go), CANN operator kernels (C++/AscendC), MindSpeed training framework (Python), and torch\_npu (Python)---spanning three complexity tiers from single-file fixes to 98-file architectural changes.
+We evaluate five commercially available agent configurations across 116 experiments and find a clear answer: \textbf{Not Ready Yet} for autonomous deployment.
+The best configuration (OpenAI Codex with GPT-5.4) achieves a 26.1\% PASS rate under our rubric; the overall rate across all configurations is 12.1\%.
+Even restricting to the most favorable condition---the best agent with detailed implementation specifications---the pass rate reaches only 33.3\%, with critical gaps in test coverage, API design coherence, and cross-module completeness.
+
+This paper makes five contributions:
+
+\begin{enumerate}
+  \item \textbf{First feature-level capability assessment across enterprise repositories.}
+    We design and execute a controlled evaluation of coding agents on 12 real feature implementation tasks spanning four languages and three complexity tiers, using merged production code as ground truth (\S\ref{sec:study-design}).
+
+  \item \textbf{Root cause taxonomy separating model problems from engineering problems.}
+    Manual analysis of 102 non-PASS experiments yields a six-category failure taxonomy.
+    The dominant failure mode is incomplete file coverage (43\% of failures), not semantic misunderstanding (4\%), suggesting that the gap is primarily one of execution breadth rather than comprehension (\S\ref{sec:root-cause}).
+
+  \item \textbf{Quantified harness engineering effects.}
+    We isolate the effect of two harness types through controlled comparisons: an output-side validation harness (Loops) that improves composite scores by +0.52/15 and wins 12 of 23 head-to-head comparisons, and input-side detailed specifications that improve PASS rates by up to 16.7 percentage points across all configurations (\S\ref{sec:harness}).
+
+  \item \textbf{Trajectory analysis revealing tool-use strategy as a key differentiator.}
+    On K4 (98 ground-truth files), the passing agent executed ${\sim}$50 discovery operations before writing code vs.\ ${\sim}$20 for the non-passing agent, demonstrating that exploration depth drives implementation completeness (\S\ref{sec:root-cause}).
+
+  \item \textbf{Harness engineering roadmap.}
+    We propose a phased adoption roadmap from language-aware validation through fix-cycle loops to architecture-aware planning harness, with estimated impact ranges grounded in our empirical gap analysis (\S\ref{sec:harness-roadmap}).
+\end{enumerate}
+
+The remainder of this paper is organized as follows.
+Section~\ref{sec:industrial-context} describes the industrial context and motivation.
+Section~\ref{sec:study-design} presents the study design, including task selection, agent configurations, and evaluation framework.
+Section~\ref{sec:results} reports the main results.
+Section~\ref{sec:root-cause} analyzes root causes of failure.
+Section~\ref{sec:harness} examines harness engineering effectiveness and limitations.
+Section~\ref{sec:related-work} surveys related work, Section~\ref{sec:threats} discusses threats to validity, and Section~\ref{sec:conclusion} concludes.

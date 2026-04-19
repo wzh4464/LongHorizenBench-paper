@@ -1,0 +1,89 @@
+\documentclass{article}
+
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{styles/arxiv}
+
+\usepackage{enumitem}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{amsmath}
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xspace}
+\usepackage{cleveref}
+\usepackage[breakable]{tcolorbox}
+\usepackage{listings}
+\usepackage{bbold}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{ifthen}
+\usepackage{fontawesome5}
+
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\usepackage{graphicx}
+\usepackage{balance}
+\usepackage{flushend}
+\usepackage{soul}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{wrapfig}
+\tcbuselibrary{listings,skins}
+
+\input{macros.tex}
+
+\makeatletter
+\newcommand{\github}[1]{%
+   \href{#1}{\faGithubSquare}%
+}
+\newcommand{\website}[1]{%
+  \href{#1}{\faGlobe}%
+}
+\makeatother
+
+\title{Building Effective AI Coding Agents for the Terminal:\\ Scaffolding, Harness, Context Engineering, and Lessons Learned}
+
+\author{\textbf{Nghi D. Q. Bui} \\[5pt]
+OpenDev \\[3pt]
+\faGithub \enspace \url{https://github.com/opendev-to/opendev} \\[3pt]
+{\small \faRust \enspace Codebase written in Rust} \\[3pt]
+\faEnvelope \enspace \texttt{bdqnghi@gmail.com}}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-12pt}
+\input{sections/abstract}
+\vspace{-10pt}
+\input{sections/introduction}
+\input{sections/architecture}
+\input{sections/tips}
+\input{sections/related_work}
+\input{sections/conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+\appendix
+\input{sections/appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
