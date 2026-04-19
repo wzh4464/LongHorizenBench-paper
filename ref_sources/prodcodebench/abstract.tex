@@ -1,6 +1,0 @@
-Benchmarks that reflect production workloads are better for evaluating AI coding agents in industrial settings, yet existing benchmarks differ from real usage in programming language distribution, prompt style and codebase structure.
-This paper presents a methodology for curating production-derived benchmarks, illustrated through \benchmark{}, a benchmark sourced from real developer-agent sessions.
-We detail our data collection and curation practices including LLM-based task classification, test relevance validation, and multi-run stability checks which address challenges in constructing reliable evaluation signals from monorepo environments.
-Each curated sample consists of a verbatim prompt, a committed code change and fail-to-pass tests spanning seven programming languages.
-Our systematic analysis of four foundation models yields solve rates ranging from \SolveRateLowest{}\% to \SolveRateHighest{}\%. We demonstrate how these offline evaluation signals drive practical decisions around model selection and harness design, while noting that offline benchmarks provide directional signal that we complement with online A/B testing for production deployment decisions.
-We share our methodology and lessons learned to enable other organizations to construct similar production-derived benchmarks.
