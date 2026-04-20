@@ -7,17 +7,17 @@
 \@writefile{toc}{\contentsline {section}{Abstract}{1}{section*.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Study Design}{2}{section.2}\protected@file@percent }
+\newlabel{sec:study-design}{{2}{2}{Study Design}{section.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Task registry. GT = ground truth (merged code). Complexity is classified by file count, cross-component coordination required, and domain-specific knowledge.}}{2}{table.caption.3}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{tab:tasks}{{1}{2}{Task registry. GT = ground truth (merged code). Complexity is classified by file count, cross-component coordination required, and domain-specific knowledge}{table.caption.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Study Design}{2}{section.2}\protected@file@percent }
-\newlabel{sec:study-design}{{2}{2}{Study Design}{section.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Task Selection}{2}{subsection.2.1}\protected@file@percent }
 \newlabel{sec:tasks}{{2.1}{2}{Task Selection}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Agent Configurations}{2}{subsection.2.2}\protected@file@percent }
+\newlabel{sec:configs}{{2.2}{2}{Agent Configurations}{subsection.2.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Agent configurations evaluated on the full 12-task benchmark. Each runs all $12 \times 2 = 24$ task--prompt combinations.}}{3}{table.caption.4}\protected@file@percent }
 \newlabel{tab:configs}{{2}{3}{Agent configurations evaluated on the full 12-task benchmark. Each runs all $12 \times 2 = 24$ task--prompt combinations}{table.caption.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Agent Configurations}{3}{subsection.2.2}\protected@file@percent }
-\newlabel{sec:configs}{{2.2}{3}{Agent Configurations}{subsection.2.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Prompt Design}{3}{subsection.2.3}\protected@file@percent }
 \newlabel{sec:prompts}{{2.3}{3}{Prompt Design}{subsection.2.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Evaluation Framework}{3}{subsection.2.4}\protected@file@percent }
@@ -41,24 +41,26 @@
 \newlabel{tab:overall-results}{{3}{5}{Overall results: majority verdict per task, prompt, and configuration. Scores shown as (A/B/C), averaged across three evaluators and rounded, where A = Functional Correctness, B = Completeness, C = Behavioral Equivalence, each out of 5. Bold = \textsc {pass}, italic = \textsc {partial}, plain = \textsc {fail}}{table.caption.5}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Configuration comparison. $N$ = number of experiments, Pass Rate = fraction achieving \textsc  {pass}, Mean Comp.\ = mean composite score (A+B+C, out of 15). Scores are averaged across three independent evaluators.}}{5}{table.caption.6}\protected@file@percent }
 \newlabel{tab:config-comparison}{{4}{5}{Configuration comparison. $N$ = number of experiments, Pass Rate = fraction achieving \textsc {pass}, Mean Comp.\ = mean composite score (A+B+C, out of 15). Scores are averaged across three independent evaluators}{table.caption.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Prompt granularity effect. Long = detailed specification, Short = one-line summary. $\Delta $Pass = difference in pass rate (percentage points). $\Delta $Comp.\ = difference in mean composite score.}}{5}{table.caption.7}\protected@file@percent }
-\newlabel{tab:prompt-effect}{{5}{5}{Prompt granularity effect. Long = detailed specification, Short = one-line summary. $\Delta $Pass = difference in pass rate (percentage points). $\Delta $Comp.\ = difference in mean composite score}{table.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Root Cause Analysis}{5}{section.4}\protected@file@percent }
 \newlabel{sec:root-cause}{{4}{5}{Root Cause Analysis}{section.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Prompt granularity effect. Long = detailed specification, Short = one-line summary. $\Delta $Pass = difference in pass rate (percentage points). $\Delta $Comp.\ = difference in mean composite score.}}{5}{table.caption.7}\protected@file@percent }
+\newlabel{tab:prompt-effect}{{5}{5}{Prompt granularity effect. Long = detailed specification, Short = one-line summary. $\Delta $Pass = difference in pass rate (percentage points). $\Delta $Comp.\ = difference in mean composite score}{table.caption.7}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Failure Mode Taxonomy}{5}{subsection.4.1}\protected@file@percent }
 \newlabel{sec:failure-taxonomy}{{4.1}{5}{Failure Mode Taxonomy}{subsection.4.1}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Pass rate by task complexity tier and configuration.}}{6}{table.caption.8}\protected@file@percent }
 \newlabel{tab:complexity}{{6}{6}{Pass rate by task complexity tier and configuration}{table.caption.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Engineering-Addressable vs.\ Model-Capability Gaps}{6}{subsection.4.2}\protected@file@percent }
 \newlabel{sec:eng-vs-model}{{4.2}{6}{Engineering-Addressable vs.\ Model-Capability Gaps}{subsection.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Complexity-Driven Degradation}{6}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:complexity-degradation}{{4.3}{6}{Complexity-Driven Degradation}{subsection.4.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Completeness degradation by complexity tier among non-PASS experiments. B$<$2 = critically incomplete.}}{6}{table.caption.9}\protected@file@percent }
 \newlabel{tab:complexity-rootcause}{{7}{6}{Completeness degradation by complexity tier among non-PASS experiments. B$<$2 = critically incomplete}{table.caption.9}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Non-PASS failure profiles by agent configuration.}}{6}{table.caption.10}\protected@file@percent }
 \newlabel{tab:agent-failure}{{8}{6}{Non-PASS failure profiles by agent configuration}{table.caption.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Complexity-Driven Degradation}{6}{subsection.4.3}\protected@file@percent }
-\newlabel{sec:complexity-degradation}{{4.3}{6}{Complexity-Driven Degradation}{subsection.4.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Per-Agent Failure Patterns}{6}{subsection.4.4}\protected@file@percent }
 \newlabel{sec:per-agent-failure}{{4.4}{6}{Per-Agent Failure Patterns}{subsection.4.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Harness Engineering}{6}{section.5}\protected@file@percent }
+\newlabel{sec:harness}{{5}{6}{Harness Engineering}{section.5}{}}
 \citation{jimenez2024swebench}
 \citation{chen2021humaneval}
 \citation{austin2021mbpp}
@@ -71,8 +73,6 @@
 \citation{metr2025copilot}
 \citation{yang2024sweagent}
 \citation{aider2024}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Harness Engineering}{7}{section.5}\protected@file@percent }
-\newlabel{sec:harness}{{5}{7}{Harness Engineering}{section.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Definition and Taxonomy}{7}{subsection.5.1}\protected@file@percent }
 \newlabel{sec:harness-def}{{5.1}{7}{Definition and Taxonomy}{subsection.5.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Input-Side Harness: The Prompt Effect}{7}{subsection.5.2}\protected@file@percent }
@@ -97,9 +97,6 @@
 \bibcite{liu2026EvaluatingLLMsAerospace}{{9}{2026}{{Liu et~al\mbox  {.}}}{{}}}
 \bibcite{mundhra2025EvaluatingLLMsASML}{{10}{2025}{{Mundhra et~al\mbox  {.}}}{{}}}
 \bibcite{google2025rct}{{11}{2024}{{Paradis et~al\mbox  {.}}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{8}{section.8}\protected@file@percent }
-\newlabel{sec:conclusion}{{8}{8}{Conclusion}{section.8}{}}
-\@writefile{toc}{\contentsline {section}{References}{8}{section*.13}\protected@file@percent }
 \bibcite{yang2024sweagent}{{12}{2024}{{Yang et~al\mbox  {.}}}{{}}}
 \bibcite{zhang2023repocodecompletion}{{13}{2023}{{Zhang et~al\mbox  {.}}}{{}}}
 \newlabel{tocindent-1}{0pt}
@@ -109,5 +106,8 @@
 \newlabel{tocindent3}{0pt}
 \newlabel{tocindent4}{0pt}
 \newlabel{tocindent5}{0pt}
-\newlabel{TotPages}{{9}{9}{}{page.9}{}}
-\gdef \@abspage@last{9}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{8}{section.8}\protected@file@percent }
+\newlabel{sec:conclusion}{{8}{8}{Conclusion}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{References}{8}{section*.13}\protected@file@percent }
+\newlabel{TotPages}{{8}{8}{}{page.8}{}}
+\gdef \@abspage@last{8}
