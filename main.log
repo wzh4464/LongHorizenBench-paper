@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.5)  20 APR 2026 14:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.5)  20 APR 2026 14:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1485,7 +1485,7 @@ LaTeX Warning: Reference `sec:industrial-context' on page 2 undefined on input
 line 43.
 
 ) (./sections/02-industrial-context.tex) (./sections/03-study-design.tex
-Overfull \hbox (24.36438pt too wide) in paragraph at lines 23--43
+Overfull \hbox (7.8124pt too wide) in paragraph at lines 23--43
  [][] 
  []
 
@@ -1671,15 +1671,12 @@ Class acmart Warning: CCS concepts are mandatory for papers over two pages.
 Package balance Warning: You have called \balance in second column
 (balance)                Columns might not be balanced.
 
-[8.8] (/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
+(/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
 (/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-)
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.6pt on input line 62.
- [9.8]
+) [8.8]
 (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -1689,46 +1686,36 @@ L3 programming layer <2026-01-19>
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-LaTeX Warning: Temporary extra page added at the end. Rerun to get it removed.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: EC70AE382C05393D33ADAD6A1C794636;4866.
  ) 
 Here is how much of TeX's memory you used:
- 23396 strings out of 467525
- 382358 string characters out of 5418983
- 871041 words of memory out of 5000000
- 50968 multiletter control sequences out of 15000+600000
- 888565 words of font info for 633 fonts, out of 8000000 for 9000
+ 23381 strings out of 467525
+ 381977 string characters out of 5418983
+ 888396 words of memory out of 5000000
+ 50964 multiletter control sequences out of 15000+600000
+ 882756 words of font info for 627 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,16n,131p,1001b,688s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{page.9} has been referenced but does not exist, rep
-laced by a fixed one
-
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-
-zi4r.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Libertine
-MathMI.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Liberti
-neMathMI7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Libe
-rtineMathRM.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/libertin
-e/LinBiolinumT.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/liber
-tine/LinBiolinumTB.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/l
-ibertine/LinLibertineT.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publ
-ic/libertine/LinLibertineTB.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
-/public/libertine/LinLibertineTBI.pfb></usr/local/texlive/2026/texmf-dist/fonts
-/type1/public/libertine/LinLibertineTI.pfb></usr/local/texlive/2026/texmf-dist/
-fonts/type1/public/newtx/NewTXMI.pfb></usr/local/texlive/2026/texmf-dist/fonts/
-type1/public/newtx/NewTXMI7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
-/public/newtx/txmiaX.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public
-/newtx/txsys.pfb>
-Output written on main.pdf (9 pages, 539511 bytes).
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
+a-zi4r.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Liberti
+neMathMI.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Liber
+tineMathMI7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Li
+bertineMathRM.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/libert
+ine/LinBiolinumT.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lib
+ertine/LinBiolinumTB.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public
+/libertine/LinLibertineT.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/pu
+blic/libertine/LinLibertineTB.pfb></usr/local/texlive/2026/texmf-dist/fonts/typ
+e1/public/libertine/LinLibertineTBI.pfb></usr/local/texlive/2026/texmf-dist/fon
+ts/type1/public/libertine/LinLibertineTI.pfb></usr/local/texlive/2026/texmf-dis
+t/fonts/type1/public/newtx/NewTXMI.pfb></usr/local/texlive/2026/texmf-dist/font
+s/type1/public/newtx/NewTXMI7.pfb></usr/local/texlive/2026/texmf-dist/fonts/typ
+e1/public/newtx/txmiaX.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publ
+ic/newtx/txsys.pfb>
+Output written on main.pdf (8 pages, 538719 bytes).
 PDF statistics:
- 369 PDF objects out of 1000 (max. 8388607)
- 318 compressed objects within 4 object streams
- 69 named destinations out of 1000 (max. 500000)
- 135913 words of extra memory for PDF output out of 154059 (max. 10000000)
+ 365 PDF objects out of 1000 (max. 8388607)
+ 315 compressed objects within 4 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 131817 words of extra memory for PDF output out of 154059 (max. 10000000)
 
