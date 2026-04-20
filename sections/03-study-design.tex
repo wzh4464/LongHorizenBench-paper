@@ -73,54 +73,35 @@ capabilities across different engineering contexts.
 %% ------------------------------------------------------------------
 \subsection{Agent Configurations}\label{sec:configs}
 
-We evaluate five primary agent configurations, summarised in
-Table~\ref{tab:configs}.  Each configuration pairs a foundation model
-with an agent framework and, optionally, an execution harness.
+We evaluate four primary agent configurations, summarised in
+Table~\ref{tab:configs}.  Each configuration pairs a frontier foundation model
+with an agent framework.
 
 \begin{table}[t]
-  \caption{Agent configurations.  ``Harness'' indicates whether a
-    validation feedback loop (syntax checking, structure verification)
-    is active during generation.}
+  \caption{Agent configurations evaluated on the full 12-task benchmark.
+    Each runs all $12 \times 2 = 24$ task--prompt combinations.}
   \label{tab:configs}
   \centering
   \small
-  \begin{tabular}{lllll}
+  \begin{tabular}{lllr}
     \toprule
-    \textbf{ID} & \textbf{Model} & \textbf{Framework} & \textbf{Harness} & \textbf{$N$} \\
+    \textbf{Config} & \textbf{Model} & \textbf{Framework} & \textbf{$N$} \\
     \midrule
-    A1 & Claude Sonnet 4  & Claude Code & None  & 24 \\
-    A2 & Claude Opus 4.6  & Claude Code & None  & 23 \\
-    A3 & Claude Opus 4.6  & Claude Code & Loops & 24 \\
-    Codex & GPT-5.4       & Codex CLI   & Built-in & 23 \\
-    MiniMax & MiniMax-M2.5 & MiniMax Agent & None & 22 \\
+    Claude  & Claude Opus 4.6  & Claude Code & 24 \\
+    Codex   & GPT-5.4          & Codex CLI   & 24 \\
+    Cursor  & Composer-2       & Cursor Agent & 24 \\
+    OpenCode & GLM-5.1         & OpenCode    & 24 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\textbf{Core comparison: A2 vs.\ A3.}
-A2 and A3 share the same model (Opus~4.6) and framework (Claude Code),
-differing only in whether the Loops harness---a syntax-checking and
-structure-validation feedback loop---is active.  This is the only
-single-variable comparison in the study and provides the cleanest
-evidence for the effectiveness of harness engineering
-(\S\ref{sec:harness}).
-
-\textbf{Cross-product comparisons.}
-A1 uses a different model (Sonnet~4) within the same framework, so
-A1~vs.~A2 confounds model capability with evaluation timing.
-Codex pairs a different model (GPT-5.4) with a different framework
-(OpenAI's Codex CLI, which includes built-in web search and repository
-analysis capabilities).  MiniMax pairs yet another model (M2.5) with
-its own agent framework.  These comparisons are best understood as
-\emph{product-level} assessments---comparing the capabilities of
-commercially available agent tools---rather than controlled ablations.
+\textbf{Product-level comparisons.}
+Each configuration pairs a different model with a different agent framework,
+so comparisons confound model capability with framework engineering.
+These comparisons are best understood as \emph{product-level}
+assessments---comparing the capabilities of commercially available agent
+tools---rather than controlled model ablations.
 We discuss this confound further in \S\ref{sec:threats}.
-
-\textbf{Additional configurations.}
-Three Huawei-internal models (CodeArts, Lingxi, OpenCodeGLM) and
-OpenCode~(GLM-5) were evaluated on a limited subset of tasks (2--4
-experiments each).  Due to their small sample sizes, we report their
-results but exclude them from primary statistical comparisons.
 
 %% ------------------------------------------------------------------
 \subsection{Prompt Design}\label{sec:prompts}
@@ -202,13 +183,14 @@ This design choice reflects our industrial interest: we assess whether agent out
 As a consequence, our \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally incorrect.''
 Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: the majority of non-PASS cases stem from engineering completeness gaps, not semantic misunderstanding.
 
-\textbf{Evaluator assignment.}
-A2 and A3 experiments were evaluated by Claude Sonnet~4.  Codex and
-MiniMax experiments were evaluated by MiniMax-M2.5 to avoid
-self-evaluation bias within the Anthropic model family.  A1 experiments
-were evaluated in a separate earlier session.  We acknowledge that
-cross-evaluator calibration differences may exist
-(\S\ref{sec:threats}).
+\textbf{Multi-evaluator cross-validation.}
+To mitigate evaluator bias, every experiment is independently scored by
+three LLM evaluators from different model families: Claude Opus~4.6,
+Codex GPT-5.4, and GLM-5.1.  We report the \emph{majority verdict}
+(agreement of $\geq$2/3 evaluators) and scores averaged across all
+three.  Unanimous agreement is 62\%, and $\geq$2/3 consensus reaches
+99\%; pairwise agreement ranges from 69\% to 79\%, with per-dimension
+score spreads averaging $<$1~point.
 
 %% ------------------------------------------------------------------
 \subsection{Experiment Execution}\label{sec:execution}
@@ -243,10 +225,9 @@ search for shortcuts in version control history, making thorough
 sanitization essential for any benchmark using real repositories.
 
 \textbf{Experiment scale.}
-In total, we executed 116 experiments across 12~tasks $\times$
-5~primary configurations $\times$ 2~prompt levels.  The full
-$12 \times 5 \times 2 = 120$ matrix has four missing cells
-(A2$\times$K1-short, Codex$\times$K3-short, MiniMax$\times$K3-long,
-MiniMax$\times$K3-short) due to infrastructure failures during execution.
-Each remaining task--config--prompt combination was run exactly once.
+In total, we executed 96 experiments across 12~tasks $\times$
+4~configurations $\times$ 2~prompt levels---a complete factorial design
+with no missing cells.
+Each task--config--prompt combination was run exactly once and
+evaluated by three independent LLM judges.
 The full results are reported in \S\ref{sec:results}.

@@ -1,8 +1,8 @@
 \section{Harness Engineering}
 \label{sec:harness}
 
-The previous sections established that no agent configuration reliably completes industrial feature implementation (Section~\ref{sec:results}) and that failures cluster around engineering-addressable gaps (Section~\ref{sec:root-cause}).
-This section examines whether engineering interventions---execution-time harnesses and detailed specifications---can close the performance gap.
+The previous sections established that no agent configuration reliably completes industrial feature implementation (Section~\ref{sec:results}) and that failures cluster around engineering-addressable gaps---primarily incomplete file coverage (Section~\ref{sec:root-cause}).
+This section examines whether engineering interventions---specifically, detailed input specifications---can close the performance gap.
 
 %% ──────────────────────────────────────────────────────────────────
 \subsection{Definition and Taxonomy}
@@ -12,98 +12,41 @@ We define \textbf{Harness Engineering} as the practice of augmenting a coding ag
 We distinguish three intervention points:
 
 \begin{itemize}
-  \item \textbf{Output-side} (validation harness): syntax checking, structure validation, and test execution that feed errors back to the agent for correction.  Our A3 configuration adds the Loops harness to the A2 baseline.
   \item \textbf{Input-side} (specification harness): detailed task descriptions, file-level scope constraints, or architecture guidelines provided before generation begins.  Our long prompts serve this role.
+  \item \textbf{Output-side} (validation harness): syntax checking, structure validation, and test execution that feed errors back to the agent for correction.  No configuration in our study implements this level.
   \item \textbf{Process-side} (pipeline harness): enforced phases such as discovery-before-implementation, mandatory test generation, or CI-gated iteration.  No configuration in our study implements this level.
 \end{itemize}
 
 %% ──────────────────────────────────────────────────────────────────
-\subsection{Output-Side Harness: A2 vs.\ A3}
-\label{sec:harness-output}
-
-The A2 (Opus~4.6, no harness) vs.\ A3 (Opus~4.6 + Loops) comparison is the cleanest ablation in the study: same model, same prompts, differing only in the presence of a validation feedback loop.
-Table~\ref{tab:a2-a3} presents the head-to-head results across 23 paired experiments.
-
-\begin{table}[t]
-\caption{A2 vs.\ A3 head-to-head composite scores. $\Delta$ = A3 $-$ A2; bold $\Delta$ indicates improvement $\geq$ 3.}
-\label{tab:a2-a3}
-\centering
-\small
-\begin{tabular}{llrrr}
-\toprule
-Task & Prompt & A2 & A3 & $\Delta$ \\
-\midrule
-C1 & long  & 11 & 14 & +3 \\
-C1 & short &  5 &  6 & +1 \\
-C2 & long  &  6 & 10 & \textbf{+4} \\
-C2 & short &  8 &  0 & $-$8 \\
-C3 & long  &  0 &  9 & \textbf{+9} \\
-C3 & short &  6 &  8 & +2 \\
-C4 & long  &  9 &  8 & $-$1 \\
-C4 & short &  0 &  9 & \textbf{+9} \\
-C5 & long  &  6 &  0 & $-$6 \\
-C5 & short &  3 &  6 & +3 \\
-\midrule
-M1 & long  & 11 & 12 & +1 \\
-M1 & short &  7 &  5 & $-$2 \\
-M2 & long  &  10 &  7 & $-$3 \\
-M2 & short &  6 & 10 & \textbf{+4} \\
-M3 & long  &  0 &  6 & \textbf{+6} \\
-M3 & short &  7 &  5 & $-$2 \\
-\midrule
-K1 & long  &  9 &  9 &  0 \\
-K2 & long  &  9 &  9 &  0 \\
-K2 & short & 10 &  7 & $-$3 \\
-K3 & long  &  8 &  9 & +1 \\
-K3 & short &  2 &  4 & +2 \\
-K4 & long  &  9 &  9 &  0 \\
-K4 & short &  8 &  0 & $-$8 \\
-\midrule
-\multicolumn{2}{l}{\textbf{Mean}} & \textbf{6.52} & \textbf{7.04} & \textbf{+0.52} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textbf{Aggregate effect.}
-A3 wins 12 of 23 comparisons, ties 3, and loses 8.
-The mean composite improvement is +0.52 points (A2: 6.52, A3: 7.04).
-A3's PASS rate (8.3\%) is comparable to A2's (8.7\%), with PARTIAL+ rates of 79.2\% and 73.9\% respectively.
-
-\textbf{Domain dependence.}
-The harness effect is strongly domain-dependent.
-On CANN/torch\_npu tasks (C-series), A3 wins 8 of 10 comparisons with mean delta +2.90.
-On MindSpeed tasks (M-series), A3 wins 3 of 6 with mean delta +0.67.
-On Kubernetes tasks (K-series), A3 wins 2 of 7 with mean delta $-$1.14.
-The Loops harness validates syntax and file-structure conventions specific to C++/AscendC codebases; these checks are less applicable to Go's generated code patterns.
-
-\finding{The Loops harness wins 12/23 head-to-head comparisons with mean composite improvement of +0.52/15. Its benefit concentrates on convention-heavy C++ codebases (CANN: +2.90 mean $\Delta$) and reverses on Go codebases (K8s: $-$1.14 mean $\Delta$).}
-
-%% ──────────────────────────────────────────────────
 \subsection{Input-Side Harness: The Prompt Effect}
 \label{sec:harness-prompt}
 
 Detailed (long) prompts constitute an input-side harness that constrains the agent's search space.
-Table~\ref{tab:prompt-effect} (in \S\ref{sec:results-prompt}) shows the effect across configurations.
+Table~\ref{tab:prompt-effect} (in \S\ref{sec:results-prompt}) shows the effect across all four configurations.
 
-\finding{Detailed specifications improve PASS rates by up to 16.7 percentage points and composite scores by +1.23 to +2.91/15 across most configurations.
-The effect is strongest for models already near the PASS threshold.}
+For the two strongest agents, long prompts improve composite scores by +2.2 to +2.6/15 and pass rates by 25.0 percentage points.
+Both Claude and Codex show identical prompt deltas (+25.0~pp), passing 25.0\% of tasks with long prompts vs.\ 0\% with short prompts.
+However, the effect is not universal: Cursor shows a \emph{negative} delta ($-$16.7~pp), and OpenCode shows no change (0\% regardless of prompt detail).
 
-%% ──────────────────────────────────────────────────
+\finding{Detailed specifications improve PASS rates by up to 25.0 percentage points and composite scores by +2.2 to +2.6/15 for the two strongest configurations.
+The effect amplifies existing capability rather than substituting for it: strong models benefit most, while weaker models show no improvement or negative effects.}
+
+%% ──────────────────────────────────────────────────────────────────
 \subsection{Harness Limitations and Future Directions}
 \label{sec:harness-limits}
 
-Even with both harness types active, the best configuration (Codex + long prompts) reaches only 33.3\% PASS.
+Even with detailed input specifications, the best configurations (Claude and Codex + long prompts) reach only 25.0\% PASS.
 The remaining gap stems from:
 \begin{itemize}
-  \item \textbf{Test generation:} No harness enforces test writing; on K4, Codex wrote 9 test files while Claude~A3 wrote 0.
-  \item \textbf{Architecture reasoning:} Validation can catch syntax and structure errors but cannot verify that cross-module wiring is semantically correct.
+  \item \textbf{Test generation:} No harness enforces test writing; agents frequently omit test files that constitute a significant fraction of the ground truth.
+  \item \textbf{Architecture reasoning:} Input specifications can guide scope but cannot verify that cross-module wiring is semantically correct.
   \item \textbf{Discovery depth:} The harness does not control how thoroughly agents explore the codebase before writing code.
 \end{itemize}
 
 We identify three levels of harness improvement, ordered by estimated difficulty:
-(1)~\emph{language-aware validation} (adapt checks to Go/Python/C++ conventions; estimated +2--5\% PASS);
+\label{sec:harness-roadmap}
+(1)~\emph{language-aware validation} (adapt output checks to Go/Python/C++ conventions; estimated +2--5\% PASS);
 (2)~\emph{fix-cycle loops} (feed validation errors back for agent correction; estimated +10--15\% PASS); and
 (3)~\emph{architecture-aware planning} (enforce discovery-before-implementation phases; estimated +5--10\% PASS).
 
-\finding{The output-side Loops harness improves composite scores by +0.52 points (mean) and wins 12/23 head-to-head comparisons, but its effect is domain-dependent: strong on C/M-series tasks (+1.60 mean), negative or neutral on K-series ($-$0.43 mean). Input-side prompt engineering (long vs.\ short) yields up to +16.7pp pass rate improvement. The combination suggests that harness design must be language- and domain-aware to be effective.}
-
+\finding{Input-side prompt engineering (long vs.\ short) yields up to +25.0pp pass rate improvement for capable agents. The remaining 75.0\% non-pass gap requires output-side and process-side harnesses---particularly fix-cycle loops and enforced test generation---that no current configuration implements.}

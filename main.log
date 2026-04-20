@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.5)  9 APR 2026 14:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.5)  20 APR 2026 13:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1025,10 +1025,7 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 9.0pt on input line 25.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 10.95pt on input line 25.
- (./sections/abstract.tex
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 9.0pt on input line 7.
-)
+ (./sections/abstract.tex)
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\\' on input line 25.
@@ -1083,14 +1080,13 @@ LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 (Font)              scaled to size 6.0pt on input line 25.
 
 (./sections/01-introduction.tex
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
+(Font)              scaled to size 9.0pt on input line 9.
+
 Overfull \hbox (1.85822pt too wide) in paragraph at lines 15--20
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) prises 12 tasks drawn from four pro-duc-tio
 n repositories---Kubernetes
  []
-
-
-LaTeX Warning: Reference `sec:root-cause' on page 1 undefined on input line 29.
-
 
 
 Overfull \hbox (2.65794pt too wide) in paragraph at lines 27--30
@@ -1102,7 +1098,7 @@ Overfull \hbox (2.65794pt too wide) in paragraph at lines 27--30
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 30.
+(Font)              scaled to size 6.0pt on input line 31.
  [1.1{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/us
 r/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr
 /local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}
@@ -1143,21 +1139,14 @@ LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 (Font)              scaled to size 6.6pt on input line 35.
 
-
-LaTeX Warning: Reference `sec:root-cause' on page 2 undefined on input line 35.
-
-
-
-LaTeX Warning: Reference `sec:harness-roadmap' on page 2 undefined on input lin
-e 38.
+Overfull \hbox (11.96643pt too wide) in paragraph at lines 34--37
+[]\T1/LinuxLibertineT-TLF/b/n/9 (-20) Complexity-driven com-plete-ness cliff. \
+T1/LinuxLibertineT-TLF/m/n/9 (-20) On high-complexity
+ []
 
 
 LaTeX Warning: Reference `sec:industrial-context' on page 2 undefined on input 
-line 42.
-
-
-LaTeX Warning: Reference `sec:root-cause' on page 2 undefined on input line 45.
-
+line 43.
 
 ) (./sections/02-industrial-context.tex) (./sections/03-study-design.tex
 Overfull \hbox (24.36438pt too wide) in paragraph at lines 23--43
@@ -1165,41 +1154,34 @@ Overfull \hbox (24.36438pt too wide) in paragraph at lines 23--43
  []
 
 
-Overfull \hbox (4.88295pt too wide) in paragraph at lines 108--118
-\T1/LinuxLibertineT-TLF/m/n/9 (-20) These com-par-isons are best un-der-stood a
-s \T1/LinuxLibertineT-TLF/m/it/9 (-20) product-level \T1/LinuxLibertineT-TLF/m/
-n/9 (-20) assessments---
- []
+Underfull \vbox (badness 3281) has occurred while \output is active []
 
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 119.
+(Font)              scaled to size 9.0pt on input line 120.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 119.
-[2.2]
-Overfull \hbox (36.81087pt too wide) in paragraph at lines 148--156
+(Font)              scaled to size 7.0pt on input line 120.
+ [2.2{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_oexx6f.
+enc}]
+Overfull \hbox (36.81087pt too wide) in paragraph at lines 129--137
 \T1/LinuxLibertineT-TLF/m/it/9 (-20) Masked-Soft-max-GradV2 has a ten-sor life-
 time vi-o-la-tion in ComputeSoftmaxGrad---
  []
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sc' will be
-(Font)              scaled to size 9.0pt on input line 186.
+(Font)              scaled to size 9.0pt on input line 167.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 9.0pt on input line 194.
+(Font)              scaled to size 9.0pt on input line 175.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 6.6pt on input line 194.
+(Font)              scaled to size 6.6pt on input line 175.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 5.5pt on input line 194.
-
-LaTeX Warning: Reference `sec:root-cause' on page 3 undefined on input line 203
-.
-
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 22
-4.
+(Font)              scaled to size 5.5pt on input line 175.
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 20
+6.
 (/usr/local/texlive/2026/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 224.
+(Font)              scaled to size 9.0pt on input line 206.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
@@ -1214,30 +1196,34 @@ Package fancyhdr Warning: \headheight is too small (13.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.45749pt}.
 
 [3.3{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_ncsllp.e
-nc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_oexx6f.en
-c}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_kijugd.enc
-}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}]
+nc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_kijugd.en
+c}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}]
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/sc' will be
-(Font)              scaled to size 9.0pt on input line 15.
+(Font)              scaled to size 9.0pt on input line 17.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 8.0pt on input line 19.
+(Font)              scaled to size 8.0pt on input line 21.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 6.0pt on input line 19.
+(Font)              scaled to size 6.0pt on input line 21.
 
-Overfull \hbox (9.4125pt too wide) in paragraph at lines 75--86
+Overfull \hbox (17.44449pt too wide) in paragraph at lines 77--87
  [][] 
  []
 
-) (./sections/05-root-cause.tex) (./sections/06-harness.tex
 
-LaTeX Warning: Reference `sec:root-cause' on page 4 undefined on input line 4.
+Overfull \hbox (4.69241pt too wide) in paragraph at lines 104--114
+ [][] 
+ []
 
+) (./sections/05-root-cause.tex [4.4]
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 23.
 
- [4.4]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/it' will be
+(Font)              scaled to size 9.0pt on input line 23.
 
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 23.
 
 
 Package fancyhdr Warning: \headheight is too small (13.0pt): 
@@ -1247,58 +1233,73 @@ Package fancyhdr Warning: \headheight is too small (13.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.45749pt}.
 
 [5.5{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_tlukpt.e
-nc}]
+nc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_ki75ao.en
+c}]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 79.
-
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/it' will be
-(Font)              scaled to size 9.0pt on input line 79.
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 79.
+surrounding objects on input line 35.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 89.
+surrounding objects on input line 35.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 89.
+surrounding objects on input line 69.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 108.
+surrounding objects on input line 69.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 108.
+Overfull \hbox (11.71164pt too wide) in paragraph at lines 69--70
+\T1/LinuxLibertineT-TLF/b/it/9 (-20) Finding: \T1/LinuxLibertineT-TLF/m/it/9 (-
+20) Task com-plex-ity cre-ates a com-plete-ness cliff: on high-complexity
+ []
 
-) (./sections/07-related-work.tex [6.6{/usr/local/texlive/2026/texmf-dist/fonts
-/enc/dvips/libertine/lbtn_ki75ao.enc}]
-
-LaTeX Warning: Reference `sec:tool-use' on page 7 undefined on input line 16.
-
-) (./sections/08-threats.tex
-Overfull \hbox (4.81056pt too wide) in paragraph at lines 4--13
-\T1/LinuxLibertineT-TLF/m/n/9 (-20) tor, in-tro-duc-ing po-ten-tial cal-i-bra-t
-ion bias. We mit-i-gate self-evaluation
+) (./sections/06-harness.tex
+Overfull \hbox (1.6017pt too wide) in paragraph at lines 4--6
+\T1/LinuxLibertineT-TLF/m/n/9 (-20) that fail-ures clus-ter around engineering-
+addressable gaps---primarily
  []
 
 
-Underfull \vbox (badness 3049) has occurred while \output is active []
+Overfull \hbox (6.32375pt too wide) in paragraph at lines 4--6
+\T1/LinuxLibertineT-TLF/m/n/9 (-20) en-gi-neer-ing interventions---specifically
+, de-tailed in-put specifications---
+ []
+
+[6.6]
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 32.
 
 
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 32.
 
-LaTeX Warning: Reference `sec:tool-use' on page 7 undefined on input line 24.
 
-) (./sections/10-conclusion.tex
-Overfull \hbox (11.09691pt too wide) in paragraph at lines 23--1
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 52.
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 52.
+
+) (./sections/07-related-work.tex
+
+LaTeX Warning: Reference `sec:tool-use' on page 7 undefined on input line 16.
+
+) (./sections/08-threats.tex) (./sections/10-conclusion.tex
+Overfull \hbox (11.09691pt too wide) in paragraph at lines 19--1
 []\T1/LinuxLibertineT-TLF/b/n/9 (-20) VCS his-tory as in-for-ma-tion chan-nel. 
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) Codex proac-tively searched
  []
 
-) (./sections/09-data-availability.tex)
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 Package fancyhdr Warning: \headheight is too small (13.0pt): 
 (fancyhdr)                Make it at least 15.45749pt, for example:
@@ -1306,7 +1307,7 @@ Package fancyhdr Warning: \headheight is too small (13.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.45749pt}.
 
-[7.7] (./main.bbl
+[7.7]) (./sections/09-data-availability.tex) (./main.bbl
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 7.3pt on input line 54.
 
@@ -1317,6 +1318,9 @@ ye, Maarten Bosma, Hen-ryk
 
 LaTeX Info: Redefining \tempurl on input line 68.
 LaTeX Info: Redefining \tempurl on input line 113.
+
+Underfull \vbox (badness 1558) has occurred while \output is active []
+
 LaTeX Info: Redefining \tempurl on input line 169.
 LaTeX Info: Redefining \tempurl on input line 190.
 LaTeX Info: Redefining \tempurl on input line 209.
@@ -1331,8 +1335,8 @@ Class acmart Warning: ACM keywords are mandatory for papers over two pages.
 Class acmart Warning: CCS concepts are mandatory for papers over two pages.
 
 
-Overfull \vbox (1.626pt too high) has occurred while \output is active []
-
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
 
 (/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
@@ -1350,16 +1354,16 @@ L3 programming layer <2026-01-19>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 64A1A889D0D68DF848D620CAB741B848;3978.
+(rerunfilecheck)             Checksum: EC70AE382C05393D33ADAD6A1C794636;4866.
  ) 
 Here is how much of TeX's memory you used:
- 23091 strings out of 467525
- 375389 string characters out of 5418983
- 879188 words of memory out of 5000000
- 50783 multiletter control sequences out of 15000+600000
- 824279 words of font info for 493 fonts, out of 8000000 for 9000
+ 23130 strings out of 467525
+ 376263 string characters out of 5418983
+ 875188 words of memory out of 5000000
+ 50791 multiletter control sequences out of 15000+600000
+ 827267 words of font info for 510 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,17n,131p,1001b,764s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,17n,131p,1001b,761s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
 a-zi4r.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Liberti
 neMathMI.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newtx/Liber
@@ -1372,12 +1376,13 @@ blic/libertine/LinLibertineTB.pfb></usr/local/texlive/2026/texmf-dist/fonts/typ
 e1/public/libertine/LinLibertineTBI.pfb></usr/local/texlive/2026/texmf-dist/fon
 ts/type1/public/libertine/LinLibertineTI.pfb></usr/local/texlive/2026/texmf-dis
 t/fonts/type1/public/newtx/NewTXMI.pfb></usr/local/texlive/2026/texmf-dist/font
-s/type1/public/newtx/txmiaX.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
-/public/newtx/txsys.pfb>
-Output written on main.pdf (8 pages, 525377 bytes).
+s/type1/public/newtx/NewTXMI7.pfb></usr/local/texlive/2026/texmf-dist/fonts/typ
+e1/public/newtx/txmiaX.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publ
+ic/newtx/txsys.pfb>
+Output written on main.pdf (8 pages, 533063 bytes).
 PDF statistics:
- 334 PDF objects out of 1000 (max. 8388607)
- 287 compressed objects within 3 object streams
- 63 named destinations out of 1000 (max. 500000)
- 107209 words of extra memory for PDF output out of 128383 (max. 10000000)
+ 365 PDF objects out of 1000 (max. 8388607)
+ 315 compressed objects within 4 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 107241 words of extra memory for PDF output out of 128383 (max. 10000000)
 

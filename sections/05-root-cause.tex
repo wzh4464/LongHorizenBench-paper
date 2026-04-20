@@ -1,0 +1,99 @@
+\section{Root Cause Analysis}
+\label{sec:root-cause}
+
+Of 96 experiments, 88 result in non-PASS verdicts (48 PARTIAL, 39 FAIL, 1 no majority).
+This section analyzes the failure modes to determine whether the gap reflects fundamental model-capability limitations or engineering-addressable shortcomings.
+
+%% ------------------------------------------------------------------
+\subsection{Failure Mode Taxonomy}
+\label{sec:failure-taxonomy}
+
+We classify the 88 non-PASS experiments into four failure modes based on the averaged evaluation scores across three independent evaluators:
+
+\begin{itemize}
+  \item \textbf{Incomplete coverage} ($B < 2$): The agent touched too few files or components to constitute a meaningful implementation. 43 cases (48.9\%).
+  \item \textbf{Partial coverage} ($2 \leq B < 4$, $A \geq 2$): The agent covered some required files but missed key components, producing a recognizable but incomplete implementation. 36 cases (40.9\%).
+  \item \textbf{No output} ($A < 1$ and $B < 1$): The agent produced no meaningful code---crashed, timed out, or generated no changes. 8 cases (9.1\%).
+  \item \textbf{Structural mismatch} ($C < 2$ with $A, B \geq 2$): The agent covered the right scope with working code but used a fundamentally different architectural approach. 1 case (1.1\%).
+\end{itemize}
+
+The dominant failure mode is incomplete coverage (48.9\%), not semantic misunderstanding (1.1\%).
+Combined with partial coverage, 89.8\% of non-PASS outcomes stem from the agent failing to cover the full scope of required changes.
+
+\finding{Completeness (dimension B) is the dominant bottleneck: it is the lowest-scoring dimension in 69\% of non-PASS experiments, with mean $B = 1.71/5$ vs.\ mean $A = 2.21/5$. Only 1.1\% of failures reflect structural mismatch; the remainder stem from insufficient coverage scope.}
+
+%% ------------------------------------------------------------------
+\subsection{Engineering-Addressable vs.\ Model-Capability Gaps}
+\label{sec:eng-vs-model}
+
+To separate engineering problems from model-capability problems, we compare dimensions A (Functional Correctness) and B (Completeness) for each non-PASS experiment.
+When $B \leq A$, completeness is the binding constraint: the agent understands the problem but fails to implement the full scope.
+When $A < B$, the agent covers the right scope but implements incorrectly, indicating a model-capability limitation.
+
+Of 88 non-PASS experiments: 74 (84.1\%) have $B \leq A$ (engineering-addressable), 6 (6.8\%) have $A < B$ (model-capability limited), and 8 (9.1\%) produced no output.
+
+\finding{84.1\% of non-PASS outcomes are engineering-addressable: the agent's functional understanding (A) exceeds its implementation completeness (B), suggesting that better scope control---not better model reasoning---would close the majority of the gap.}
+
+%% ------------------------------------------------------------------
+\subsection{Complexity-Driven Degradation}
+\label{sec:complexity-degradation}
+
+Table~\ref{tab:complexity-rootcause} shows how completeness degrades with task complexity.
+
+\begin{table}[t]
+\caption{Completeness degradation by complexity tier among non-PASS experiments. B$<$2 = critically incomplete.}
+\label{tab:complexity-rootcause}
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Tier} & \textbf{Non-PASS} & \textbf{Mean B} & \textbf{B$<$2} & \textbf{B$<$2 \%} \\
+\midrule
+Low     & 27 & 2.28 & 10 & 37.0 \\
+Medium  & 37 & 1.67 & 20 & 54.1 \\
+High    & 24 & 1.15 & 21 & 87.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On high-complexity tasks, 87.5\% of non-PASS experiments are critically incomplete ($B < 2$), compared to 37.0\% on low-complexity tasks.
+Mean B drops from 2.28 (low) to 1.15 (high), confirming that agents struggle with scope management as cross-component dependencies increase.
+Three examples illustrate the pattern:
+
+\begin{itemize}
+  \item \textbf{K4} (58 HW files, Go): The best agent (Claude) covers 31/58 files (53\%); the weakest (Cursor) covers 1/58 (2\%). Even partial implementations miss authorization hooks, generated client code, and e2e test scaffolding.
+  \item \textbf{C5} (25 HW files, C++/AscendC): Coverage ranges from 0/25 (OpenCode) to 12/25 (Codex, 48\%). No agent reaches PASS.
+  \item \textbf{M3} (9 HW files, Python): All agents cover $\leq$1/9 files. No agent achieves PASS on any prompt variant.
+\end{itemize}
+
+\finding{Task complexity creates a completeness cliff: on high-complexity tasks, 87.5\% of non-PASS experiments are critically incomplete ($B < 2$), and mean $B$ drops from 2.28 to 1.15. Agents fail at scope discovery, not at per-file implementation quality.}
+
+%% ------------------------------------------------------------------
+\subsection{Per-Agent Failure Patterns}
+\label{sec:per-agent-failure}
+
+Table~\ref{tab:agent-failure} shows the failure profile for each configuration among non-PASS experiments.
+
+\begin{table}[t]
+\caption{Non-PASS failure profiles by agent configuration.}
+\label{tab:agent-failure}
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Config} & \textbf{$N$} & \textbf{Mean A} & \textbf{Mean B} & \textbf{B$<$2} \\
+\midrule
+Claude (Opus 4.6)      & 21 & 2.15 & 1.62 & 13 \\
+Codex (GPT-5.4)        & 21 & 2.52 & 1.95 & 10 \\
+Cursor (Composer-2)    & 22 & 2.31 & 1.73 & 12 \\
+OpenCode (GLM-5.1)     & 24 & 1.91 & 1.57 & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All four agents exhibit the same failure pattern: B consistently trails A, confirming that incomplete coverage is the universal bottleneck.
+Codex achieves the highest non-PASS mean B (1.95), reflecting broader file exploration. With both Claude and Codex tied at 12.5\% PASS, Codex's higher mean composite score (7.36 vs.\ 6.50) suggests that exploration breadth yields better partial implementations even when it does not cross the PASS threshold.
+
+File coverage data corroborates this analysis.
+On K4, Claude covers 31/58 HW files while Cursor covers only 1/58---a 30$\times$ difference that directly explains their respective PARTIAL vs.\ FAIL verdicts.
+On C2, all four agents cover 4/4 HW files yet all receive PARTIAL, indicating that when coverage is not the bottleneck, functional correctness (A) becomes the binding constraint.

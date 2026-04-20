@@ -1,74 +1,76 @@
 \section{Results: The Gap}
 \label{sec:results}
 
-This section presents the empirical results of 116 experiments across 12 tasks, 5 primary agent configurations, and 2 prompt granularities, answering \textbf{RQ1}: \emph{Can current coding agents independently complete enterprise-level feature implementation?} The short answer is no---the best configuration achieves 26.1\% PASS under our rubric---but the data reveals nuanced patterns across configurations, prompts, and task complexity.
+This section presents the empirical results of 96 experiments across 12 industrial tasks, 4 agent configurations, and 2 prompt granularities, answering \textbf{RQ1}: \emph{Can current coding agents independently complete enterprise-level feature implementation?} The short answer is no---the best configurations achieve only 12.5\% PASS under our rubric---but the data reveals nuanced patterns across configurations, prompts, and task complexity.
+
+Each experiment was independently scored by three LLM evaluators (Claude Opus~4.6, Codex GPT-5.4, and GLM-5.1); we report the \emph{majority verdict} (agreement of $\geq$2/3 evaluators) and averaged scores. The three evaluators agree unanimously on 62\% of verdicts and reach $\geq$2/3 consensus on 99\%; pairwise verdict agreement ranges from 69\% to 79\%, and per-dimension score spread averages $<$1 point, confirming robust cross-model calibration.
 
 %% ----------------------------------------------------------------
 \subsection{Overall Results}
 \label{sec:results-overall}
 
-Table~\ref{tab:overall-results} presents the verdict for every task--configuration--prompt combination across the five primary configurations.
-Of 116 experiments, 14 achieve \textsc{pass} (12.1\%), 67 achieve \textsc{partial} (57.8\%), and 35 result in \textsc{fail} (30.2\%).
-No single configuration passes all tasks; even the strongest configuration (Codex) fails on 3 of 23 experiments and only partially passes 14.
+Table~\ref{tab:overall-results} presents the majority verdict for every task--configuration--prompt combination across the four configurations.
+Of 96 experiments, 8 achieve \textsc{pass} (8.3\%), 49 achieve \textsc{partial} (51.0\%), and 39 result in \textsc{fail} (40.6\%).
+No single configuration passes all tasks; even the strongest configurations pass only 3 of 24 experiments.
 
 \begin{table*}[t]
-\caption{Overall results: verdict per task, prompt, and configuration. Scores shown as (A/B/C) where A = Functional Correctness, B = Completeness, C = Behavioral Equivalence, each out of 5. Bold = \textsc{pass}, italic = \textsc{partial}, plain = \textsc{fail}.}
+\caption{Overall results: majority verdict per task, prompt, and configuration. Scores shown as (A/B/C), averaged across three evaluators and rounded, where A = Functional Correctness, B = Completeness, C = Behavioral Equivalence, each out of 5. Bold = \textsc{pass}, italic = \textsc{partial}, plain = \textsc{fail}.}
 \label{tab:overall-results}
 \centering
 \small
-\begin{tabular}{ll ccccc}
+\begin{tabular}{ll cccc}
 \toprule
-\textbf{Task} & \textbf{Prompt} & \textbf{A1 (Sonnet)} & \textbf{A2 (Opus)} & \textbf{A3 (Opus+Loops)} & \textbf{Codex (gpt-5.4)} & \textbf{MiniMax (M2.5)} \\
+\textbf{Task} & \textbf{Prompt} & \textbf{Claude (Opus 4.6)} & \textbf{Codex (GPT-5.4)} & \textbf{Cursor (Composer-2)} & \textbf{OpenCode (GLM-5.1)} \\
 \midrule
-\multirow{2}{*}{C1} & long  & \textbf{PASS} (5/5/5) & \textbf{PASS} (4/4/3) & \textbf{PASS} (5/5/4) & \textbf{PASS} (4/5/4) & \textit{PARTIAL} (4/5/3) \\
-                     & short & \textbf{PASS} (5/5/5) & FAIL (1/2/2) & FAIL (1/3/2) & FAIL (2/2/2) & FAIL (1/2/1) \\
+\multirow{2}{*}{C1} & long  & \textbf{PASS} (5/5/5) & \textbf{PASS} (5/5/5) & FAIL (1/1/1) & FAIL (1/1/1) \\
+                     & short & FAIL (2/1/1) & FAIL (1/1/1) & \textbf{PASS} (5/5/3) & FAIL (1/1/1) \\
 \midrule
-\multirow{2}{*}{C2} & long  & \textit{PARTIAL} (?/?/?) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/4/3) & \textit{PARTIAL} (2/4/2) & \textit{PARTIAL} (4/4/3) \\
-                     & short & FAIL (1/1/2) & FAIL (2/4/2) & \textit{PARTIAL} (?/?/?) & FAIL (2/2/2) & FAIL (2/1/2) \\
+\multirow{2}{*}{C2} & long  & \textit{PARTIAL} (3/4/2) & \textit{PARTIAL} (3/4/3) & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (2/3/2) \\
+                     & short & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (2/3/2) \\
 \midrule
-\multirow{2}{*}{C3} & long  & \textit{PARTIAL} (3/3/4) & FAIL (0/?/?) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (2/3/2) & \textit{PARTIAL} (3/2/3) \\
-                     & short & FAIL (0/0/2) & \textit{PARTIAL} (3/1/2) & FAIL (3/2/3) & \textit{PARTIAL} (4/2/3) & \textit{PARTIAL} (4/3/3) \\
+\multirow{2}{*}{C3} & long  & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/2/2) \\
+                     & short & FAIL (0/0/0) & FAIL (3/1/2) & \textit{PARTIAL} (3/1/2) & FAIL (2/1/2) \\
 \midrule
-\multirow{2}{*}{C4} & long  & FAIL (0/0/0) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/2/3) & \textbf{PASS} (5/4/5) & \textit{PARTIAL} (4/4/3) \\
-                     & short & \textit{PARTIAL} (3/4/1) & \textit{PARTIAL} (?/?/?) & \textit{PARTIAL} (3/3/3) & \textbf{PASS} (4/4/3) & FAIL (2/2/2) \\
+\multirow{2}{*}{C4} & long  & \textbf{PASS} (4/4/3) & \textbf{PASS} (4/4/4) & \textit{PARTIAL} (4/2/2) & \textit{PARTIAL} (3/3/2) \\
+                     & short & \textit{PARTIAL} (4/3/2) & \textit{PARTIAL} (2/2/2) & \textbf{PASS} (4/3/3) & FAIL (2/2/2) \\
 \midrule
-\multirow{2}{*}{C5} & long  & FAIL (0/0/0) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (?/?/?) & \textit{PARTIAL} (4/3/3) & \textit{PARTIAL} (3/2/2) \\
-                     & short & \textit{PARTIAL} (2/2/3) & FAIL (1/1/1) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (4/3/4) & \textit{PARTIAL} (3/2/2) \\
+\multirow{2}{*}{C5} & long  & FAIL (2/2/1) & FAIL (2/2/1) & FAIL (2/1/2) & FAIL (0/0/0) \\
+                     & short & FAIL (2/2/1) & FAIL (2/1/2) & FAIL (2/1/1) & FAIL (1/0/0) \\
 \midrule
-\multirow{2}{*}{M1} & long  & \textit{PARTIAL} (4/3/4) & \textbf{PASS} (4/4/3) & \textbf{PASS} (4/4/4) & \textbf{PASS} (5/4/4) & \textbf{PASS} (4/4/3) \\
-                     & short & \textit{PARTIAL} (3/2/3) & \textit{PARTIAL} (2/2/3) & \textit{PARTIAL} (2/1/2) & FAIL (3/2/2) & FAIL (1/1/1) \\
+\multirow{2}{*}{M1} & long  & \textbf{PASS} (5/5/5) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) \\
+                     & short & \textit{PARTIAL} (3/1/3) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/2/2) & FAIL (2/1/1) \\
 \midrule
-\multirow{2}{*}{M2} & long  & FAIL (0/0/0) & \textit{PARTIAL} (3.5/3.5/3) & \textit{PARTIAL} (2/2/3) & \textit{PARTIAL} (4/5/3) & \textit{PARTIAL} (3/3/2) \\
-                     & short & \textbf{PASS} (?/?/?) & \textit{PARTIAL} (2/3/1) & \textit{PARTIAL} (3/3/4) & \textbf{PASS} (4/4/4) & \textit{PARTIAL} (3/2/3) \\
+\multirow{2}{*}{M2} & long  & \textit{PARTIAL} (2/1/1) & FAIL (1/1/1) & \textit{PARTIAL} (2/2/3) & FAIL (0/0/0) \\
+                     & short & \textit{PARTIAL} (2/1/3) & FAIL (2/1/2) & FAIL (2/1/2) & FAIL (2/0/2) \\
 \midrule
-\multirow{2}{*}{M3} & long  & FAIL (0/0/0) & FAIL (0/0/0) & FAIL (2/2/2) & \textit{PARTIAL} (4/3/4) & FAIL (2/1/1) \\
-                     & short & FAIL (0/0/0) & \textit{PARTIAL} (2/2/3) & FAIL (2/1.5/1.5) & \textit{PARTIAL} (3/3/2) & FAIL (1/1/1) \\
+\multirow{2}{*}{M3} & long  & FAIL (1/1/2) & FAIL (2/1/1) & FAIL (2/1/2) & FAIL (2/1/1) \\
+                     & short & \textit{PARTIAL} (2/0/1) & FAIL (2/1/1) & FAIL (1/1/1) & FAIL (2/1/1) \\
 \midrule
-\multirow{2}{*}{K1} & long  & FAIL (0/0/0) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textbf{PASS} (4/4/4) & \textit{PARTIAL} (4/3/4) \\
-                     & short & FAIL (0/0/0) & --- & \textit{PARTIAL} (4/3/3) & \textit{PARTIAL} (5/4/4) & \textit{PARTIAL} (3/2/3) \\
+\multirow{2}{*}{K1} & long  & \textit{PARTIAL} (3/2/3) & \textbf{PASS} (4/4/4) & \textit{PARTIAL} (3/3/3) & FAIL (2/1/2) \\
+                     & short & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (4/3/3) & \textit{PARTIAL} (2/2/2) \\
 \midrule
-\multirow{2}{*}{K2} & long  & FAIL (0/0/0) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/2/3) \\
-                     & short & FAIL (0/0/0) & \textit{PARTIAL} (4/3/3) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (4/2/3) & \textit{PARTIAL} (3/2/2) \\
+\multirow{2}{*}{K2} & long  & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (2/2/2) \\
+                     & short & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (2/2/2) \\
 \midrule
-\multirow{2}{*}{K3} & long  & FAIL (0/1/0) & \textit{PARTIAL} (4/2/2) & \textit{PARTIAL} (4/3/2) & \textit{PARTIAL} (2/3/2) & --- \\
-                     & short & FAIL (2/0/2) & FAIL (1/1/0) & FAIL (2/1/1) & --- & --- \\
+\multirow{2}{*}{K3} & long  & FAIL (0/0/0) & \textit{PARTIAL} (3/3/2) & FAIL (0/0/0) & FAIL (2/2/1) \\
+                     & short & FAIL (0/0/0) & \textit{PARTIAL} (4/3/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (2/2/2) \\
 \midrule
-\multirow{2}{*}{K4} & long  & \textit{PARTIAL} (3/1/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (4/3/2) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/2/3) \\
-                     & short & FAIL (2/1/1) & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (?/?/?) & \textit{PARTIAL} (4/2/3) & FAIL (2/2/2) \\
+\multirow{2}{*}{K4} & long  & \textit{PARTIAL} (3/2/3) & \textit{PARTIAL} (3/2/3) & FAIL (0/0/0) & FAIL (2/1/2) \\
+                     & short & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/2/3) & FAIL (0/0/0) & FAIL (2/1/2) \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-\textbf{Finding 1:} \emph{No agent configuration reliably completes industrial feature implementation.} Across 116 experiments, the overall \textsc{pass} rate is 12.1\%. Even the best configuration (Codex gpt-5.4) fails or only partially completes 73.9\% of its tasks. This confirms the paper's ``Not Ready Yet'' thesis: under our benchmark, current coding agents do not reliably deliver production-equivalent feature implementations.
+\textbf{Finding 1:} \emph{No agent configuration reliably completes industrial feature implementation.} Across 96 experiments, the overall \textsc{pass} rate is 8.3\%. Even the best configurations fail or only partially pass 87.5\% of their tasks. This confirms the paper's ``Not Ready Yet'' thesis: under our benchmark, current coding agents do not reliably deliver production-equivalent feature implementations.
 
 %% ----------------------------------------------------------------
 \subsection{Pass Rate by Configuration}
 \label{sec:results-config}
 
-Table~\ref{tab:config-comparison} compares the five primary configurations on overall pass rate and mean composite score (sum of A+B+C, out of 15).
+Table~\ref{tab:config-comparison} compares the four configurations on overall pass rate and mean composite score (sum of A+B+C, out of 15).
 
 \begin{table}[t]
-\caption{Configuration comparison. $N$ = number of experiments, Pass Rate = fraction achieving \textsc{pass}, Partial+ = fraction achieving \textsc{pass} or \textsc{partial}, Mean Comp.\ = mean composite score (A+B+C, out of 15).}
+\caption{Configuration comparison. $N$ = number of experiments, Pass Rate = fraction achieving \textsc{pass}, Mean Comp.\ = mean composite score (A+B+C, out of 15). Scores are averaged across three independent evaluators.}
 \label{tab:config-comparison}
 \centering
 \small
@@ -76,20 +78,17 @@ Table~\ref{tab:config-comparison} compares the five primary configurations on ov
 \toprule
 \textbf{Config} & $N$ & \textbf{PASS} & \textbf{PARTIAL} & \textbf{FAIL} & \textbf{Pass\%} & \textbf{Mean} \\
 \midrule
-Codex (gpt-5.4)    & 23 & 6  & 14 & 3 & 26.1 & 9.83 \\
-A1 (Sonnet)         & 24 & 3  &  7 & 14 & 12.5 & 4.00 \\
-A3 (Opus+Loops)     & 24 & 2  & 17 & 5 &  8.3 & 7.17 \\
-A2 (Opus baseline)  & 23 & 2  & 15 & 6 &  8.7 & 6.52 \\
-MiniMax (M2.5)      & 22 & 1  & 14 & 7 &  4.5 & 7.55 \\
+Claude (Opus 4.6)      & 24 & 3  & 14 & 7 & 12.5 & 6.50 \\
+Codex (GPT-5.4)        & 24 & 3  & 13 & 8 & 12.5 & 7.36 \\
+Cursor (Composer-2)    & 24 & 2  & 13 & 9 &  8.3 & 6.31 \\
+OpenCode (GLM-5.1)     & 24 & 0  &  9 & 15 &  0.0 & 5.09 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Two configurations stand apart. Codex (gpt-5.4) achieves the highest pass rate (26.1\%, 6/23) with the highest mean composite score (9.83/15). A1 (Claude Sonnet) has pass rate (12.5\%, 3/24) but is dragged down by the K-series tasks, where it produced only planning documents and no code for K1, K2, and K3-long, resulting in 14 outright failures. Notably, A1's 3 passes are C1-long, C1-short, and M2-short.
+Claude Opus~4.6 and Codex GPT-5.4 tie for the highest pass rate (12.5\%, 3/24 each). However, Codex achieves a higher mean composite score (7.36 vs.\ 6.50), indicating stronger partial-implementation quality despite identical pass counts. All three Claude passes occur with long prompts (C1-long, C4-long, M1-long), while Codex also passes exclusively with long prompts (C1-long, C4-long, K1-long). Cursor Composer-2 passes 8.3\% (2/24); notably, both passes occur on short prompts (C1-short, C4-short), a counter-intuitive pattern discussed in \S\ref{sec:results-prompt}. OpenCode GLM-5.1 achieves 0\% pass but still produces partial implementations in 37.5\% of experiments, suggesting the model understands problems but cannot execute complete solutions.
 
-A2 (Opus baseline) and A3 (Opus+Loops) form a middle tier at 8.7\% and 12.5\% pass rate, respectively, but both maintain high partial+ rates ($\geq$73.9\%), meaning they reliably produce partial implementations. MiniMax (M2.5) achieves 4.5\% pass (1/22) with mean composite 7.55, exposing a pattern where the model consistently understands problems but cannot execute complete solutions.
-
-\textbf{Finding 2:} \emph{The best configuration (Codex gpt-5.4) achieves 26.1\% PASS under our rubric---a meaningful step above prior agents, but far from production-ready.} Codex is the only configuration to pass medium-complexity tasks (C4, M2), demonstrating a qualitative capability gap over other configurations. Yet a 87.9\% non-pass rate on industrial tasks confirms that even frontier models require significant human oversight.
+\textbf{Finding 2:} \emph{The two strongest configurations (Claude Opus~4.6 and Codex GPT-5.4) each achieve 12.5\% PASS under our rubric---tied, and far from production-ready.} No configuration passes any high-complexity task. A 91.7\% non-pass rate across all configurations confirms that even frontier models require significant human oversight.
 
 %% ----------------------------------------------------------------
 \subsection{Prompt Granularity Effect}
@@ -106,28 +105,25 @@ Each task was run with both a \emph{long} prompt (detailed specification with de
 \toprule
 \textbf{Config} & \textbf{Long\%} & \textbf{Short\%} & $\Delta$\textbf{Pass} & \textbf{Long} & $\Delta$\textbf{Comp.} \\
 \midrule
-Codex (gpt-5.4)  & 33.3 & 18.2 & +15.2 & 10.42 & +1.23 \\
-A1 (Sonnet)      &  8.3 & 16.7 &  $-$8.3 &  3.67 & $-$0.69 \\
-A2 (Opus)        & 16.7 &  0.0 & +16.7 &  7.33 & +1.70 \\
-A3 (Opus+Loops)  & 16.7 &  0.0 & +16.7 &  8.50 & +2.67 \\
-MiniMax (M2.5)   &  9.1 &  0.0 &  +9.1 &  9.00 & +2.91 \\
+Claude (Opus 4.6)  & 25.0 &  0.0 & +25.0 &  7.8 & +2.6 \\
+Codex (GPT-5.4)    & 25.0 &  0.0 & +25.0 &  8.4 & +2.2 \\
+Cursor (Composer-2) &  0.0 & 16.7 & $-$16.7 &  5.7 & $-$1.3 \\
+OpenCode (GLM-5.1) &  0.0 &  0.0 &   0.0 &  5.1 &  0.0 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Long prompts generally improve composite scores (+1.23 to +2.91), but the pass rate improvement varies dramatically.
-Codex gains +15.2 percentage points~(pp); MiniMax's pass rate remains 0\% despite a +1.92 composite gain.
-Detailed prompts help capable models cross the \textsc{pass} threshold while weaker models improve incrementally but remain below it.
+Long prompts improve composite scores for the two strongest models (Claude +2.6, Codex +2.2) and amplify their pass rates substantially (+25.0~pp each). Both Claude and Codex pass 25.0\% of tasks with long prompts vs.\ 0\% with short prompts. However, the pattern is not universal: Cursor shows a \emph{negative} prompt delta ($-$16.7~pp), with both passes on short prompts. OpenCode shows no prompt effect, remaining at 0\% pass regardless of prompt detail.
 
-\textbf{Finding 3:} \emph{Prompt granularity is the single strongest lever for improving agent performance.} Long prompts improve composite scores by +1.23 to +2.91 across most configurations, and improve pass rates by up to 16.7~pp for the strongest models. The effect amplifies existing model capability rather than substituting for it: strong models benefit most, while weaker models improve incrementally without crossing the pass threshold.
+\textbf{Finding 3:} \emph{Prompt granularity is the single strongest lever for improving performance of capable agents.} For the two strongest models, long prompts improve composite scores by +2.2 to +2.6 and pass rates by 25.0~pp. The effect amplifies existing model capability rather than substituting for it: strong models benefit most, while weaker models show no improvement or even negative effects.
 
-We note one counter-pattern: A1 shows a negative prompt delta ($-$8.3 pp), with short prompts outperforming long---its two short-prompt passes (C1-short, M2-short) involve tasks where concise specifications suffice, while its long-prompt pass (C1-long) is the only long-prompt success. This reversal does not generalize: all other configurations show non-negative prompt deltas.
+We note one counter-pattern: Cursor shows a negative prompt delta, with short prompts outperforming long---its two passes (C1-short, C4-short) involve tasks where the model's autonomous exploration suffices, while long prompts may constrain its search strategy. This reversal does not generalize to the other configurations.
 
 %% ----------------------------------------------------------------
 \subsection{Task Complexity Analysis}
 \label{sec:results-complexity}
 
-Tasks are grouped into three complexity tiers: \emph{Low} (C1, C2, M1, K1: 1--13 GT files), \emph{Medium} (C3, C4, M2, K2, K3: 6--49 GT files), and \emph{High} (C5, M3, K4: 10--98 GT files). Table~\ref{tab:complexity} shows pass rates per tier for the five primary configurations.
+Tasks are grouped into three complexity tiers: \emph{Low} (C1, C2, M1, K1: 1--13 GT files), \emph{Medium} (C3, C4, M2, K2, K3: 6--49 GT files), and \emph{High} (C5, M3, K4: 10--98 GT files). Table~\ref{tab:complexity} shows pass rates per tier for the four configurations.
 
 \begin{table}[t]
 \caption{Pass rate by task complexity tier and configuration.}
@@ -138,39 +134,36 @@ Tasks are grouped into three complexity tiers: \emph{Low} (C1, C2, M1, K1: 1--13
 \toprule
 \textbf{Complexity} & \textbf{Config} & $N$ & \textbf{PASS} & \textbf{FAIL} & \textbf{Pass\%} \\
 \midrule
-\multirow{5}{*}{Low}
- & Codex      & 8 & 3 & 3 & 37.5 \\
- & A2         & 7 & 2 & 2 & 28.6 \\
- & A1         & 8 & 2 & 3 & 25.0 \\
- & A3         & 8 & 2 & 1 & 25.0 \\
- & MiniMax    & 8 & 1 & 3 & 12.5 \\
+\multirow{4}{*}{Low}
+ & Claude      & 8 & 2 & 1 & 25.0 \\
+ & Codex       & 8 & 2 & 1 & 25.0 \\
+ & Cursor      & 8 & 1 & 1 & 12.5 \\
+ & OpenCode    & 8 & 0 & 4 &  0.0 \\
 \midrule
-\multirow{5}{*}{Medium}
- & Codex      & 9 & 3 & 0 & 33.3 \\
- & A1         & 10 & 1 & 6 & 10.0 \\
- & A2         & 10 & 0 & 3 &  0.0 \\
- & A3         & 10 & 0 & 2 &  0.0 \\
- & MiniMax    & 8 & 0 & 1 &  0.0 \\
+\multirow{4}{*}{Medium}
+ & Claude      & 10 & 1 & 3 & 10.0 \\
+ & Codex       & 10 & 1 & 3 & 10.0 \\
+ & Cursor      & 10 & 1 & 2 & 10.0 \\
+ & OpenCode    & 10 & 0 & 5 &  0.0 \\
 \midrule
-\multirow{5}{*}{High}
- & Codex      & 6 & 0 & 0 &  0.0 \\
- & A1         & 6 & 0 & 4 &  0.0 \\
- & A2         & 6 & 0 & 2 &  0.0 \\
- & A3         & 6 & 0 & 2 &  0.0 \\
- & MiniMax    & 6 & 0 & 3 &  0.0 \\
+\multirow{4}{*}{High}
+ & Claude      & 6 & 0 & 3 &  0.0 \\
+ & Codex       & 6 & 0 & 4 &  0.0 \\
+ & Cursor      & 6 & 0 & 6 &  0.0 \\
+ & OpenCode    & 6 & 0 & 6 &  0.0 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On low-complexity tasks, the best configuration (Codex) passes 37.5\% of tasks. On medium-complexity tasks, Codex passes 33.3\% (3 of 9) while all other configurations achieve 0--10\%. No configuration passes any high-complexity task, where all 30 experiments produce at most PARTIAL results.
+On low-complexity tasks, the best configurations (Claude and Codex) each pass 25.0\%. On medium-complexity tasks, three configurations (Claude, Codex, Cursor) each pass 10.0\% (1 of 10). On high-complexity tasks, no configuration achieves any pass, with all experiments producing only PARTIAL or FAIL results.
 
-\textbf{Finding 4:} \emph{Task complexity creates a steep capability cliff.} On low-complexity tasks, top configurations achieve 28--38\% pass. On high-complexity tasks, no configuration achieves any PASS verdict.
+\textbf{Finding 4:} \emph{Task complexity creates an absolute capability cliff.} On low-complexity tasks, top configurations achieve 25\% pass. On high-complexity tasks, all four configurations achieve 0\%---no agent produces a production-equivalent implementation for tasks with 10+ ground-truth files.
 
 %% ----------------------------------------------------------------
 \subsection{Comparison with SWE-bench}
 \label{sec:results-swebench}
 
 SWE-bench~\cite{jimenez2024swebench} tasks are predominantly single-file bug fixes in Python repositories (1--3 files, $<$50 lines); our tasks range from 1 to 98 files and up to 11{,}107 lines, require new feature design, and span four languages.
-Where frontier agents achieve $>$70\% on SWE-bench Verified, the best configuration in our benchmark achieves 26.1\% overall (33.3\% with long prompts); even on low-complexity tasks, our best pass rate is 37.5\%.
+Where frontier agents achieve $>$70\% on SWE-bench Verified, the best configurations in our benchmark achieve 12.5\% overall (25.0\% with long prompts); even on low-complexity tasks, our best pass rate is 25.0\%.
 
-\textbf{Finding 5:} \emph{Under our benchmark, feature implementation appears substantially harder than bug fixing.} The gap grows with task complexity: on high-complexity tasks, even the best agent achieves 0\% pass on high-complexity tasks under our evaluation, suggesting that current benchmarks may underestimate the challenge of real-world coding agent deployment.
+\textbf{Finding 5:} \emph{Under our benchmark, feature implementation appears substantially harder than bug fixing.} The gap grows with task complexity: on high-complexity tasks, no agent achieves any pass (0\%), suggesting that current benchmarks may underestimate the challenge of real-world coding agent deployment.

@@ -2,24 +2,20 @@
 \label{sec:threats}
 
 \textbf{Construct validity.}
-All experiments are scored by an LLM evaluator, introducing potential calibration bias.
-We mitigate self-evaluation by using MiniMax-M2.5 to evaluate Codex and MiniMax experiments, and Claude Sonnet~4 for A2/A3.
-Cross-evaluator calibration differences may exist; our rubric may also miss dimensions such as maintainability or security.
-To assess evaluator reliability, we audited all 14 PASS verdicts.
-16 cases (76\%) are clearly correct: file coverage $\geq$67\% with matching file paths and implementation approach.
-5 cases (24\%)---all from Codex---received PASS despite low file coverage (0--41\%), where the agent implemented correct functionality at different file paths than the ground truth.
-Under a stricter file-coverage-aware rubric, these 5 would likely be PARTIAL, reducing Codex's PASS rate from 26.1\% to 4.3\% and the overall rate from 12.1\% to 7.8\%.
-We report both figures to bracket the true performance range.
+Every experiment is independently scored by three LLM evaluators from different model families (Claude Opus~4.6, Codex GPT-5.4, and GLM-5.1), and we use the majority verdict ($\geq$2/3 agreement) as the final outcome.
+This cross-validation design mitigates single-evaluator bias, but shared blind spots across model families may persist.
+Unanimous agreement is 62\%, and $\geq$2/3 consensus reaches 99\%; pairwise agreement ranges from 69\% to 79\%, with per-dimension score spreads averaging $<$1~point.
+Our rubric measures production-level equivalence to the merged implementation rather than purely functional correctness; it may miss dimensions such as maintainability or security.
 
 \textbf{Internal validity.}
-Each task--configuration--prompt cell was executed once; stochastic variation means individual results may not represent expected performance, though aggregate patterns across 116 experiments provide robustness.
-Only A2~vs.~A3 is a clean single-variable ablation; all other cross-configuration comparisons are \emph{product-level} assessments confounding model and framework differences.
-During initial K4 experiments, Codex exploited insufficiently sanitized git history via \texttt{git cherry-pick}; we remediated by re-sanitizing all repositories to single-commit snapshots and re-running affected experiments, confirming no ground-truth extraction in post-sanitization trajectories.
+Each task--configuration--prompt cell was executed once; stochastic variation means individual results may not represent expected performance, though aggregate patterns across 96 experiments provide robustness.
+All cross-configuration comparisons are \emph{product-level} assessments confounding model and framework differences (\S\ref{sec:configs}).
+During initial K4 experiments, Codex exploited insufficiently sanitized git history via \texttt{git cherry-pick}; we remediated by re-sanitizing all repositories and re-running affected experiments, confirming no ground-truth extraction in post-sanitization trajectories.
 
 \textbf{External validity.}
 Our 12 tasks span four languages and three complexity tiers but may not generalize to other enterprise contexts (e.g., Java, Rust, fully proprietary codebases).
-Agent capabilities evolve rapidly; our early-2026 model snapshots will be superseded, though we expect relative patterns (prompt effect, harness effect, complexity cliff) to persist.
+Agent capabilities evolve rapidly; our early-2026 model snapshots will be superseded, though we expect relative patterns (prompt effect, complexity cliff) to persist.
 
 \textbf{VCS history as information channel.}
-Codex proactively searched git history and web documentation, while Claude had access to the same tools but chose not to use them (\S\ref{sec:tool-use}).
+Codex proactively searched git history and web documentation, while other agents varied in their use of these information channels.
 Neither behavior constitutes ground-truth leakage (sanitization removed target commits), but the information asymmetry means performance differences partially reflect tool-use strategy rather than pure model capability.

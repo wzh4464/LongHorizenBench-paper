@@ -1,9 +1,8 @@
 LLM-based coding agents now resolve over 70\% of SWE-bench bug-fix tasks, prompting industry interest in deploying them for larger-scale feature implementation.
 Yet no rigorous evaluation exists for multi-file feature development in industrial codebases.
-We present an empirical assessment of five agent configurations---spanning Claude, GPT, and two industrial models---across 12 feature-implementation tasks drawn from four production repositories (Huawei CANN, MindSpeed, torch\_npu, and Kubernetes) in C++, Python, Go, and AscendC, yielding 116 experiments evaluated against developer-written ground truth.
-The best configuration achieves 26.1\% PASS under our rubric, and overall only 12.1\% of experiments produce production-equivalent implementations.
-Task complexity exposes a steep capability cliff under our evaluation: top agents pass 37.5\% of low-complexity tasks but drop below 8.5\% on medium-complexity ones.
-Root-cause analysis reveals that the majority of failures stem from engineering-addressable gaps---incomplete file coverage, wrong directory structure, missing tests, and stub implementations---rather than fundamental model-capability limitations.
-We introduce \emph{Harness Engineering}, the practice of augmenting agent execution through structured input specifications, output validation loops, and process-side interventions.
-Detailed prompts improve pass rates by up to 16.7 percentage points; output-side validation wins 12 of 23 head-to-head comparisons, with the strongest gains on convention-heavy C++ codebases.
-Our findings indicate that coding agents are not ready for autonomous deployment on feature implementation, but that harness engineering---particularly fix-cycle loops, enforced test generation, and language-aware validation---is a promising and practical direction to bridge the gap.
+We present an empirical assessment of four agent configurations---Claude Opus~4.6, GPT-5.4 (Codex), Cursor Composer-2, and GLM-5.1 (OpenCode)---across 12 feature-implementation tasks drawn from four production repositories (Huawei CANN, MindSpeed, torch\_npu, and Kubernetes) in C++, Python, Go, and AscendC, yielding 96 experiments each independently scored by three LLM evaluators for cross-validation.
+The best configurations achieve 12.5\% PASS under our rubric, and overall only 8.3\% of experiments produce production-equivalent implementations.
+Task complexity exposes an absolute capability cliff: top agents pass 25.0\% of low-complexity tasks but 0\% of high-complexity ones.
+Root-cause analysis reveals that 84.1\% of failures stem from engineering-addressable gaps---primarily incomplete file coverage---rather than fundamental model-capability limitations.
+Detailed prompts improve pass rates by up to 25.0 percentage points for capable models, confirming prompt granularity as the single strongest performance lever.
+Our findings indicate that coding agents are not ready for autonomous deployment on feature implementation, but that structured specifications and process-side interventions offer a practical direction to bridge the gap.

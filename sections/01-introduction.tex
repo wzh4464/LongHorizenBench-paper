@@ -14,9 +14,9 @@ No systematic evaluation exists for how coding agents perform on this class of t
 
 We present the first industrial-scale capability assessment of coding agents on feature implementation tasks.
 Our benchmark comprises 12 tasks drawn from four production repositories---Kubernetes (Go), CANN operator kernels (C++/AscendC), MindSpeed training framework (Python), and torch\_npu (Python)---spanning three complexity tiers from single-file fixes to 98-file architectural changes.
-We evaluate five commercially available agent configurations across 116 experiments and find a clear answer: \textbf{Not Ready Yet} for autonomous deployment.
-The best configuration (OpenAI Codex with GPT-5.4) achieves a 26.1\% PASS rate under our rubric; the overall rate across all configurations is 12.1\%.
-Even restricting to the most favorable condition---the best agent with detailed implementation specifications---the pass rate reaches only 33.3\%, with critical gaps in test coverage, API design coherence, and cross-module completeness.
+We evaluate four commercially available agent configurations across 96 experiments---each independently scored by three LLM evaluators for cross-validation---and find a clear answer: \textbf{Not Ready Yet} for autonomous deployment.
+The best configurations (Claude Opus~4.6 and Codex GPT-5.4) each achieve a 12.5\% PASS rate under our rubric; the overall rate across all configurations is 8.3\%.
+Even restricting to the most favorable condition---the best agents with detailed implementation specifications---the pass rate reaches only 25.0\%, with critical gaps in test coverage, API design coherence, and cross-module completeness.
 
 This paper makes five contributions:
 
@@ -25,17 +25,18 @@ This paper makes five contributions:
     We design and execute a controlled evaluation of coding agents on 12 real feature implementation tasks spanning four languages and three complexity tiers, using merged production code as ground truth (\S\ref{sec:study-design}).
 
   \item \textbf{Root cause taxonomy separating model problems from engineering problems.}
-    Manual analysis of 102 non-PASS experiments yields a six-category failure taxonomy.
-    The dominant failure mode is incomplete file coverage (43\% of failures), not semantic misunderstanding (4\%), suggesting that the gap is primarily one of execution breadth rather than comprehension (\S\ref{sec:root-cause}).
+    Analysis of 88 non-PASS experiments yields a four-category failure taxonomy.
+    The dominant failure mode is incomplete file coverage (49\% of failures), not structural mismatch (1\%), and 84.1\% of failures are engineering-addressable---the agent understands the problem but fails to cover the full scope (\S\ref{sec:root-cause}).
 
-  \item \textbf{Quantified harness engineering effects.}
-    We isolate the effect of two harness types through controlled comparisons: an output-side validation harness (Loops) that improves composite scores by +0.52/15 and wins 12 of 23 head-to-head comparisons, and input-side detailed specifications that improve PASS rates by up to 16.7 percentage points across all configurations (\S\ref{sec:harness}).
+  \item \textbf{Quantified prompt engineering effects.}
+    We measure the effect of input-side specification detail through controlled prompt comparisons: detailed specifications improve PASS rates by up to 25.0 percentage points for capable agents and composite scores by +2.2 to +2.6/15, confirming prompt granularity as the single strongest performance lever (\S\ref{sec:harness}).
 
-  \item \textbf{Trajectory analysis revealing tool-use strategy as a key differentiator.}
-    On K4 (98 ground-truth files), the passing agent executed ${\sim}$50 discovery operations before writing code vs.\ ${\sim}$20 for the non-passing agent, demonstrating that exploration depth drives implementation completeness (\S\ref{sec:root-cause}).
+  \item \textbf{Complexity-driven completeness cliff.}
+    On high-complexity tasks (10--98 ground-truth files), 88\% of non-PASS experiments are critically incomplete ($B < 2$), compared to 37\% on low-complexity tasks.
+    File coverage data shows up to 30$\times$ differences between agents on the same task (\S\ref{sec:root-cause}).
 
   \item \textbf{Harness engineering roadmap.}
-    We propose a phased adoption roadmap from language-aware validation through fix-cycle loops to architecture-aware planning harness, with estimated impact ranges grounded in our empirical gap analysis (\S\ref{sec:harness-roadmap}).
+    We propose a phased adoption roadmap from language-aware validation through fix-cycle loops to architecture-aware planning, with estimated impact ranges grounded in our empirical gap analysis (\S\ref{sec:harness-roadmap}).
 \end{enumerate}
 
 The remainder of this paper is organized as follows.
