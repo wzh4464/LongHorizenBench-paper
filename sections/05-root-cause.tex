@@ -35,12 +35,12 @@ $B < A$ (the agent's code is of higher quality than its coverage),
 we classify runs:
 
 \begin{itemize}
-  \item \emph{Engineering-addressable (B $<$ A):} agent could PASS with better scope-management infrastructure. $\approx$ 58\% of non-PASS runs.
-  \item \emph{Capability-limited (A $\le$ 1):} core reasoning error; code is wrong, not merely incomplete. $\approx$ 25\% of non-PASS runs.
-  \item \emph{Borderline (A = B, C < 4):} $\approx$ 17\% of non-PASS runs with both correctness and scope issues.
+  \item \emph{Engineering-addressable (B $<$ A):} agent could PASS with better scope-management infrastructure. the majority of non-PASS runs.
+  \item \emph{Capability-limited (A $\le$ 1):} core reasoning error; code is wrong, not merely incomplete. a substantial minority (mean $A < 2$ across the four evaluators).
+  \item \emph{Borderline (A $\approx$ B, C low):} remaining runs where agents produced code with both correctness and scope issues that also diverged structurally from the reference PR.
 \end{itemize}
 
-Codex and Claude dominate the engineering-addressable category (65--70\%), suggesting strongest candidates for harness augmentation. Cursor and OpenCode have higher rates of capability-limited failures, indicating the underlying model struggles more with core task comprehension.
+Codex and Claude cluster more often in the engineering-addressable bucket (high A, lower B), suggesting their failures are most likely to be fixed by harness augmentation. Cursor and OpenCode fall more often into capability-limited (low A), indicating their underlying models struggle more with the core task semantics before any scope-management help can be applied.
 
 \finding{The dominant failure mode is engineering scope---agents write correct code, but only for a fraction of the required files. Across all 496 runs, roughly two-thirds of non-PASS outcomes are engineering-addressable rather than fundamental reasoning failures. Tooling that enforces complete scope coverage (multi-file planning, dependency discovery, automated verification) could substantially improve PASS rates without model changes.}
 
@@ -70,4 +70,4 @@ Combining the failure-mode taxonomy with the task-family signatures, we classify
 \item \textbf{Model-capability-limited}: $A \le 1$ or structural-mismatch ($C < 2$ with $A, B \ge 3$)---the agent failed to understand the problem or picked a wrong approach.
 \end{itemize}
 
-The majority of non-PASS runs in our benchmark are engineering-addressable (estimated 70--80\%). This suggests that prompting and harness improvements, not model capability, are the highest-leverage interventions.
+Qualitatively, the majority of non-PASS runs fall into the engineering-addressable bucket rather than the capability-limited bucket, suggesting that prompting and harness improvements--rather than waiting for newer models--are the highest-leverage interventions for practitioners today. We deliberately avoid attaching a precise percentage to the split: the boundary between categories depends on evaluator score cut-offs, and evaluator disagreement (Sec.~\ref{sec:eval-framework}) propagates into any fixed threshold.

@@ -36,7 +36,21 @@ Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
 - codex × glm 42.7% (lowest)
 - 4-way unanimous 41.3%
 
-## Iteration 4 (2026-04-22) — current
+## Iteration 5 (2026-04-22) — current
+
+**Completed:**
+- Removed the fabricated "58% / 25% / 17%" breakdown in §5; replaced with language anchored to mean A/B/C sub-scores that can be computed from `eval_scores_v2_long.csv`. The narrative now states "the majority of non-PASS runs" instead of a specific percentage.
+- Added `\finding{}` callout at the top of §4 summarising the 11-of-496 headline and noting the per-agent cliff.
+- Appended \emph{Deployment recipe} paragraph to §6 harness section: four concrete hardening steps (completeness checks, test-suite gate, architecture-plan enforcement, evaluator-as-critic) that teams can apply today.
+- Verified no figure overflows: `pdflatex` returns 11-page PDF with no "Overfull \hbox" complaints from Fig 1 or Fig 2.
+- Updated REVISION_NOTES with Iteration 5 note + canonical data table.
+
+**Still open:**
+- Appendix~\ref{app:per-run} (per-run breakdown) is still TODO; would let readers recompute §5 numbers themselves.
+- Introduction §1 still claims "21\% mean PASS" in one sentence; needs cross-check.
+- Reference list (`references.bib`) includes 3 ASE citations we have not read end-to-end.
+
+## Iteration 4 (2026-04-22)
 
 - Re-verified per-agent PASS rates against `reports/eval_scores_v2_long.csv` using strict majority-of-4. Numbers in §4 match.
 - Replaced Fig. 2 heatmap stub with a real pgfplots matrix plot driven by per (family, agent) PASS%.

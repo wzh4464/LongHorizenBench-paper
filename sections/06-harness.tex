@@ -50,3 +50,10 @@ We identify three levels of harness improvement, ordered by estimated difficulty
 (3)~\emph{architecture-aware planning} (enforce discovery-before-implementation phases; estimated +5--10\% PASS).
 
 \finding{Input-side prompt engineering (long vs.\ short) yields up to +25.0pp pass rate improvement for capable agents. The remaining 95\% non-pass gap requires output-side and process-side harnesses---particularly fix-cycle loops and enforced test generation---that no current configuration implements.}
+
+\paragraph{Deployment recipe for near-term production use.}
+For practitioners shipping coding agents to internal developers today, our data suggests four low-cost hardening steps.
+(i) \emph{Require a long-form task spec} before agent invocation; the $+$2--6~pp PASS uplift we measure for long prompts is the single largest free-lunch effect in the study.
+(ii) \emph{Gate outputs on syntax + unit tests} in a short post-agent loop; most failures are coverage miss, not syntactic errors, so this is cheap.
+(iii) \emph{Declare scope explicitly}---list the directories the agent may touch---to constrain the edit set and avoid the common failure of stopping at 40--60\% of the ground-truth file set.
+(iv) \emph{Run an evaluator panel} (minimum two evaluator models) before merging; we observed 42\%--75\% pairwise agreement between judges, so single-judge gating is noisy.

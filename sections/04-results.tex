@@ -35,6 +35,8 @@ All agents           & 496 & 11 & 194 & 291 & 2.2\% & 4.86 \\
 
 Table~\ref{tab:family_agent} further breaks down PASS by task family, confirming that the Kubernetes family yields zero PASS across all agents.
 
+\finding{\textbf{Headline result.} Across 496 runs (62 tasks $\times$ 4 agents $\times$ 2 prompts), only 11 clear the full rubric (2.2\% PASS). The strongest configuration is Cursor Composer-2 at 3.2\%; the weakest is OpenCode at 0.8\%. No agent passes any Kubernetes-family task, and no agent exceeds 4.8\% PASS even on its best prompt variant.}
+
 \textbf{Finding 1 (No Winner, All Fall Short).} Cursor Composer-2 narrowly leads on raw PASS count (4 of 124, 3.2\%), while Codex GPT-5.4 leads on mean composite score (5.82 / 15). Claude Opus 4.6 ties Codex on PASS count (3 each, 2.4\%). OpenCode trails all three at 0.8\% PASS, consistent with its lower model capability. Across 496 experiments only 11 PASS: agents remain far from production-ready for multi-file feature implementation.
 
 %% ------------------------------------------------------------------
