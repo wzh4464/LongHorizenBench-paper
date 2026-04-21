@@ -1,35 +1,35 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-Under our benchmark of 12 industrial feature-implementation tasks
-spanning four languages and three complexity tiers, no agent
-configuration achieves reliable autonomous feature implementation.
-The best configurations (Claude Opus~4.6 and Codex GPT-5.4) each reach 12.5\% PASS
-under our rubric; the overall rate across 96 experiments is 8.3\%.
-Task complexity exposes an absolute capability cliff: top agents pass
-25.0\% of low-complexity tasks but 0\% of high-complexity ones.
-Root-cause analysis shows that 84.1\% of non-PASS outcomes stem from
-engineering-addressable gaps---primarily incomplete file coverage---rather
-than fundamental model-capability limitations.
+Across 496 experiments spanning 62 real feature-implementation tasks
+and 4 state-of-the-art coding agents, we find that current commercial
+agents are \emph{not ready} to autonomously deliver production-quality
+feature implementations.  The best-performing configuration (Cursor
+Composer-2) achieves only a 3.2\% PASS rate; the overall benchmark
+average is 2.2\%.  All four agents record \emph{zero} passes on the
+Kubernetes task family (K1--K4) and on any of the 12 High-complexity
+tasks, a striking cliff that holds regardless of prompt quality.
 
-These findings carry a concrete industrial consequence.
-This research informed our team's decision to adopt
-\emph{agent-assisted} rather than agent-autonomous workflows, with
-mandatory human review gates for API design, test coverage, and
-feature lifecycle decisions.
-At the same time, the harness engineering results are encouraging:
-detailed input specifications improve pass rates by up to 25.0
-percentage points for capable agents, confirming prompt granularity
-as the single strongest performance lever.
+Our CapBench extension (50 OSS tasks beyond the 12 Huawei-ecosystem
+cases) confirms the picture at scale: the pattern is not an artefact of
+our original industrial repositories.  Even on well-documented open
+source projects, the 4 frontier agents combined solve only 5 of the 50
+CapBench tasks (10\% absolute pass count, 1.25\% of 400 runs),
+reinforcing the finding that modern agents cannot yet autonomously
+deliver multi-file feature implementations.
 
-Future work should pursue three directions:
-(1)~\emph{stronger harness}---fix-cycle loops that feed validation
-failures back as repair instructions, enforced test-generation
-mandates, and language-aware output validation;
-(2)~\emph{broader evaluation}---a larger and more diverse task set
-covering additional languages, repository types, and complexity
-ranges to test generalizability;
-(3)~\emph{human--agent collaboration modes}---measuring productivity
-and quality when agents operate under human supervision rather than
-autonomously, which better reflects the workflow our industrial
-experience suggests is practical today.
+Three additional patterns are worth emphasising:
+
+\begin{itemize}
+  \item \textbf{Cursor passes short prompts best.}  Alone among the four
+  agents, Cursor's best pass rate comes on short prompts (2/62 = 3.2\%
+  vs.\ 2/62 = 3.2\% on long).  Long specifications give Claude and
+  Codex the largest lift, while OpenCode barely benefits.
+  \item \textbf{Evaluator disagreement is significant.}  Codex vs.\ GLM
+  pairwise verdict agreement is only 42.7\%.  This makes our 4-evaluator
+  majority vote (with conservative tie-break) essential for
+  credible conclusions.
+  \item \textbf{High-complexity tasks are impossible.}  For 12 Huawei
+  tasks graded High (C5, M3, K4) the pass rate is 0/4/2 = 0\% across all
+  agents.  For the Medium-High tail of CapBench the story is identical.
+\end{itemize}

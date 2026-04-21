@@ -8,15 +8,10 @@ design, evaluation framework, and experiment execution protocol.
 %% ------------------------------------------------------------------
 \subsection{Task Selection}\label{sec:tasks}
 
-We select 12 tasks from four open-source repositories that are actively
-maintained by Huawei and the broader community.  Each task corresponds
-to a merged pull request or commit that implements a complete feature or
-bug fix.  Table~\ref{tab:tasks} summarises the task registry.
+Our benchmark has 62 tasks in total: 12 from the Huawei ecosystem (Kubernetes, CANN operator kernels, MindSpeed, torch\_npu) that are actively maintained and for which Huawei engineers contributed the ground-truth PRs, and 50 from \textit{CapBench}, an open-source extension we assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor.  Table~\ref{tab:tasks} summarises the Huawei subset; the full CapBench task inventory is available in the supplementary material.
 
 \begin{table}[t]
-  \caption{Task registry.  GT = ground truth (merged code).  Complexity
-    is classified by file count, cross-component coordination required,
-    and domain-specific knowledge.}
+  \caption{Huawei-industrial task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code).  Complexity reflects file count, cross-component coordination, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite and are summarised in Appendix~A.}
   \label{tab:tasks}
   \centering
   \small
@@ -66,9 +61,10 @@ knowledge needed:
     understanding, multi-module orchestration, and extensive testing.
 \end{itemize}
 
-The tasks span four languages (C++, AscendC, Python, Go) and three
-complexity tiers, providing a diverse substrate for evaluating agent
-capabilities across different engineering contexts.
+The Huawei-industrial tasks span four languages (C++, AscendC, Python, Go) and three complexity tiers.
+
+\paragraph{CapBench extension (50 tasks).}
+To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--50 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks are complexity-classified by the same rubric (GT files $\leq 5$ = Low; 6--15 = Medium; $> 15$ = High). Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
 
 %% ------------------------------------------------------------------
 \subsection{Agent Configurations}\label{sec:configs}
@@ -78,8 +74,8 @@ Table~\ref{tab:configs}.  Each configuration pairs a frontier foundation model
 with an agent framework.
 
 \begin{table}[t]
-  \caption{Agent configurations evaluated on the full 12-task benchmark.
-    Each runs all $12 \times 2 = 24$ task--prompt combinations.}
+  \caption{Agent configurations evaluated across the full 62-task benchmark (12 Huawei-industrial + 50 CapBench).
+    Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments.}
   \label{tab:configs}
   \centering
   \small
@@ -87,10 +83,10 @@ with an agent framework.
     \toprule
     \textbf{Config} & \textbf{Model} & \textbf{Framework} & \textbf{$N$} \\
     \midrule
-    Claude  & Claude Opus 4.6  & Claude Code & 24 \\
-    Codex   & GPT-5.4          & Codex CLI   & 24 \\
-    Cursor  & Composer-2       & Cursor Agent & 24 \\
-    OpenCode & GLM-5.1         & OpenCode    & 24 \\
+    Claude  & Claude Opus 4.6  & Claude Code & 124 \\
+    Codex   & GPT-5.4          & Codex CLI   & 124 \\
+    Cursor  & Composer-2       & Cursor Agent & 124 \\
+    OpenCode & GLM-5.1         & OpenCode    & 124 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -185,12 +181,16 @@ Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: the majority of 
 
 \textbf{Multi-evaluator cross-validation.}
 To mitigate evaluator bias, every experiment is independently scored by
-three LLM evaluators from different model families: Claude Opus~4.6,
-Codex GPT-5.4, and GLM-5.1.  We report the \emph{majority verdict}
-(agreement of $\geq$2/3 evaluators) and scores averaged across all
-three.  Unanimous agreement is 62\%, and $\geq$2/3 consensus reaches
-99\%; pairwise agreement ranges from 69\% to 79\%, with per-dimension
-score spreads averaging $<$1~point.
+four LLM evaluators from different model families: Claude Opus~4.6,
+Codex GPT-5.4, Cursor Composer-2, and GLM-5.1.  We report the
+\emph{majority verdict} (strict majority where possible, with a conservative
+tie-break PARTIAL$<$FAIL$<$PASS that privileges the worse verdict when
+evaluators are split) and scores averaged across the four.  Unanimity on the
+verdict label holds for 41.3\% of experiments; pairwise verdict agreement
+ranges from 42.7\% (Codex vs GLM, the two strictest evaluators) to 74.8\%
+(Claude vs Cursor).  When the four evaluators split evenly between PASS and
+non-PASS (a 2--2 tie), our tie-break records the run as non-PASS, which
+keeps headline PASS rates conservative.
 
 %% ------------------------------------------------------------------
 \subsection{Experiment Execution}\label{sec:execution}
@@ -225,9 +225,9 @@ search for shortcuts in version control history, making thorough
 sanitization essential for any benchmark using real repositories.
 
 \textbf{Experiment scale.}
-In total, we executed 96 experiments across 12~tasks $\times$
+In total, we executed 496 experiments across 62~tasks $\times$
 4~configurations $\times$ 2~prompt levels---a complete factorial design
 with no missing cells.
 Each task--config--prompt combination was run exactly once and
-evaluated by three independent LLM judges.
+evaluated by four independent LLM judges.
 The full results are reported in \S\ref{sec:results}.

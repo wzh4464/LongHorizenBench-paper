@@ -13,27 +13,26 @@ A Kubernetes feature gate, for example, touches API types, validation, defaultin
 No systematic evaluation exists for how coding agents perform on this class of tasks in production codebases.
 
 We present the first industrial-scale capability assessment of coding agents on feature implementation tasks.
-Our benchmark comprises 12 tasks drawn from four production repositories---Kubernetes (Go), CANN operator kernels (C++/AscendC), MindSpeed training framework (Python), and torch\_npu (Python)---spanning three complexity tiers from single-file fixes to 98-file architectural changes.
-We evaluate four commercially available agent configurations across 96 experiments---each independently scored by three LLM evaluators for cross-validation---and find a clear answer: \textbf{Not Ready Yet} for autonomous deployment.
-The best configurations (Claude Opus~4.6 and Codex GPT-5.4) each achieve a 12.5\% PASS rate under our rubric; the overall rate across all configurations is 8.3\%.
-Even restricting to the most favorable condition---the best agents with detailed implementation specifications---the pass rate reaches only 25.0\%, with critical gaps in test coverage, API design coherence, and cross-module completeness.
+Our benchmark comprises 62 tasks: 12 industrial tasks drawn from four Huawei production repositories---Kubernetes (Go), CANN operator kernels (C++/AscendC), MindSpeed training framework (Python), and torch\_npu (Python)---spanning three complexity tiers from single-file fixes to 98-file architectural changes, plus 50 multi-file tasks from the CapBench open-source suite (Kafka, Airflow, CPython, Django, Spring, and others).
+We evaluate four commercially available agent configurations across 496 experiments---each independently scored by four LLM evaluators (Claude, Codex, Cursor, GLM) for cross-validation via majority-vote verdicts with conservative tie-breaking---and find a clear answer: \textbf{no.}
+The best configuration (Cursor Composer-2) achieves only 3.2\% PASS; Claude Opus~4.6 and GPT-5.4 (Codex) tie at 2.4\%; OpenCode GLM-5.1 reaches 0.8\%.
+Overall, only 11 of 496 runs pass (2.2\%), and \emph{all four} agents fail at 0\% on Kubernetes-scale refactors and on the High-complexity tier in aggregate.
 
 This paper makes five contributions:
 
 \begin{enumerate}
   \item \textbf{First feature-level capability assessment across enterprise repositories.}
-    We design and execute a controlled evaluation of coding agents on 12 real feature implementation tasks spanning four languages and three complexity tiers, using merged production code as ground truth (\S\ref{sec:study-design}).
+    We design and execute a controlled evaluation of coding agents on 62 real feature-implementation tasks (12 Huawei enterprise + 50 CapBench open-source), spanning six languages and three complexity tiers, using merged production code as ground truth (\S\ref{sec:study-design}).
 
   \item \textbf{Root cause taxonomy separating model problems from engineering problems.}
-    Analysis of 88 non-PASS experiments yields a four-category failure taxonomy.
-    The dominant failure mode is incomplete file coverage (49\% of failures), not structural mismatch (1\%), and 84.1\% of failures are engineering-addressable---the agent understands the problem but fails to cover the full scope (\S\ref{sec:root-cause}).
+    Analysis of all 485 non-PASS experiments reveals a four-category failure taxonomy.
+    The dominant failure mode is incomplete file coverage, and across 4 agents the majority of failures are engineering-addressable—the agent correctly identifies the problem direction but fails to cover the full scope of handwritten changes (\S\ref{sec:root-cause}).
 
   \item \textbf{Quantified prompt engineering effects.}
-    We measure the effect of input-side specification detail through controlled prompt comparisons: detailed specifications improve PASS rates by up to 25.0 percentage points for capable agents and composite scores by +2.2 to +2.6/15, confirming prompt granularity as the single strongest performance lever (\S\ref{sec:harness}).
+    We measure the effect of input-side specification detail through a two-level prompt variant. On the industrial subset, detailed specifications improve PASS rates substantially (the best configuration reaches 4.8\% on long prompts vs. 0\% on short prompts), though the effect dissipates on the open-source CapBench tasks where baseline PASS rates are near zero (\S\ref{sec:results-prompt}).
 
   \item \textbf{Complexity-driven completeness cliff.}
-    On high-complexity tasks (10--98 ground-truth files), 88\% of non-PASS experiments are critically incomplete ($B < 2$), compared to 37\% on low-complexity tasks.
-    File coverage data shows up to 30$\times$ differences between agents on the same task (\S\ref{sec:root-cause}).
+    Across all 4 agents and both task families, no agent passes any High-complexity task (C5, M3, K4 in the Huawei set; the Kubernetes K1--K4 family is 0/32 across agents). File coverage data shows that agents systematically under-touch the handwritten target files, and this gap widens as GT file count grows (\S\ref{sec:root-cause}).
 
   \item \textbf{Harness engineering roadmap.}
     We propose a phased adoption roadmap from language-aware validation through fix-cycle loops to architecture-aware planning, with estimated impact ranges grounded in our empirical gap analysis (\S\ref{sec:harness-roadmap}).

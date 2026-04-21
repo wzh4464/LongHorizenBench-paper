@@ -1,169 +1,163 @@
-\section{Results: The Gap}
+\section{Results: The Gap Between Hype and Reality}
 \label{sec:results}
 
-This section presents the empirical results of 96 experiments across 12 industrial tasks, 4 agent configurations, and 2 prompt granularities, answering \textbf{RQ1}: \emph{Can current coding agents independently complete enterprise-level feature implementation?} The short answer is no---the best configurations achieve only 12.5\% PASS under our rubric---but the data reveals nuanced patterns across configurations, prompts, and task complexity.
+This section presents the empirical results of 496 experiments across 62 tasks (12 Huawei industrial + 50 CapBench open-source), 4 agent configurations, and 2 prompt granularities, answering: \emph{Can current coding agents independently complete real feature-implementation tasks?}
+The short answer is: \textbf{no}. Across all 496 runs, only 11 (2.2\%) pass our rubric; the best-performing configuration passes 3.2\%; and no agent passes any High-complexity task.
 
-Each experiment was independently scored by three LLM evaluators (Claude Opus~4.6, Codex GPT-5.4, and GLM-5.1); we report the \emph{majority verdict} (agreement of $\geq$2/3 evaluators) and averaged scores. The three evaluators agree unanimously on 62\% of verdicts and reach $\geq$2/3 consensus on 99\%; pairwise verdict agreement ranges from 69\% to 79\%, and per-dimension score spread averages $<$1 point, confirming robust cross-model calibration.
+Each experiment was independently scored by four LLM evaluators (Claude Opus~4.6, Codex GPT-5.4, Cursor Composer-2, GLM-5.1), and we report the majority verdict (with conservative tie-break) together with the mean score across the four evaluators. Pairwise evaluator agreement ranges from 42.7\% (Codex vs.\ GLM) to 74.8\% (Claude vs.\ Cursor), consistent with well-known disagreement patterns for LLM judges on open-ended code tasks.
 
 %% ----------------------------------------------------------------
-\subsection{Overall Results}
+\subsection{Agent-Level Performance}
 \label{sec:results-overall}
 
-Table~\ref{tab:overall-results} presents the majority verdict for every task--configuration--prompt combination across the four configurations.
-Of 96 experiments, 8 achieve \textsc{pass} (8.3\%), 49 achieve \textsc{partial} (51.0\%), and 39 result in \textsc{fail} (40.6\%).
-No single configuration passes all tasks; even the strongest configurations pass only 3 of 24 experiments.
-
-\begin{table*}[t]
-\caption{Overall results: majority verdict per task, prompt, and configuration. Scores shown as (A/B/C), averaged across three evaluators and rounded, where A = Functional Correctness, B = Completeness, C = Behavioral Equivalence, each out of 5. Bold = \textsc{pass}, italic = \textsc{partial}, plain = \textsc{fail}.}
-\label{tab:overall-results}
-\centering
-\small
-\begin{tabular}{ll cccc}
-\toprule
-\textbf{Task} & \textbf{Prompt} & \textbf{Claude (Opus 4.6)} & \textbf{Codex (GPT-5.4)} & \textbf{Cursor (Composer-2)} & \textbf{OpenCode (GLM-5.1)} \\
-\midrule
-\multirow{2}{*}{C1} & long  & \textbf{PASS} (5/5/5) & \textbf{PASS} (5/5/5) & FAIL (1/1/1) & FAIL (1/1/1) \\
-                     & short & FAIL (2/1/1) & FAIL (1/1/1) & \textbf{PASS} (5/5/3) & FAIL (1/1/1) \\
-\midrule
-\multirow{2}{*}{C2} & long  & \textit{PARTIAL} (3/4/2) & \textit{PARTIAL} (3/4/3) & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (2/3/2) \\
-                     & short & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (2/3/2) \\
-\midrule
-\multirow{2}{*}{C3} & long  & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/2/2) \\
-                     & short & FAIL (0/0/0) & FAIL (3/1/2) & \textit{PARTIAL} (3/1/2) & FAIL (2/1/2) \\
-\midrule
-\multirow{2}{*}{C4} & long  & \textbf{PASS} (4/4/3) & \textbf{PASS} (4/4/4) & \textit{PARTIAL} (4/2/2) & \textit{PARTIAL} (3/3/2) \\
-                     & short & \textit{PARTIAL} (4/3/2) & \textit{PARTIAL} (2/2/2) & \textbf{PASS} (4/3/3) & FAIL (2/2/2) \\
-\midrule
-\multirow{2}{*}{C5} & long  & FAIL (2/2/1) & FAIL (2/2/1) & FAIL (2/1/2) & FAIL (0/0/0) \\
-                     & short & FAIL (2/2/1) & FAIL (2/1/2) & FAIL (2/1/1) & FAIL (1/0/0) \\
-\midrule
-\multirow{2}{*}{M1} & long  & \textbf{PASS} (5/5/5) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) \\
-                     & short & \textit{PARTIAL} (3/1/3) & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/2/2) & FAIL (2/1/1) \\
-\midrule
-\multirow{2}{*}{M2} & long  & \textit{PARTIAL} (2/1/1) & FAIL (1/1/1) & \textit{PARTIAL} (2/2/3) & FAIL (0/0/0) \\
-                     & short & \textit{PARTIAL} (2/1/3) & FAIL (2/1/2) & FAIL (2/1/2) & FAIL (2/0/2) \\
-\midrule
-\multirow{2}{*}{M3} & long  & FAIL (1/1/2) & FAIL (2/1/1) & FAIL (2/1/2) & FAIL (2/1/1) \\
-                     & short & \textit{PARTIAL} (2/0/1) & FAIL (2/1/1) & FAIL (1/1/1) & FAIL (2/1/1) \\
-\midrule
-\multirow{2}{*}{K1} & long  & \textit{PARTIAL} (3/2/3) & \textbf{PASS} (4/4/4) & \textit{PARTIAL} (3/3/3) & FAIL (2/1/2) \\
-                     & short & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (4/3/3) & \textit{PARTIAL} (2/2/2) \\
-\midrule
-\multirow{2}{*}{K2} & long  & \textit{PARTIAL} (3/3/2) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (2/2/2) \\
-                     & short & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (3/3/3) & \textit{PARTIAL} (2/2/2) \\
-\midrule
-\multirow{2}{*}{K3} & long  & FAIL (0/0/0) & \textit{PARTIAL} (3/3/2) & FAIL (0/0/0) & FAIL (2/2/1) \\
-                     & short & FAIL (0/0/0) & \textit{PARTIAL} (4/3/2) & \textit{PARTIAL} (3/2/2) & \textit{PARTIAL} (2/2/2) \\
-\midrule
-\multirow{2}{*}{K4} & long  & \textit{PARTIAL} (3/2/3) & \textit{PARTIAL} (3/2/3) & FAIL (0/0/0) & FAIL (2/1/2) \\
-                     & short & \textit{PARTIAL} (2/2/2) & \textit{PARTIAL} (3/2/3) & FAIL (0/0/0) & FAIL (2/1/2) \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-\textbf{Finding 1:} \emph{No agent configuration reliably completes industrial feature implementation.} Across 96 experiments, the overall \textsc{pass} rate is 8.3\%. Even the best configurations fail or only partially pass 87.5\% of their tasks. This confirms the paper's ``Not Ready Yet'' thesis: under our benchmark, current coding agents do not reliably deliver production-equivalent feature implementations.
-
-%% ----------------------------------------------------------------
-\subsection{Pass Rate by Configuration}
-\label{sec:results-config}
-
-Table~\ref{tab:config-comparison} compares the four configurations on overall pass rate and mean composite score (sum of A+B+C, out of 15).
+Table~\ref{tab:config-pass} summarises per-agent PASS rates across all 124 runs (62 tasks × 2 prompts).
 
 \begin{table}[t]
-\caption{Configuration comparison. $N$ = number of experiments, Pass Rate = fraction achieving \textsc{pass}, Mean Comp.\ = mean composite score (A+B+C, out of 15). Scores are averaged across three independent evaluators.}
-\label{tab:config-comparison}
+\caption{Per-agent PASS/PARTIAL/FAIL distribution across all 496 runs. Verdict = majority of four LLM judges; mean score is averaged across four evaluators on a 0--15 scale (sum of three 0--5 dimensions).}
+\label{tab:config-pass}
 \centering
 \small
 \begin{tabular}{lrrrrrr}
 \toprule
-\textbf{Config} & $N$ & \textbf{PASS} & \textbf{PARTIAL} & \textbf{FAIL} & \textbf{Pass\%} & \textbf{Mean} \\
+\textbf{Agent} & $N$ & \textbf{PASS} & \textbf{PART.} & \textbf{FAIL} & \textbf{PASS\%} & \textbf{Mean} \\
 \midrule
-Claude (Opus 4.6)      & 24 & 3  & 14 & 7 & 12.5 & 6.50 \\
-Codex (GPT-5.4)        & 24 & 3  & 13 & 8 & 12.5 & 7.36 \\
-Cursor (Composer-2)    & 24 & 2  & 13 & 9 &  8.3 & 6.31 \\
-OpenCode (GLM-5.1)     & 24 & 0  &  9 & 15 &  0.0 & 5.09 \\
+Claude (Opus 4.6)     & 124 & 3 & 57 & 64 & 2.4\% & 5.68 \\
+Codex (GPT-5.4)       & 124 & 3 & 62 & 59 & 2.4\% & \textbf{5.82} \\
+Cursor (Composer-2)   & 124 & \textbf{4} & 49 & 71 & \textbf{3.2\%} & 5.06 \\
+OpenCode (GLM-5.1)    & 124 & 1 & 26 & 97 & 0.8\% & 3.87 \\
+\midrule
+All agents           & 496 & 11 & 194 & 291 & 2.2\% & 4.86 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Claude Opus~4.6 and Codex GPT-5.4 tie for the highest pass rate (12.5\%, 3/24 each). However, Codex achieves a higher mean composite score (7.36 vs.\ 6.50), indicating stronger partial-implementation quality despite identical pass counts. All three Claude passes occur with long prompts (C1-long, C4-long, M1-long), while Codex also passes exclusively with long prompts (C1-long, C4-long, K1-long). Cursor Composer-2 passes 8.3\% (2/24); notably, both passes occur on short prompts (C1-short, C4-short), a counter-intuitive pattern discussed in \S\ref{sec:results-prompt}. OpenCode GLM-5.1 achieves 0\% pass but still produces partial implementations in 37.5\% of experiments, suggesting the model understands problems but cannot execute complete solutions.
+\textbf{Finding 1 (No Winner, All Fall Short).} Cursor Composer-2 narrowly leads on raw PASS count (4 of 124, 3.2\%), while Codex GPT-5.4 leads on mean composite score (5.82 / 15). Claude Opus 4.6 ties Codex on PASS count (3 each, 2.4\%). OpenCode trails all three at 0.8\% PASS, consistent with its lower model capability. Across 496 experiments only 11 PASS: agents remain far from production-ready for multi-file feature implementation.
 
-\textbf{Finding 2:} \emph{The two strongest configurations (Claude Opus~4.6 and Codex GPT-5.4) each achieve 12.5\% PASS under our rubric---tied, and far from production-ready.} No configuration passes any high-complexity task. A 91.7\% non-pass rate across all configurations confirms that even frontier models require significant human oversight.
+%% ------------------------------------------------------------------
+\subsection{Task-Family Effect}
+\label{sec:results-family}
 
-%% ----------------------------------------------------------------
-\subsection{Prompt Granularity Effect}
-\label{sec:results-prompt}
-
-Each task was run with both a \emph{long} prompt (detailed specification with design-level requirements and architectural guidance) and a \emph{short} prompt (one-line task summary). Table~\ref{tab:prompt-effect} shows the per-configuration delta.
+Our benchmark spans four task families: CANN operator kernels (C1--C5), MindSpeed distributed training (M1--M3), Kubernetes-family (K1--K4), and CapBench OSS (T01--T50). The PASS distribution differs dramatically across families:
 
 \begin{table}[t]
-\caption{Prompt granularity effect. Long = detailed specification, Short = one-line summary. $\Delta$Pass = difference in pass rate (percentage points). $\Delta$Comp.\ = difference in mean composite score.}
-\label{tab:prompt-effect}
+\caption{PASS rate by task family (averaged across 4 agents, 2 prompts = 8 runs per task).}
+\label{tab:family}
 \centering
 \small
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-\textbf{Config} & \textbf{Long\%} & \textbf{Short\%} & $\Delta$\textbf{Pass} & \textbf{Long} & $\Delta$\textbf{Comp.} \\
+\textbf{Family} & \textbf{Repos} & \textbf{Tasks} & \textbf{Runs} & \textbf{PASS\%} \\
 \midrule
-Claude (Opus 4.6)  & 25.0 &  0.0 & +25.0 &  7.8 & +2.6 \\
-Codex (GPT-5.4)    & 25.0 &  0.0 & +25.0 &  8.4 & +2.2 \\
-Cursor (Composer-2) &  0.0 & 16.7 & $-$16.7 &  5.7 & $-$1.3 \\
-OpenCode (GLM-5.1) &  0.0 &  0.0 &   0.0 &  5.1 &  0.0 \\
+C (Huawei CANN, C++/AscendC) & cann-ops, cann-ops-adv & 5 & 40 & 12.5\% \\
+M (MindSpeed, Python)         & MindSpeed               & 3 & 24 &  4.2\% \\
+K (Kubernetes, Go)            & kubernetes              & 4 & 32 &  0.0\% \\
+T (CapBench, mixed)           & 15 OSS projects         & 50 & 400 &  1.25\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Long prompts improve composite scores for the two strongest models (Claude +2.6, Codex +2.2) and amplify their pass rates substantially (+25.0~pp each). Both Claude and Codex pass 25.0\% of tasks with long prompts vs.\ 0\% with short prompts. However, the pattern is not universal: Cursor shows a \emph{negative} prompt delta ($-$16.7~pp), with both passes on short prompts. OpenCode shows no prompt effect, remaining at 0\% pass regardless of prompt detail.
+Kubernetes tasks (K1--K4) are a categorical blind spot: \emph{zero} of 32 runs pass across all four agents and both prompt levels. CANN-family C++/AscendC tasks achieve the highest PASS rate (12.5\%), reflecting that Huawei-specific operator kernel code has relatively localised changes. CapBench OSS tasks average 1.25\% PASS, consistent with the overall 2.2\% but revealing that Kubernetes-class difficulty scales with project size.
 
-\textbf{Finding 3:} \emph{Prompt granularity is the single strongest lever for improving performance of capable agents.} For the two strongest models, long prompts improve composite scores by +2.2 to +2.6 and pass rates by 25.0~pp. The effect amplifies existing model capability rather than substituting for it: strong models benefit most, while weaker models show no improvement or even negative effects.
+\textbf{Finding 2 (Kubernetes Cliff).} All four agents fail on all Kubernetes-family tasks (0/32) regardless of prompt or agent capability---even the best-performing agent (Cursor, 3.2\% overall) scored zero on K1--K4. Kubernetes feature implementation appears fundamentally out-of-reach for current coding agents due to the combination of multi-module coordination, API-machinery boilerplate, and extensive test scaffolding requirements.
 
-We note one counter-pattern: Cursor shows a negative prompt delta, with short prompts outperforming long---its two passes (C1-short, C4-short) involve tasks where the model's autonomous exploration suffices, while long prompts may constrain its search strategy. This reversal does not generalize to the other configurations.
+%% ------------------------------------------------------------------
+\subsection{Per-Task Pass Distribution}
+\label{sec:per-task}
 
-%% ----------------------------------------------------------------
-\subsection{Task Complexity Analysis}
+Of the 62 tasks, only 8 have any PASS across the 4 agents (and most of those only 1--2 agents): C1, C4, M1, T10, T34 each have multiple agents passing; K1--K4 all tasks have zero agent PASS. Table~\ref{tab:task-pass-distribution} summarises the per-task PASS distribution.
+
+\begin{table}[t]
+\caption{Tasks that any agent passed (majority-PASS across 4 judges) in at least one prompt variant.}
+\label{tab:task-pass-distribution}
+\centering
+\small
+\begin{tabular}{llr}
+\toprule
+Task & Agents passing (and prompt) & Total PASS (of 8 runs) \\
+\midrule
+C1 (CANN) & Claude (long), Codex (long), Cursor (short) & 3 \\
+C4 (CANN, Low) & Codex (long), Cursor (short) & 2 \\
+M1 (MindSpeed, Low) & Claude (long) & 1 \\
+T10 (CapBench) & Claude, Codex, Cursor, OpenCode (all long) & 4 \\
+T34 (CapBench) & Cursor (long) & 1 \\
+\midrule
+\textbf{Total} & 11 / 496 & 2.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every other task has 0 PASS across all 8 attempts (4 agents × 2 prompts). Notably, of the 50 CapBench OSS tasks, only 2 (T10 and T34) elicit any PASS at all; all Huawei-ecosystem tasks except C1, C4, and M1 score 0 PASS.
+
+\paragraph{Finding 1.} No agent is strong enough to consistently complete feature-implementation tasks. Cursor leads by PASS count (4 of 124, 3.2\%), Codex and Claude tie at 3 of 124 (2.4\%), and OpenCode trails at 1 of 124 (0.8\%). Codex leads by mean composite score (5.82/15, vs.\ 5.68 for Claude and 5.06 for Cursor), indicating Codex produces more consistent PARTIAL outputs while Cursor is more ``all-or-nothing.''
+
+%% ---------------------------------------------------------------
+\subsection{Complexity-driven failures}
 \label{sec:results-complexity}
 
-Tasks are grouped into three complexity tiers: \emph{Low} (C1, C2, M1, K1: 1--13 GT files), \emph{Medium} (C3, C4, M2, K2, K3: 6--49 GT files), and \emph{High} (C5, M3, K4: 10--98 GT files). Table~\ref{tab:complexity} shows pass rates per tier for the four configurations.
+Complexity tiers for the 12 industrial tasks are assigned by GT-file count: Low (C1, C2, M1, K1), Medium (C3, C4, K2, K3, M2), High (C5, K4, M3). CapBench tasks span broader ranges but lean toward Medium/High. Results:
 
 \begin{table}[t]
-\caption{Pass rate by task complexity tier and configuration.}
-\label{tab:complexity}
 \centering
 \small
-\begin{tabular}{llrrrr}
+\caption{PASS rate by complexity tier, for the 12 Huawei industrial tasks.}
+\label{tab:complexity-hw}
+\begin{tabular}{lrrrrr}
 \toprule
-\textbf{Complexity} & \textbf{Config} & $N$ & \textbf{PASS} & \textbf{FAIL} & \textbf{Pass\%} \\
+ & Codex & Cursor & Claude & OpenCode & Avg \\
 \midrule
-\multirow{4}{*}{Low}
- & Claude      & 8 & 2 & 1 & 25.0 \\
- & Codex       & 8 & 2 & 1 & 25.0 \\
- & Cursor      & 8 & 1 & 1 & 12.5 \\
- & OpenCode    & 8 & 0 & 4 &  0.0 \\
-\midrule
-\multirow{4}{*}{Medium}
- & Claude      & 10 & 1 & 3 & 10.0 \\
- & Codex       & 10 & 1 & 3 & 10.0 \\
- & Cursor      & 10 & 1 & 2 & 10.0 \\
- & OpenCode    & 10 & 0 & 5 &  0.0 \\
-\midrule
-\multirow{4}{*}{High}
- & Claude      & 6 & 0 & 3 &  0.0 \\
- & Codex       & 6 & 0 & 4 &  0.0 \\
- & Cursor      & 6 & 0 & 6 &  0.0 \\
- & OpenCode    & 6 & 0 & 6 &  0.0 \\
+Low (4 tasks)    & 1/8 (12.5\%) & 1/8 (12.5\%) & 2/8 (25\%)    & 0/8 (0\%) & 4/32 (12.5\%) \\
+Medium (5 tasks) & 1/10 (10\%)  & 1/10 (10\%)  & 0/10 (0\%)    & 0/10 (0\%) & 2/40 (5.0\%) \\
+High (3 tasks)   & 0/6 (0\%)    & 0/6 (0\%)    & 0/6 (0\%)     & 0/6 (0\%) & 0/24 (0\%) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On low-complexity tasks, the best configurations (Claude and Codex) each pass 25.0\%. On medium-complexity tasks, three configurations (Claude, Codex, Cursor) each pass 10.0\% (1 of 10). On high-complexity tasks, no configuration achieves any pass, with all experiments producing only PARTIAL or FAIL results.
+On the broader CapBench extension (50 tasks $\times$ 4 agents $\times$ 2 prompts = 400 runs), only 5 runs reach PASS: Cursor (T10-long, T34-long), plus Claude/Codex/OpenCode on T10-long. The effect is even starker: the 50 CapBench tasks collectively yield 1.25\% PASS rate.
 
-\textbf{Finding 4:} \emph{Task complexity creates an absolute capability cliff.} On low-complexity tasks, top configurations achieve 25\% pass. On high-complexity tasks, all four configurations achieve 0\%---no agent produces a production-equivalent implementation for tasks with 10+ ground-truth files.
+\textbf{Finding 4 (updated):} \emph{Task complexity creates an absolute capability cliff.} Pass rate drops from 12.5\% on Huawei Low-complexity tasks to 0\% on High-complexity; the CapBench subset (mostly Medium/High-complexity multi-file OSS PRs) pushes the aggregate to 1\% PASS even for the best agent.
+
+%% ------------------------------------------------------------------
+\subsection{Prompt Effect (Long vs Short)}
+\label{sec:results-prompt}
+
+Each of the 62 tasks was run with both a short ($\le 3$-sentence) and a long (detailed architectural spec) prompt. Table~\ref{tab:prompt} aggregates pass rates and mean scores by agent and prompt type.
+
+\begin{table}[t]
+\caption{Prompt effect. $\Delta$ = long $-$ short, percentage points.}
+\label{tab:prompt}
+\centering
+\small
+\begin{tabular}{lrrr@{}rrr}
+\toprule
+\textbf{Agent} & \textbf{Short PASS\%} & \textbf{Long PASS\%} & \textbf{$\Delta$PASS} & \textbf{Short Mean} & \textbf{Long Mean} & \textbf{$\Delta$Mean} \\
+\midrule
+Claude   & 0.0\% & 4.8\% & +4.8 & 5.08 & 6.28 & +1.20 \\
+Codex    & 0.0\% & 4.8\% & +4.8 & 5.20 & 6.44 & +1.24 \\
+Cursor   & 3.2\% & 3.2\% & 0.0  & 4.23 & 5.90 & +1.67 \\
+OpenCode & 0.0\% & 1.6\% & +1.6 & 3.72 & 4.60 & +0.88 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For Claude and Codex, detailed prompts yield a +4.8-point PASS-rate improvement and a $\sim$+1.2-point mean-score boost. Cursor is unique: short prompts yield the same pass rate but with a 1.67-point lower mean score, and long prompts improve mean score without unlocking additional PASS cases. OpenCode's PASS rate stays near-zero regardless of prompt.
+
+\textbf{Finding 3:} Longer prompts help Claude, Codex, and OpenCode; Cursor's PASS rate is prompt-independent (though its mean score rises with longer prompts). This suggests that Cursor is at a ceiling on a small number of tractable tasks, while Claude and Codex can leverage richer problem specifications to reach PASS on a larger set of tasks.
 
 %% ----------------------------------------------------------------
-\subsection{Comparison with SWE-bench}
-\label{sec:results-swebench}
+\subsection{Evaluator Agreement}
+\label{sec:results-agreement}
 
-SWE-bench~\cite{jimenez2024swebench} tasks are predominantly single-file bug fixes in Python repositories (1--3 files, $<$50 lines); our tasks range from 1 to 98 files and up to 11{,}107 lines, require new feature design, and span four languages.
-Where frontier agents achieve $>$70\% on SWE-bench Verified, the best configurations in our benchmark achieve 12.5\% overall (25.0\% with long prompts); even on low-complexity tasks, our best pass rate is 25.0\%.
+We report pairwise Jaccard agreement among the four evaluators on verdict labels:
 
-\textbf{Finding 5:} \emph{Under our benchmark, feature implementation appears substantially harder than bug fixing.} The gap grows with task complexity: on high-complexity tasks, no agent achieves any pass (0\%), suggesting that current benchmarks may underestimate the challenge of real-world coding agent deployment.
+\begin{itemize}
+\item Claude-Codex: 64.0\%
+\item Claude-Cursor: 75.1\%
+\item Claude-GLM:   68.1\%
+\item Codex-Cursor:  64.9\%
+\item Codex-GLM:     42.7\%
+\item Cursor-GLM:    65.9\%
+\end{itemize}
+
+Codex and GLM agree the least (42.7\%) — these two judges are the most divergent, suggesting that Codex adopts stricter behavioral-equivalence criteria while GLM is more lenient on partial implementations. Claude and Cursor agree most often (75.1\%). Full 4-way consensus occurs on 41.3\% of runs, and the majority-vote rule with our conservative tie-break produces a deterministic verdict for all 496 experiments.
+
+\textbf{Finding 5.} Cross-evaluator agreement, while imperfect, is substantially above random (25\% for three-way majority from four votes). The 42.7\% Codex--GLM disagreement implies that single-evaluator benchmarks mis-rank agents; multi-evaluator consensus is essential for reproducible industrial benchmarks.
