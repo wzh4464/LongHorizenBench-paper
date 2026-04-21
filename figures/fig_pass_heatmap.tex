@@ -1,58 +1,21 @@
-% Requires \usepackage{pgfplots} \pgfplotsset{compat=1.18}
-% Heatmap of per-agent PASS% across task families.
-% Data source: reports/summary.md (section "Pass Rate by Agent and Prompt")
-\begin{figure}[t]
-\centering
-\begin{tikzpicture}
-  \begin{axis}[
-    width=0.95\linewidth,
-    height=5.0cm,
-    view={0}{90},
-    enlargelimits=false,
-    xtick={0,1,2,3,4,5,6},
-    ytick={0,1,2,3},
-    xticklabels={C1--C5,M1--M3,K1--K4,T(easy),T(med),T(hard)},
-    yticklabels={Claude,Codex,Cursor,OpenCode},
-    x tick label style={rotate=25, anchor=east, font=\scriptsize},
-    y tick label style={font=\scriptsize},
-    colormap/viridis,
-    colorbar,
-    colorbar style={width=0.25cm, font=\scriptsize},
-    point meta min=0, point meta max=25,
-    axis on top,
-    nodes near coords*={\pgfmathprintnumber\pgfplotspointmeta},
-    every node near coord/.append style={font=\tiny, text=white}
-  ]
-    \addplot[matrix plot*, point meta=explicit]
-      table[meta=v] {
-        x y v
-        0 0 12.0
-        1 0 0.0
-        2 0 0.0
-        3 0 5.0
-        4 0 2.0
-        5 0 0.0
-        0 1 20.0
-        1 1 0.0
-        2 1 0.0
-        3 1 6.0
-        4 1 3.0
-        5 1 0.0
-        0 2 8.0
-        1 2 0.0
-        2 2 0.0
-        3 2 4.0
-        4 2 1.0
-        5 2 0.0
-        0 3 0.0
-        1 3 0.0
-        2 3 0.0
-        3 3 2.0
-        4 3 0.0
-        5 3 0.0
-      };
-  \end{axis}
-\end{tikzpicture}
-\caption{PASS rate (\%) by task family and agent across all 496 experiment runs. Numbers in each cell are \texttt{PASS / total} (n=2 prompts $\times$ tasks in row). Darker green = higher PASS. The Kubernetes column is uniformly zero; Claude and Codex split the CANN top rank on easy tasks.}
-\label{fig:pass_heatmap}
-\end{figure*}
+% Task-family x agent PASS-rate matrix.
+% Source: reports/eval_scores_v2_long.csv, strict majority-of-4 voting.
+\begin{table}[t]
+  \centering
+  \caption{Run-level PASS counts by task family and agent (majority of four LLM judges; strict-PASS requires $\ge 3$ PASS votes). Every agent scores 0/8 on the Kubernetes family, the most structurally complex tasks in the benchmark.}
+  \label{tab:family_agent}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrrrr@{\hspace{1em}}r}
+    \toprule
+    \textbf{Family} & \textbf{Claude} & \textbf{Codex} & \textbf{Cursor} & \textbf{OpenCode} & \textbf{Row total} \\
+    \midrule
+    CANN (C1--C5)          & 1/10 (10\%)  & 2/10 (20\%) & 2/10 (20\%) & 0/10         & 5/40 (12.5\%) \\
+    MindSpeed (M1--M3)     & 1/6  (16.7\%)& 0/6         & 0/6         & 0/6          & 1/24 (4.2\%)  \\
+    Kubernetes (K1--K4)    & 0/8          & 0/8         & 0/8         & 0/8          & \textbf{0/32 (0\%)} \\
+    CapBench (T01--T50)    & 1/100 (1\%)  & 1/100 (1\%) & 2/100 (2\%) & 1/100 (1\%)  & 5/400 (1.3\%) \\
+    \midrule
+    \textbf{Agent total}   & \textbf{3/124 (2.4\%)} & \textbf{3/124 (2.4\%)} & \textbf{4/124 (3.2\%)} & \textbf{1/124 (0.8\%)} & \textbf{11/496 (2.2\%)} \\
+    \bottomrule
+  \end{tabular}
+\end{table}

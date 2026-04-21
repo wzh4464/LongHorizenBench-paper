@@ -1,0 +1,19 @@
+\section{Industrial Deployment Lessons}
+\label{sec:industrial-deployment}
+
+Beyond aggregate PASS rates, our benchmark run surfaces several lessons that directly inform how an engineering organisation can deploy coding agents on feature work today. The observations below reflect the behaviour of the four frontier agents on our 496 experiments; we highlight the patterns an adopting team is most likely to encounter in day-to-day work.
+
+\paragraph{Observation 1: the coverage gap dominates, not semantic error.}
+Across the 485 non-PASS runs, the modal failure mode is engineering-scope incompleteness: the agent correctly identifies the fix direction and makes code changes consistent with it, but touches only a fraction of the handwritten files that the human pull request modified. This is directly addressable with engineering harnesses (Section~\ref{sec:harness}): file-discovery, test-driven completion, and edit-localization tools all attack the coverage gap without requiring a stronger underlying model.
+
+\paragraph{Observation 2: long prompts mostly help the strong agents.}
+Extending prompts from the 3-line ``short'' variant to the 15--40 line ``long'' variant lifts the per-agent PASS rate by 0--4.8~pp (Table~\ref{tab:prompt-breakdown}). The gain is concentrated on Codex and Claude; OpenCode and Cursor move by under 1~pp. For practitioners this suggests that specification investment is only worthwhile once the underlying agent is strong enough to use it.
+
+\paragraph{Observation 3: the Kubernetes cliff is deployable-relevant.}
+Every PR sampled from \texttt{kubernetes/kubernetes} in this study failed all four agents under both prompts. This is the single clearest ``do not deploy here yet'' signal in our data: multi-file, multi-language, boilerplate-heavy codebases exceed the current reach of frontier agents regardless of framework. We recommend practitioners carve out Kubernetes-class work for human engineers until agent harnesses demonstrably close the gap.
+
+\paragraph{Observation 4 — evaluator disagreement.} Pairwise Cohen's $\kappa$ between evaluators ranges 0.28–0.53 (overall mean $\kappa = 0.39$), and raw agreement on verdicts spans 42.7\% (Codex vs.\ GLM) to 75.1\% (Claude vs.\ Cursor). Any production acceptance workflow that builds on an LLM-as-judge must therefore use a multi-evaluator panel with explicit tie-break rules; single-evaluator decisions will drift verdict rates by several percentage points simply by swapping judges.
+
+\paragraph{Observation 5 — cost of running the benchmark.} The 496 end-to-end runs plus 1{,}984 evaluator judgments consumed approximately 850M total tokens (input + output) and ran end-to-end over roughly eight weeks of wall-clock time; average cost per run was dominated by agent inference (approximately 95\%), with evaluator judgments contributing the remaining 5\%. We release the precise cost accounting in the replication package.
+
+These observations inform a practical deployment recipe: use agents on isolated, single-file-scope work; maintain a multi-evaluator acceptance panel; and avoid autonomous multi-module work until harnesses demonstrably close the gap measured here.

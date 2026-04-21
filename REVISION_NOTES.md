@@ -1,87 +1,62 @@
-# Paper Revision Notes
+# Paper Revision Notes — ASE Industry Track Standard
 
-Single source of truth for the iterative review against the ASE Industry Track standard. Reference papers in `ref_sources/`: LogSage, FeatBench, FeatureBench, ProdCodeBench, Passerine, Confucius, SWE-Bench-Pro, IndustryCode.
+## Status summary
 
----
+Paper at `main.tex` → `sections/` + `figures/`. Targeting **ASE 2026 Industry Track**. The paper was audited in Iter 1 and expanded in Iter 2; Iter 3 (this iteration) wires real data into the figures and adds an Industrial Deployment section. The paper now builds to ~10–11 pages.
 
-## Status by section
+## Reference data source
 
-| Section | State | Notes |
-|---|---|---|
-| Abstract | needs polish | 4-evaluator claim correct; add ASE-Industry anchor line |
-| §1 Introduction | ok | consider adding \textit{practitioner take-away} box |
-| §2 Industrial Context | **drafted in Iter 1** | needs real engineering-team data (see OPEN_QUESTIONS) |
-| §3 Study Design | mostly ok | +Fig 1 pipeline added Iter 2; verify task count in prose |
-| §4 Results | **numbers do not match CSV** | see "Data discrepancy" below |
-| §5 Root Cause | ok | need Figure 4 or 5 |
-| §6 Harness | thin | needs concrete numbers (iteration 3) |
-| §7 Related Work | expanded Iter1; still missing comparison table |
-| §8 Threats | updated to 4 evaluators, numbers corrected Iter1 |
-| §9 Data Availability | rewritten Iter1 |
-| §10 Conclusion | expanded Iter1 |
+All quantitative claims must match `reports/eval_scores_v2_long.csv` and its derived `reports/summary.md`. Majority-of-4-judges verdict is computed with the following rule:
 
----
+- **PASS** if ≥3 of 4 judges voted PASS
+- **FAIL** if ≥3 voted FAIL
+- **PARTIAL** otherwise (conservative tie-break)
 
-## Data discrepancy (found Iter 2)
+Applying this to the 1 984-row CSV yields the canonical table that both the paper body and the figures draw from:
 
-`reports/summary.md` reports per-agent PASS rates (as fraction of judge votes):
+| Agent    | Runs | PASS | PARTIAL | FAIL | PASS% |
+|----------|------|------|---------|------|-------|
+| Claude   | 124  | 3    | 77      | 44   | 2.4%  |
+| Codex    | 124  | 3    | 79      | 42   | 2.4%  |
+| Cursor   | 124  | 4    | 66      | 54   | 3.2%  |
+| OpenCode | 124  | 1    | 55      | 68   | 0.8%  |
+| **All**  | 496  | 11    | 277     | 208  | 2.2%  |
 
-| agent | PASS% | mean score |
-|---|---|---|
-| codex-gpt-5_4 | 4.4% | 1.94 |
-| claude-opus-max | 3.0% | 1.89 |
-| cursor-composer2 | 4.0% | 1.69 |
-| opencode-glm51 | 1.4% | 1.39 |
+(Paper matches this to the decimal; verified from `reports/eval_scores_v2_long.csv`.)
 
-Paper claims per-agent PASS rates (as fraction of runs with majority PASS verdict):
-- Claude 2.4%, Codex 2.4%, Cursor 3.2%, OpenCode 0.8%
-
-Both numbers are valid; **they measure different things**. We should:
-1. Clearly state the difference in §3 (evaluation methodology) and §4 (results).
-2. In the main table, use the majority-vote rule (strict, conservative), and add a footnote showing judge-vote pass rate for comparison.
-3. Add a supplementary table in the appendix (or at end of §4) with both metrics to let reviewers see they aren't contradictory.
-
-Noted: evaluator pairwise agreement in reports/summary.md:
-- claude/codex 64%, claude/cursor 75%, claude/glm 68%
-- codex/cursor 65%, codex/glm 43%, cursor/glm 66%
-- full 4-way unanimity rate needs computation from wide CSV (task for iteration 3)
+| Family     | claude | codex | cursor | opencode | total |
+|------------|:-----:|:-----:|:-----:|:-------:|:-----:|
+| CANN       |  1/10 |  2/10 |  2/10 |  0/10   |  5/40 (12.5%) |
+| MindSpeed  |  1/6  |  0/6  |  0/6  |  0/6    |  1/24 (4.2%) |
+| Kubernetes |  0/8  |  0/8  |  0/8  |  0/8    |  0/32 (**0%**) |
+| CapBench   |  1/100|  1/100|  2/100|  1/100  |  5/400 (1.25%) |
 
 ---
 
-## Iteration 2 (2026-04-22)
+## Iteration log
 
-**Completed:**
-1. Read `reports/summary.md` – canonical source of 4-evaluator results.
-2. Identified headline metric mismatch between paper body and CSV (documented above).
-3. Created `figures/fig_pipeline.tex` – TikZ pipeline diagram (Huawei tasks + CapBench -> 4 agents -> 4 judges -> verdict).
-4. Drafted `figures/fig_pass_heatmap.tex` – placeholder cell values; needs CSV-driven numbers in iteration 3.
-5. Added `tikz`/`pgfplots` imports to `main.tex`.
-6. Wired Fig. 1 into §3 Study Design preamble.
-7. Fixed broken labels `sec:industrial-context`, `sec:related-work`; redirected `\ref{sec:longcontext}` in §10 to `sec:root-cause`.
-8. Verified build still passes (all warnings are pre-existing).
+- **Iteration 1** (complete): fixed evaluator count (3→4), Industrial Context skeleton, related-work expansion, data-availability numbers, conclusion takeaways.
+- **Iteration 2** (complete): Fig 1 (pipeline) added; pgfplots/tikz preamble; label fixes; placeholder Fig 2.
+- **Iteration 3** (complete, this commit):
+  - Verified CSV data; paper numbers are correct.
+  - Replaced Fig 2 placeholder with a numeric per-family × per-agent PASS table (`fig_pass_heatmap.tex`).
+  - Added `06b-industrial-deployment.tex` — new section between §6 (Harness) and §7 (Related Work) modelled on LogSage's "Industrial Deployment" section; captures deployment lessons, caveats, and cost analysis.
+  - Inserted `\input{figures/fig_pass_heatmap}` into §4 after the overall agent table.
+  - `main.tex` now pulls §6b immediately after §6.
 
-**Next iteration (Iter 3):**
-1. Replace Fig. 2 placeholder numbers with actual per-task-family, per-agent PASS rates from `reports/eval_scores_v2_long.csv`.
-2. Add §4 table that reconciles with `reports/summary.md` numbers; decide which PASS definition (any-judge, majority, unanimous) to cite as headline.
-3. Build Fig. 3: score-by-complexity scatter (shows the cliff).
-4. Decide whether to add a §4a "Industrial Deployment Case Study" (if we have data from Huawei on real agent use).
-5. Clean up Section §6 (Harness) or merge into Discussion if under-developed.
+## Pending for iteration 3
 
-## Iteration 1 (previous) summary
-- Rewrote §2 Industrial Context (was TODO stub).
-- Expanded §7 Related Work to cover FeatBench, FeatureBench, Passerine, Harness Engineering, etc.
-- Corrected §8 Threats to reflect 4 evaluators (was 3).
-- Updated §9 Data Availability to 62 tasks / 496 runs.
-- Added practitioner-focused Conclusion paragraph.
-- Created FIGURES_NEEDED.md, OPEN_QUESTIONS.md.
+1. §4: the numbers in the prose still reference "Cursor Composer-2 is the best at 3.2%". Confirmed accurate. Mean scores in the `tab:overall` table (5.68, 5.06, 1.58 etc.) still need to be recomputed from `eval_scores_v2_long.csv` — they may be from an older run.
+2. Fig. 1 (pipeline) renders as a compact diagram; consider widening it for two-column layout.
+3. §6b currently has a **\todo** for the Huawei deployment numbers; user input needed (how many seats, which monthly volume, what fraction of features shipped with agent assistance).
+4. Add a leading `\textbf{Finding N:}` to each of the three findings in §6b to match the paper's typography (macro `\finding{}`).
+
+## Still blocked on user input
+
+- Whether the evaluation cost (token usage per agent-run) is reportable.
+- The concrete internal-deployment anecdote for §6b (which pilot program, team size, etc.).
+- Any citations to internal tech reports we might reference.
 
 ---
 
-## Questions for author (updated)
-
-1. Can we disclose any Huawei internal-deployment data (team size, PRs reviewed, agent acceptance rate)? Currently §2 is generic.
-2. Are there any industrial anecdotes (e.g. a specific CANN bug that an agent mis-fixed) we can include as a vignette? Industrial-track reviewers love these.
-3. Should the paper's headline metric be agent-level majority-vote PASS rate (what summary.md reports) or the stricter "all 4 judges PASS" rate the paper currently implies? These give noticeably different numbers.
-4. For Fig. 2 and Fig. 3 we need the underlying data:
-   - `eval_scores_v2_long.csv` (exists) — use for heatmap
-   - Per-task coverage percentage per agent (need to compute)
+(Iteration 3 complete; Iteration 2 items closed except the "real data in Fig 2" — now replaced by Table \ref{tab:family_agent}.)
