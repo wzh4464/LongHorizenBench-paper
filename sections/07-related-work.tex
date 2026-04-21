@@ -1,17 +1,29 @@
 \section{Related Work}
-\label{sec:related-work}
+\label{sec:related}
 
-\textbf{Code generation benchmarks.}
-SWE-bench~\cite{jimenez2024swebench} evaluates bug fixing in open-source Python repositories; frontier agents now resolve $>$70\% of its Verified subset.
-HumanEval~\cite{chen2021humaneval}, MBPP~\cite{austin2021mbpp}, DevBench~\cite{li2024devbench}, and RepoEval~\cite{zhang2023repocodecompletion} extend evaluation to function- and repository-level code generation but do not incorporate industrial engineering constraints.
-Our work evaluates multi-file feature implementation in production codebases with ground truth from merged pull requests.
+\subsection{Benchmarks for LLM Code Agents}
 
-\textbf{Industrial agent evaluations.}
-Mundhra et al.~\cite{mundhra2025EvaluatingLLMsASML} found LLM-generated code on ASML's EUV lithography codebase insufficient for production use; Liu et al.~\cite{liu2026EvaluatingLLMsAerospace} identified LLM capability boundaries in aerospace anomaly detection---both aligned with our ``Not Ready Yet'' thesis regarding autonomous deployment.
-A Google RCT reported 21\% developer speedup with AI-assisted coding~\cite{google2025rct}, but the DORA~2025 report found a slight throughput decrease with high AI adoption~\cite{dora2025}, and a Copilot study found 19\% slower task completion on mature codebases~\cite{metr2025copilot}.
-These conflicting signals reinforce that agent effectiveness depends heavily on task type and context.
+\textbf{Bug-fix benchmarks.}
+SWE-bench~\cite{jimenez2024swebench} and its human-verified subset SWE-bench~Verified~\cite{chowdhury2024swebenchverified} established the modern standard for evaluating LLM coding agents on real GitHub bug-fix patches.
+Subsequent work extends the formula to multi-file repair (SWE-Bench~Pro~\cite{swebenchpro2025}), polyglot corpora (SWE-Bench~Live~\cite{swebenchlive}, Multi-SWE-Bench~\cite{multiswebench}), and non-trivial test-driven patches (TDD-Bench-Verified~\cite{tddbench}).
+All of these datasets share the bug-fix framing: ground truth is a small diff that makes a previously-failing test pass.
+Our work targets the complementary regime of \emph{feature implementation}, where tasks include multi-file refactors, new subsystems, and cross-module protocol changes---none of which are reducible to a single failing test.
 
-\textbf{Agent frameworks and harness engineering.}
-Modern coding agents---SWE-agent~\cite{yang2024sweagent}, Aider~\cite{aider2024}, Claude Code, Codex CLI---embed iterative repair loops, planning, and tool-use orchestration.
-Our trajectory analysis (\S\ref{sec:tool-use}) shows that framework-level tool-use strategy can matter as much as model capability.
-To our knowledge, no prior work has systematically evaluated \emph{harness engineering} effects on coding agent performance across a controlled benchmark; our prompt comparison quantifies the input-side effect across all four configurations.
+\textbf{Feature-level benchmarks.} The closest relatives to our study are FeatBench~\cite{featbench2025} and SWE-EVO~\cite{sweevo}, which introduce feature-addition evaluations, and CR-Bench~\cite{crbench} for code-review-grounded evaluation.
+FeatBench reports natural-language-only feature specifications; CR-Bench emphasizes reviewer verdicts.
+Our CapBench extension is closest in spirit but differs in two ways: (i)~we include a proprietary-partner subset (Huawei~CANN, MindSpeed) that represents accelerator-stack engineering absent from prior open benchmarks; and (ii) we measure \emph{implementation equivalence} against merged ground truth, which explicitly penalizes under-specified diffs.
+
+\textbf{Industrial-context benchmarks.}  Passerine~\cite{mathai2024passerine} evaluates LLM-assisted program repair at Google; ProdCodeBench~\cite{prodcodebench2024} benchmarks production-grade code completion; TestGen-LLM at Meta~\cite{alshahwan2024testgen} studies unit-test generation at scale. Unlike these works, our benchmark targets \emph{feature implementation}---multi-file, behavior-changing modifications with a merged pull-request as ground truth---rather than repair or completion.
+
+\subsection{LLM Coding Agents and Harness Design}
+
+\textbf{Model families.} The agents we evaluate embed different frontier models (Claude~4.6 Opus, GPT-5.4, GLM-4.5, and Cursor's proprietary routing system). Prior comparative studies such as MultiAgent~\cite{multiagent2024} and SWE-bench agents~\cite{jimenez2024swebench} evaluate agents on bug-fixing traces; we extend this to feature implementation across industrial repositories.
+
+\textbf{Agent architectures.} Commercial coding agents differ along three axes: (i)~tool budget and latency, (ii)~memory/planning architecture, and (iii)~prompt-handling harness. Prior harness-engineering work~\cite{harness2025,agentless,confucius} has shown that simple pipeline-level choices (file-level planning, edit localisation, self-reflection) dominate raw model capability on SWE-bench Verified. Our cross-agent comparison on enterprise tasks corroborates and extends this: no single framework wins across all complexity tiers.
+
+\paragraph{Industrial deployment studies.}
+LogSage~\cite{logsage}, Passerine~\cite{mundler2024passerine}, and Meta's AutoBug~\cite{autobug} report deployments at Huawei, Google, and Meta respectively, each on a narrower task class (CI/CD triage, test-bug fix, auto-remediation).
+Our work complements these by evaluating the \emph{generic} feature-implementation task across four commercial agents and twelve industrial tasks plus fifty open-source controls.
+
+\paragraph{Complementary evaluation perspectives.}
+TestGen-LLM~\cite{testgenllm} and CodeVisor~\cite{codevisor} evaluate test-centric code generation; ProdCodeBench~\cite{prodcodebench2024} and RepoFusion~\cite{repofusion} evaluate repository completion. These targets are complementary to ours: successful feature implementation presupposes the test synthesis and code-completion capabilities they measure in isolation.

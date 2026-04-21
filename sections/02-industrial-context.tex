@@ -1,1 +1,49 @@
-% TODO
+\section{Industrial Context}
+\label{sec:context}
+
+The motivation for this study comes from the engineering realities of maintaining large, heterogeneous, and fast-moving production codebases.
+At the repositories we study---Kubernetes, Kafka, CPython, Django, and the Huawei CANN and MindSpeed stacks---feature implementation is rarely confined to a single file or a single abstraction layer.
+A representative feature in Kubernetes, for example, touches the API-server type system, conversion generators, validation code paths, RBAC defaults, end-to-end test fixtures, and release-note templates; a representative operator change in CANN spans the schedule-emission pass, kernel-level AscendC code, autotuner entries, and the Python binding layer.
+The scale of a successful diff is the \emph{entire} multi-module change, not a patch to the unit under test.
+
+\paragraph{Why this matters for coding agents.}
+Existing agent benchmarks (SWE-bench~\cite{jimenez2024swebench}, MBPP~\cite{austin2021program}, HumanEval~\cite{chen2021evaluating}) either restrict tasks to single-function edits or permit the agent to iterate against a hidden oracle test suite. In contrast, the engineers we interviewed at our industrial partner spend most of their time on \emph{feature implementation}: multi-file edits that touch an API definition, a runtime, a set of tests, and one or more generated artifacts, where correctness is only verifiable via human review plus an integration test matrix that runs for hours.
+The agent does not see the tests; it sees a natural-language specification and the codebase.
+Measured against this reality, ``the agent passed the hidden test'' is the wrong proxy; what matters is whether the agent produced a diff close enough to the diff a senior engineer would have produced that a reviewer can merge it with minor edits.
+
+\paragraph{Target repositories.}
+We study four representative classes of industrial repositories:
+
+\begin{itemize}
+  \item \textbf{Kubernetes / Kafka / CPython.}\quad Public infrastructure codebases with strong code-review norms, heavy use of generated code, and multi-file refactors as the dominant PR shape. These stand in for the ``large OSS we depend on'' case.
+  \item \textbf{Huawei CANN operator stack (C++/AscendC).}\quad A proprietary NPU operator library where feature-complete changes touch both host launcher code and device kernels. Representative of enterprise GPU/NPU accelerator stacks.
+  \item \textbf{MindSpeed and torch\_npu.} Training-stack integration code in Python and C++. Representative of enterprise ML platform work where a change must preserve training dynamics.
+  \item \textbf{CapBench (50 OSS tasks).} Independently sampled from 15 public repositories covering distributed systems, language runtimes, and web frameworks. Serves as an out-of-distribution test for generalization.
+\end{itemize}
+
+Across all four classes, the engineering pattern we observed is the same:
+a task requires coordinated edits across multiple files, some of which are
+non-obvious from the natural-language requirement (e.g.\ registry files,
+generated bindings, conversion tables, test fixtures, documentation).
+This is the industrial reality our evaluation is designed to capture.
+
+\subsection{Why Current Benchmarks Are Insufficient}
+\label{sec:why-now}
+
+Public agentic-coding benchmarks predominantly evaluate the
+\emph{fix-a-bug-and-pass-a-test} workflow: SWE-bench~\cite{jimenez2024swebench} measures patch
+acceptance on Python bug reports; LiveCodeBench and HumanEval measure
+function-level code synthesis; Agentless~\cite{xia2024agentless} and RepoBench evaluate
+retrieval-augmented repair. These benchmarks share three properties that
+misalign with enterprise feature implementation:
+
+\begin{enumerate}
+  \item \textbf{Ground truth is a single file or function.} Real features span API + impl + tests + docs + migrations.
+  \item \textbf{A test oracle is available.} Agents iterate against failing tests; the feedback loop is closed within the benchmark harness. In industry, tests must be \emph{written} as part of the feature, and their presence is a scoring criterion rather than a supervision signal.
+  \item \textbf{Repository context is small.} Benchmarks typically use ${<}\!10{,}000$ files per task; our industrial repositories exceed 100{,}000 files.
+\end{enumerate}
+
+\paragraph{What we expect from an ``industry-ready'' agent.}
+We define an agent as industry-ready for a task class if it can (i) identify every file that must change, (ii) produce edits that compile and pass existing tests, and (iii) add new tests that cover the behavior introduced by the change. All 62 tasks in our benchmark are derived from merged PRs that passed this bar in production; the ground truth is the merged PR itself.
+\paragraph{Positioning.}
+Our paper joins a recent line of industrial evaluations---Passerine at Google~\cite{mundler2024passerine}, WhatsNew at Meta~\cite{baumstark2024whatsnew}, ProdCodeBench~\cite{prodcodebench2024}, and FeatBench~\cite{featbench2024}---that move beyond single-function benchmarks. Where those works study \emph{bug fixing} or \emph{single-feature synthesis} in one setting, we focus on the \emph{multi-repository feature implementation} task across three industrial codebases plus a curated open-source extension, and we explicitly study the input-side leverage (prompt engineering) available to practitioners today.

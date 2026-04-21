@@ -1,4 +1,8 @@
-The replication package---including evaluation scripts, all 24 prompt files (long and short variants for each task), the three-dimension scoring rubric, and experiment results (scores, verdicts, and file coverage for all 96 experiments)---is publicly available at [Zenodo DOI TBD].
-Agent session trajectories are preserved for reproducibility analysis.
-The CANN and MindSpeed source code is available on Gitee under Huawei's open-source repositories; Kubernetes source code is available on GitHub.
-Proprietary internal documentation (e.g., operator design guides) referenced during task selection cannot be shared, but the prompts and evaluation reports contain sufficient detail to reproduce our analysis methodology on comparable codebases.
+The replication package is available at \url{TBD}.  It includes:
+(1)~task descriptions for all 62 benchmark tasks (12 industrial plus 50 CapBench), with per-task metadata recording repository, parent commit, ground-truth commit, handwritten-file list, and natural-language prompt;
+(2)~the full set of 124 agent prompts (62 tasks $\times$ 2 prompt variants);
+(3)~the rubric and evaluator prompt template used by all four LLM evaluators;
+(4)~per-run artifacts for all 496 experiments---final diffs, timing metadata, session logs, and sanitization verification---with per-evaluator scores, composite scores, and verdicts;
+(5)~the scoring scripts, aggregation notebooks, and sanitization harness.
+We also distribute the per-evaluator scoring CSV (\texttt{eval\_scores\_4evaluators.csv}) used to produce every results table in this paper.
+The replication package contains no proprietary source code; only the public upstream repositories referenced by each task are required.

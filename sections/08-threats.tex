@@ -2,20 +2,28 @@
 \label{sec:threats}
 
 \textbf{Construct validity.}
-Every experiment is independently scored by three LLM evaluators from different model families (Claude Opus~4.6, Codex GPT-5.4, and GLM-5.1), and we use the majority verdict ($\geq$2/3 agreement) as the final outcome.
-This cross-validation design mitigates single-evaluator bias, but shared blind spots across model families may persist.
-Unanimous agreement is 62\%, and $\geq$2/3 consensus reaches 99\%; pairwise agreement ranges from 69\% to 79\%, with per-dimension score spreads averaging $<$1~point.
-Our rubric measures production-level equivalence to the merged implementation rather than purely functional correctness; it may miss dimensions such as maintainability or security.
+Every experiment is independently scored by four LLM evaluators from different model families (Claude Opus~4.6, Codex GPT-5.4, Cursor Composer-2, and OpenCode GLM-5.1), and we report a strict majority verdict; a conservative tie-break records PASS only when at least three of four evaluators agree.
+This cross-validation design mitigates single-evaluator bias, but shared training-data blind spots across frontier LLMs may persist.
+Pairwise verdict agreement ranges from 42.7\% (Codex vs.\ OpenCode) to 75.1\% (Claude vs.\ Cursor); unanimous four-way agreement covers 41.3\% of runs.
+Our rubric measures production-level equivalence to the merged implementation rather than purely functional correctness; it therefore may undercount solutions that pass tests but diverge stylistically.
 
 \textbf{Internal validity.}
-Each task--configuration--prompt cell was executed once; stochastic variation means individual results may not represent expected performance, though aggregate patterns across 96 experiments provide robustness.
-All cross-configuration comparisons are \emph{product-level} assessments confounding model and framework differences (\S\ref{sec:configs}).
-During initial K4 experiments, Codex exploited insufficiently sanitized git history via \texttt{git cherry-pick}; we remediated by re-sanitizing all repositories and re-running affected experiments, confirming no ground-truth extraction in post-sanitization trajectories.
+Each task--configuration--prompt cell was executed once; stochastic variation means individual results may not represent expected behaviour, though aggregate patterns across 496 runs (62 tasks $\times$ 4 configurations $\times$ 2 prompts) remain robust.
+All cross-configuration comparisons are \emph{product-level}---each configuration confounds the underlying model, harness, and tool-use policy---so an agent's advantage may reflect framework engineering as much as raw model capability (\S\ref{sec:configs}).
+During initial runs on Kubernetes task K4, one configuration exploited git history in the sanitized repository to reconstruct ground-truth diffs via \texttt{git cherry-pick}; we remediated by re-sanitizing all 62 task repositories---removing reachable commits beyond the assigned base SHA---and by programmatically auditing every trajectory for ground-truth-derived content. Post-sanitization runs were confirmed clean.
 
 \textbf{External validity.}
-Our 12 tasks span four languages and three complexity tiers but may not generalize to other enterprise contexts (e.g., Java, Rust, fully proprietary codebases).
-Agent capabilities evolve rapidly; our early-2026 model snapshots will be superseded, though we expect relative patterns (prompt effect, complexity cliff) to persist.
+Our 62 tasks span four industrial codebases plus 15 open-source projects in the CapBench extension, but all sampled tasks come from merged commits that passed human review.
+Selection is therefore biased toward \emph{tractable} feature implementations; ambiguous or cross-team tasks are underrepresented.
+Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, GPT-5.4, Composer-2, GLM-4.5) will be superseded within months of publication.
+We expect relative patterns---the Kubernetes cliff, long-prompt lift, coverage-dominated failure mode---to persist, but absolute PASS rates are a lower bound under today's models.
 
-\textbf{VCS history as information channel.}
-Codex proactively searched git history and web documentation, while other agents varied in their use of these information channels.
-Neither behavior constitutes ground-truth leakage (sanitization removed target commits), but the information asymmetry means performance differences partially reflect tool-use strategy rather than pure model capability.
+\textbf{Evaluator honesty.}
+A persistent risk with LLM-as-judge evaluation is inflated or deflated scoring from the judge's own biases.
+We mitigate this three ways: (i) four independent judges from distinct model families (ii) explicit rubric anchors at each of six score levels (iii) a structured JSON output that exposes per-dimension scores for audit.
+Empirically, judges disagree most on \emph{partial} verdicts (spread of 1.2 on the 0--5 scale), and least on \emph{PASS} verdicts where file-level coverage is decisive.
+
+\textbf{Ground-truth definition.}
+We use merged code as the reference implementation.
+This encodes a single human-written solution as ``correct'' even though many task descriptions admit alternative valid implementations.
+Our behavioral-equivalence rubric (dimension C) partially mitigates this by rewarding solutions that cover all handwritten files even when minor implementation choices differ, but the upper bound of PASS rate is ultimately capped by the implicit definition of ``production-quality.''
