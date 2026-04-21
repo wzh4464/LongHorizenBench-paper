@@ -1,21 +1,60 @@
-% Task-family x agent PASS-rate matrix.
-% Source: reports/eval_scores_v2_long.csv, strict majority-of-4 voting.
-\begin{table}[t]
-  \centering
-  \caption{Run-level PASS counts by task family and agent (majority of four LLM judges; strict-PASS requires $\ge 3$ PASS votes). Every agent scores 0/8 on the Kubernetes family, the most structurally complex tasks in the benchmark.}
-  \label{tab:family_agent}
-  \small
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{lrrrr@{\hspace{1em}}r}
-    \toprule
-    \textbf{Family} & \textbf{Claude} & \textbf{Codex} & \textbf{Cursor} & \textbf{OpenCode} & \textbf{Row total} \\
-    \midrule
-    CANN (C1--C5)          & 1/10 (10\%)  & 2/10 (20\%) & 2/10 (20\%) & 0/10         & 5/40 (12.5\%) \\
-    MindSpeed (M1--M3)     & 1/6  (16.7\%)& 0/6         & 0/6         & 0/6          & 1/24 (4.2\%)  \\
-    Kubernetes (K1--K4)    & 0/8          & 0/8         & 0/8         & 0/8          & \textbf{0/32 (0\%)} \\
-    CapBench (T01--T50)    & 1/100 (1\%)  & 1/100 (1\%) & 2/100 (2\%) & 1/100 (1\%)  & 5/400 (1.3\%) \\
-    \midrule
-    \textbf{Agent total}   & \textbf{3/124 (2.4\%)} & \textbf{3/124 (2.4\%)} & \textbf{4/124 (3.2\%)} & \textbf{1/124 (0.8\%)} & \textbf{11/496 (2.2\%)} \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+% Task-family x agent PASS rate (%), visualized as a green heatmap.
+% Values derived from reports/eval_scores_v2_long.csv, majority-of-4 voting.
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    colormap={gr}{color=(white) color=(green!60!black)},
+    colorbar,
+    colorbar style={
+      width=3mm,
+      title={\footnotesize \% PASS},
+      yticklabel style={font=\scriptsize},
+    },
+    point meta min=0, point meta max=20,
+    xtick={0,1,2,3},
+    xticklabels={Claude, Codex, Cursor, OpenCode},
+    ytick={0,1,2,3},
+    yticklabels={CapBench, Kubernetes, MindSpeed, CANN},
+    tick style={draw=none},
+    axis on top,
+    enlargelimits=false,
+    axis equal image,
+    width=0.9\linewidth,
+    xticklabel style={font=\scriptsize},
+    yticklabel style={font=\scriptsize},
+    nodes near coords,
+    nodes near coords style={font=\scriptsize},
+    nodes near coords align=center,
+    point meta=explicit symbolic,
+    every node near coord/.append style={yshift=0mm}
+  ]
+    \addplot[
+      matrix plot*,
+      mesh/cols=4,
+      point meta=explicit,
+      shader=flat corner,
+    ] table[meta=v] {
+      x y v
+      0 0 10
+      1 0 20
+      2 0 20
+      3 0 0
+      0 1 17
+      1 1 0
+      2 1 0
+      3 1 0
+      0 2 0
+      1 2 0
+      2 2 0
+      3 2 0
+      0 3 1
+      1 3 1
+      2 3 2
+      3 3 1
+    };
+  \end{axis}
+  \end{tikzpicture}
+  \caption{Pass rate (\%) by agent and task family under the majority-of-4 verdict. Rows top-to-bottom: \emph{CANN}, \emph{MindSpeed}, \emph{Kubernetes}, \emph{CapBench}. Kubernetes (K1--K4) is a \emph{uniform zero-pass} cliff across all agents.}
+\label{fig:pass-heatmap}
+\end{figure}

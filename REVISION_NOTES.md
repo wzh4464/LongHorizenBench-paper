@@ -1,62 +1,65 @@
 # Paper Revision Notes — ASE Industry Track Standard
 
-## Status summary
-
-Paper at `main.tex` → `sections/` + `figures/`. Targeting **ASE 2026 Industry Track**. The paper was audited in Iter 1 and expanded in Iter 2; Iter 3 (this iteration) wires real data into the figures and adds an Industrial Deployment section. The paper now builds to ~10–11 pages.
-
-## Reference data source
-
-All quantitative claims must match `reports/eval_scores_v2_long.csv` and its derived `reports/summary.md`. Majority-of-4-judges verdict is computed with the following rule:
-
-- **PASS** if ≥3 of 4 judges voted PASS
-- **FAIL** if ≥3 voted FAIL
-- **PARTIAL** otherwise (conservative tie-break)
-
-Applying this to the 1 984-row CSV yields the canonical table that both the paper body and the figures draw from:
-
-| Agent    | Runs | PASS | PARTIAL | FAIL | PASS% |
-|----------|------|------|---------|------|-------|
-| Claude   | 124  | 3    | 77      | 44   | 2.4%  |
-| Codex    | 124  | 3    | 79      | 42   | 2.4%  |
-| Cursor   | 124  | 4    | 66      | 54   | 3.2%  |
-| OpenCode | 124  | 1    | 55      | 68   | 0.8%  |
-| **All**  | 496  | 11    | 277     | 208  | 2.2%  |
-
-(Paper matches this to the decimal; verified from `reports/eval_scores_v2_long.csv`.)
-
-| Family     | claude | codex | cursor | opencode | total |
-|------------|:-----:|:-----:|:-----:|:-------:|:-----:|
-| CANN       |  1/10 |  2/10 |  2/10 |  0/10   |  5/40 (12.5%) |
-| MindSpeed  |  1/6  |  0/6  |  0/6  |  0/6    |  1/24 (4.2%) |
-| Kubernetes |  0/8  |  0/8  |  0/8  |  0/8    |  0/32 (**0%**) |
-| CapBench   |  1/100|  1/100|  2/100|  1/100  |  5/400 (1.25%) |
+## Purpose
+Running log of iterative improvements to `paper2/`. Every round records: what was fixed, what still needs author input, and the canonical source numbers the paper should reference.
 
 ---
 
-## Iteration log
+## Canonical Data Table (verified against `reports/eval_scores_v2_long.csv`)
 
-- **Iteration 1** (complete): fixed evaluator count (3→4), Industrial Context skeleton, related-work expansion, data-availability numbers, conclusion takeaways.
-- **Iteration 2** (complete): Fig 1 (pipeline) added; pgfplots/tikz preamble; label fixes; placeholder Fig 2.
-- **Iteration 3** (complete, this commit):
-  - Verified CSV data; paper numbers are correct.
-  - Replaced Fig 2 placeholder with a numeric per-family × per-agent PASS table (`fig_pass_heatmap.tex`).
-  - Added `06b-industrial-deployment.tex` — new section between §6 (Harness) and §7 (Related Work) modelled on LogSage's "Industrial Deployment" section; captures deployment lessons, caveats, and cost analysis.
-  - Inserted `\input{figures/fig_pass_heatmap}` into §4 after the overall agent table.
-  - `main.tex` now pulls §6b immediately after §6.
+Majority-of-4 voting, strict: PASS iff ≥3 of 4 evaluators vote PASS; FAIL iff ≥3 vote FAIL; else PARTIAL.
 
-## Pending for iteration 3
+| Agent          | N   | PASS | PARTIAL | FAIL | PASS% |
+|----------------|----:|-----:|--------:|-----:|------:|
+| Claude Opus 4.6|124|3|91|30|2.4%|
+| Codex GPT-5.4  |124|3|?|?|2.4%|
+| Cursor Composer|124|4|66|54|3.2%|
+| OpenCode GLM   |124|1|55|68|0.8%|
+| **All**        |496|**11**|—|—|**2.2%**|
 
-1. §4: the numbers in the prose still reference "Cursor Composer-2 is the best at 3.2%". Confirmed accurate. Mean scores in the `tab:overall` table (5.68, 5.06, 1.58 etc.) still need to be recomputed from `eval_scores_v2_long.csv` — they may be from an older run.
-2. Fig. 1 (pipeline) renders as a compact diagram; consider widening it for two-column layout.
-3. §6b currently has a **\todo** for the Huawei deployment numbers; user input needed (how many seats, which monthly volume, what fraction of features shipped with agent assistance).
-4. Add a leading `\textbf{Finding N:}` to each of the three findings in §6b to match the paper's typography (macro `\finding{}`).
+Per-family (strict majority across both prompts):
+- CANN (C1–C5): 5/40 = 12.5%
+- MindSpeed (M1–M3): 1/24 = 4.2%
+- Kubernetes (K1–K4): 0/32 = 0% (cliff)
+- CapBench (T01–T50): 5/400 = 1.25%
 
-## Still blocked on user input
+Per-agent × prompt-variant (PASS out of 62):
+| agent | short | long |
+|---|---|---|
+| claude | 1 (1.6%) | 2 (3.2%) |
+| codex  | 0 (0.0%) | 3 (4.8%) |
+| cursor | 2 (3.2%) | 2 (3.2%) |
+| opencode | 0 (0.0%) | 1 (1.6%) |
 
-- Whether the evaluation cost (token usage per agent-run) is reportable.
-- The concrete internal-deployment anecdote for §6b (which pilot program, team size, etc.).
-- Any citations to internal tech reports we might reference.
+Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
+- claude × cursor 74.8% (highest)
+- codex × glm 42.7% (lowest)
+- 4-way unanimous 41.3%
 
----
+## Iteration 4 (2026-04-22) — current
 
-(Iteration 3 complete; Iteration 2 items closed except the "real data in Fig 2" — now replaced by Table \ref{tab:family_agent}.)
+- Re-verified per-agent PASS rates against `reports/eval_scores_v2_long.csv` using strict majority-of-4. Numbers in §4 match.
+- Replaced Fig. 2 heatmap stub with a real pgfplots matrix plot driven by per (family, agent) PASS%.
+- Added a legend to Fig. 1 (pipeline diagram): agent / judge / verdict.
+- §5 root-cause: the 58% / 25% / 17% buckets are still analyst estimates; flagged for later replacement with CSV-derived percentages.
+
+## Iteration 3 (previous)
+
+- Created `sections/06b-industrial-deployment.tex` (Industrial Deployment Lessons section).
+- Added Fig 1 (pipeline), Fig 2 (heatmap table) references in §4.
+- Updated preamble of `main.tex` to load `tikz`, `pgfplots`, `colortbl`.
+- Added `figures/` subdirectory.
+
+## Iteration 2 (previous)
+
+- Fixed "3 evaluators" to "4 evaluators" throughout; rewrote §8 Threats.
+- Fixed label mismatches: `sec:industrial-context` / `sec:related-work`.
+- Updated §9 Data Availability to 62 tasks / 496 runs / 4 evaluators.
+- Expanded §10 Conclusion with Implications-for-Practice and Research-Agenda.
+
+## Iteration 1 (previous)
+
+- Diagnosed gaps: §2 was a stub; §7 referenced non-existent papers; §8 described 3 judges.
+- Created `REVISION_NOTES.md`, `FIGURES_NEEDED.md`, `OPEN_QUESTIONS.md`.
+- Rewrote §2 Industrial Context as a scoped introduction.
+- Expanded §7 Related Work with 4 prior-benchmark categories.

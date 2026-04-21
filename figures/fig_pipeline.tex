@@ -49,6 +49,14 @@
       \draw[->] (\j) -- (vote);
 
     \draw[->, thick] (vote) -- (verdict);
+
+    % Legend
+    \node[draw, fill=white, inner sep=2pt, right=2mm of j3, yshift=-12mm, font=\scriptsize] (leg) {%
+      \begin{tabular}{@{}l@{\;}l@{}}
+        \tikz{\fill[blue!12] (0,0) rectangle (2mm,2mm);} & coding agent \\
+        \tikz{\fill[orange!15] (0,0) rectangle (2mm,2mm);} & LLM-as-judge \\
+        \tikz{\fill[green!8] (0,0) rectangle (2mm,2mm);} & aggregated verdict \\
+      \end{tabular}};
   \end{tikzpicture}
   \caption{Evaluation pipeline. 62 tasks $\times$ 2 prompt variants $\times$ 4 agents yield 496 runs; each run is scored by four LLM judges (including the same model families as the agents themselves), then combined by majority vote with a conservative tie-break favouring PARTIAL over PASS. The pipeline produces 1,984 evaluator judgments in total.}
 \label{fig:pipeline}
