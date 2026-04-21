@@ -27,3 +27,10 @@ Empirically, judges disagree most on \emph{partial} verdicts (spread of 1.2 on t
 We use merged code as the reference implementation.
 This encodes a single human-written solution as ``correct'' even though many task descriptions admit alternative valid implementations.
 Our behavioral-equivalence rubric (dimension C) partially mitigates this by rewarding solutions that cover all handwritten files even when minor implementation choices differ, but the upper bound of PASS rate is ultimately capped by the implicit definition of ``production-quality.''
+
+\textbf{Evaluator-task confound.}
+Low PASS rates on the hardest families (Kubernetes, High-complexity tier) could in principle reflect evaluator strictness rather than agent capability, because our evaluators were prompted to penalise incomplete file coverage.
+We partially mitigate this by (a) using four independent evaluator families with different training distributions, (b) spot-checking disagreements against human judgement for a random subsample, and (c) reporting per-dimension scores (A/B/C) so a reader can isolate coverage from correctness.
+Nonetheless, a harsher evaluator would pull majority verdicts toward FAIL on long-horizon tasks; readers should interpret the absolute 2.2\% PASS rate as indicative of the composite (agent+judge) system rather than of the agent alone.
+
+\textbf{Task-difficulty and evaluator-bias confound.} Our 4-evaluator rubric was designed to be task-agnostic, but harder tasks (K-family, high-complexity CapBench) systematically produce more ambiguous agent outputs, which in turn lower inter-evaluator agreement. We observe pairwise agreement of 42.7\% on the Codex/OpenCode judge pair for hard tasks versus 74.8\% on Claude/Cursor for easy tasks. This correlation is expected but means that an absolute "PASS rate" reported at aggregate level conflates two effects: genuine agent failure and rubric-resolution ambiguity on complex tasks. The qualitative ranking across agents is stable under all four single-judge aggregations; only the absolute PASS count is sensitive.

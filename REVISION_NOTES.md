@@ -77,3 +77,13 @@ Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
 - Created `REVISION_NOTES.md`, `FIGURES_NEEDED.md`, `OPEN_QUESTIONS.md`.
 - Rewrote §2 Industrial Context as a scoped introduction.
 - Expanded §7 Related Work with 4 prior-benchmark categories.
+## Iteration 6 (2026-04-22)
+- Validated §4 Table 2 family numbers (CANN 12.5%, MindSpeed 4.2%, K8s 0%, CapBench 1.25%) against CSV — consistent.
+- Added industrial motivation anchor to §1 intro citing Huawei's internal context.
+- Added ~45 placeholder bib entries to `references.bib` for all cited but undefined keys (needs human author fill-in before submission).
+- Added new Threats-to-Validity paragraph about evaluator-bias confounds with task complexity (§8).
+- Still-undone: bibentry polish, specific evaluator-bias kappa computation, per-family error bars.
+
+Stopping auto-loop after iteration 6 to await user review; context is ~165k tokens.
+
+## Iteration 4
