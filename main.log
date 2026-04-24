@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.5)  24 APR 2026 17:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.5)  24 APR 2026 17:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -521,7 +521,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
 /n on input line 412.
 LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 419.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/LinuxLibertineT-TLF/m/it on input
+(Font)                  OT1/cmr/m/it --> OT1/LinuxLibertineT-TLF/m/it on input 
 line 419.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/LinuxLibertineT-TLF/m/it on input
@@ -533,10 +533,10 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> T1/zi4/m/n on input line 420.
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 422.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/LinuxLibertineT-TLF/sb/n on input
+(Font)                  OT1/cmr/bx/n --> OT1/LinuxLibertineT-TLF/sb/n on input 
 line 422.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/LinuxLibertineT-TLF/sb/n on input
+(Font)                  OT1/cmr/bx/n --> OT1/LinuxLibertineT-TLF/sb/n on input 
 line 422.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/LinuxLibertineT-TLF/m/it --> OT1/LinuxLibertineT-TL
@@ -692,7 +692,7 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \ACM@linecount=\count334
 
 Special comment 'acks'
-LaTeX Font Info:    Trying to load font information for T1+LinuxLibertineT-TLF
+LaTeX Font Info:    Trying to load font information for T1+LinuxLibertineT-TLF 
 on input line 3652.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/libertine/T1LinuxLibertineT-TLF.f
@@ -1210,7 +1210,7 @@ LaTeX Font Info:    ... okay on input line 15.
 LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
 LaTeX Font Info:    ... okay on input line 15.
 LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 15.
-LaTeX Font Info:    Trying to load font information for U+ntxexa on input line
+LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 
 15.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/newtx/untxexa.fd
@@ -1277,7 +1277,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 15.
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+ntxmia on input line
+LaTeX Font Info:    Trying to load font information for U+ntxmia on input line 
 15.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/newtx/untxmia.fd
@@ -1287,7 +1287,7 @@ LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
 (Font)              scaled to size 7.3pt on input line 15.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
 (Font)              scaled to size 5.5pt on input line 15.
-LaTeX Font Info:    Trying to load font information for U+ntxsym on input line
+LaTeX Font Info:    Trying to load font information for U+ntxsym on input line 
 15.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/newtx/untxsym.fd
@@ -1297,7 +1297,7 @@ LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
 (Font)              scaled to size 7.3pt on input line 15.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
 (Font)              scaled to size 5.5pt on input line 15.
-LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line
+LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 
 15.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/newtx/untxsyc.fd
@@ -1370,7 +1370,7 @@ e
 * paper: custom
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: includehead includefoot twoside heightrounded
+* modes: includehead includefoot twoside heightrounded 
 * h-part:(L,W,R)=(54.0pt, 506.295pt, 54.0pt)
 * v-part:(T,H,B)=(57.0pt, 664.96999pt, 73.0pt)
 * \paperwidth=614.295pt
@@ -1413,7 +1413,7 @@ Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
 
-Class acmart Warning: Do not put several authors in the same \author macro! on
+Class acmart Warning: Do not put several authors in the same \author macro! on 
 input line 24.
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
@@ -1818,7 +1818,7 @@ Overfull \hbox (3.22198pt too wide) in paragraph at lines 101--105
 
 ) (./sections/03-study-design.tex (./figures/fig_pipeline.tex
 Overfull \hbox (163.81853pt too wide) in paragraph at lines 60--61
- [][]
+ [][] 
  []
 
 
@@ -1826,17 +1826,17 @@ Class acmart Warning: A possible image without description on input line 63.
 
 )
 Overfull \hbox (15.55215pt too wide) in paragraph at lines 14--15
-\T1/LinuxLibertineT-TLF/m/n/9 (-20) ecosys-tem (Ku-ber-netes, CANN op-er-a-tor
+\T1/LinuxLibertineT-TLF/m/n/9 (-20) ecosys-tem (Ku-ber-netes, CANN op-er-a-tor 
 ker-nels, Mind-Speed, torch_npu)
  []
 
 
 Overfull \hbox (7.8124pt too wide) in paragraph at lines 21--41
- [][]
+ [][] 
  []
 
 
-Package fancyhdr Warning: \headheight is too small (13.0pt):
+Package fancyhdr Warning: \headheight is too small (13.0pt): 
 (fancyhdr)                Make it at least 15.45749pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.45749pt}.
 (fancyhdr)                You might also make \topmargin smaller:
@@ -1884,7 +1884,7 @@ LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 6.0pt on input line 20.
 
 Overfull \hbox (11.7725pt too wide) in paragraph at lines 20--32
- [][]
+ [][] 
  []
 
 (./figures/fig_pass_heatmap.tex
@@ -1901,7 +1901,7 @@ Package pgfplots info on input line 24: Using 'lua backend=false' for axis: x c
 oord trafo unsupported.
 
 Overfull \hbox (45.63379pt too wide) in paragraph at lines 31--32
- [][]
+ [][] 
  []
 
 
@@ -1909,15 +1909,15 @@ Class acmart Warning: A possible image without description on input line 34.
 
 )
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 40.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 40.
 
 
-Package fancyhdr Warning: \headheight is too small (13.0pt):
+Package fancyhdr Warning: \headheight is too small (13.0pt): 
 (fancyhdr)                Make it at least 15.45749pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.45749pt}.
 (fancyhdr)                You might also make \topmargin smaller:
@@ -1928,7 +1928,7 @@ nc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}
 {/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/libertine/lbtn_ki75ao.enc}]
 
 Overfull \hbox (60.19633pt too wide) in paragraph at lines 55--65
- [][]
+ [][] 
  []
 
 
@@ -1939,21 +1939,21 @@ LibertineT-TLF/m/n/9 (-20) All four agents fail on all Kubernetes-
 
 
 Overfull \hbox (74.28427pt too wide) in paragraph at lines 82--95
- [][]
+ [][] 
  []
 
 [6.6]
 Overfull \hbox (47.07649pt too wide) in paragraph at lines 112--121
- [][]
+ [][] 
  []
 
 
 Overfull \hbox (73.26842pt too wide) in paragraph at lines 138--148
- [][]
+ [][] 
  []
 
 
-Package fancyhdr Warning: \headheight is too small (13.0pt):
+Package fancyhdr Warning: \headheight is too small (13.0pt): 
 (fancyhdr)                Make it at least 15.45749pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.45749pt}.
 (fancyhdr)                You might also make \topmargin smaller:
@@ -1973,16 +1973,16 @@ bertineT-TLF/m/n/9 (-20) OpenCode,
 
 
 Overfull \hbox (10.0141pt too wide) in paragraph at lines 43--44
-[]\T1/LinuxLibertineT-TLF/m/n/9 (-20) Codex and Claude clus-ter more of-ten in
+[]\T1/LinuxLibertineT-TLF/m/n/9 (-20) Codex and Claude clus-ter more of-ten in 
 the engineering-addressable
  []
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 45.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 45.
 
 [8.8]) (./sections/06-harness.tex
@@ -1992,11 +1992,11 @@ Overfull \hbox (13.97795pt too wide) in paragraph at lines 73--1
  []
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 32.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 32.
 
 
@@ -2006,16 +2006,16 @@ nt cor-rec-tion; and (3) \T1/LinuxLibertineT-TLF/m/it/9 (-20) architecture-
  []
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 54.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below
+Class acmart Warning: \vspace should only be used to provide space above/below 
 surrounding objects on input line 54.
 
 ) (./sections/06b-industrial-deployment.tex
 
-Package fancyhdr Warning: \headheight is too small (13.0pt):
+Package fancyhdr Warning: \headheight is too small (13.0pt): 
 (fancyhdr)                Make it at least 15.45749pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.45749pt}.
 (fancyhdr)                You might also make \topmargin smaller:
@@ -2047,7 +2047,7 @@ s. Prior harness-engineering
  []
 
 ) (./sections/08-threats.tex
-Overfull \hbox (18.19107pt too wide) in paragraph at lines 30--1
+Overfull \hbox (22.37607pt too wide) in paragraph at lines 30--1
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) Code-Vi-sor [[]] eval-u-ate test-centric co
 de gen-er-a-tion; Prod-CodeBench [[]]
  []
@@ -2060,7 +2060,7 @@ und. \T1/LinuxLibertineT-TLF/m/n/9 (-20) Our 4-evaluator
 
 )
 
-Package fancyhdr Warning: \headheight is too small (13.0pt):
+Package fancyhdr Warning: \headheight is too small (13.0pt): 
 (fancyhdr)                Make it at least 15.45749pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.45749pt}.
 (fancyhdr)                You might also make \topmargin smaller:
@@ -2087,8 +2087,11 @@ Overfull \hbox (57.9235pt too wide) in paragraph at lines 1--77
 
 (./main.bbl
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 7.3pt on input line 104.
-LaTeX Info: Redefining \tempurl on input line 192.
+(Font)              scaled to size 7.3pt on input line 117.
+LaTeX Info: Redefining \tempurl on input line 187.
+
+Underfull \vbox (badness 1558) has occurred while \output is active []
+
 )
 
 Class acmart Warning: Some images may lack descriptions.
@@ -2098,7 +2101,7 @@ y Act (EAA) https://accessiblyapp.com/accessibility-compliance/eaa/ regulations
  by actively working to ensure our publications and application services are ac
 cessible to individuals with disabilities, adhering to the WCAG guidelines to p
 rovide a seamless experience for all users, and regularly reviewing our accessi
-bility practices to maintain compliance with evolving standards.
+bility practices to maintain compliance with evolving standards. 
 (acmart)              To this end, we strongly encourage our authors to provide
  alternative text and captions for images and multimedia content. It is also im
 portant to optimize color contrast for the visually impaired. Taking these impo
@@ -2128,13 +2131,13 @@ L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 9091EDABB2ACD19FC39D5D0FAB870238;7786.
- )
+ ) 
 Here is how much of TeX's memory you used:
- 45198 strings out of 467525
- 988106 string characters out of 5418983
- 1564156 words of memory out of 5000000
+ 45213 strings out of 467525
+ 988478 string characters out of 5418983
+ 1565156 words of memory out of 5000000
  72327 multiletter control sequences out of 15000+600000
- 887246 words of font info for 644 fonts, out of 8000000 for 9000
+ 888905 words of font info for 654 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,19n,131p,1001b,2672s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
@@ -2151,7 +2154,7 @@ ts/type1/public/libertine/LinLibertineTI.pfb></usr/local/texlive/2026/texmf-dis
 t/fonts/type1/public/newtx/NewTXMI.pfb></usr/local/texlive/2026/texmf-dist/font
 s/type1/public/newtx/txmiaX.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
 /public/newtx/txsys.pfb>
-Output written on main.pdf (12 pages, 581482 bytes).
+Output written on main.pdf (12 pages, 582421 bytes).
 PDF statistics:
  486 PDF objects out of 1000 (max. 8388607)
  433 compressed objects within 5 object streams

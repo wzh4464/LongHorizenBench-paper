@@ -15,85 +15,85 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Warning--empty publisher in alshahwan2024testgen
 Warning--empty address in alshahwan2024testgen
 Warning--page numbers missing in both pages and numpages fields in alshahwan2024testgen
-Warning--empty publisher in codevisor
-Warning--empty address in codevisor
-Warning--page numbers missing in both pages and numpages fields in codevisor
-Warning--no number and no volume in autobug
-Warning--page numbers missing in both pages and numpages fields in autobug
-Warning--no number and no volume in crbench
-Warning--page numbers missing in both pages and numpages fields in crbench
 Warning--no number and no volume in multiagent2024
 Warning--page numbers missing in both pages and numpages fields in multiagent2024
-Warning--no number and no volume in confucius
-Warning--page numbers missing in both pages and numpages fields in confucius
-Warning--no number and no volume in tddbench
-Warning--page numbers missing in both pages and numpages fields in tddbench
 Warning--no number and no volume in featbench2025
 Warning--page numbers missing in both pages and numpages fields in featbench2025
-Warning--no number and no volume in harness2025
-Warning--page numbers missing in both pages and numpages fields in harness2025
+Warning--no number and no volume in autobug
+Warning--page numbers missing in both pages and numpages fields in autobug
+Warning--no number and no volume in tddbench
+Warning--page numbers missing in both pages and numpages fields in tddbench
+Warning--no number and no volume in swebenchpro2025
+Warning--page numbers missing in both pages and numpages fields in swebenchpro2025
+Warning--no number and no volume in crbench
+Warning--page numbers missing in both pages and numpages fields in crbench
+Warning--no number and no volume in prodcodebench2024
+Warning--page numbers missing in both pages and numpages fields in prodcodebench2024
 Warning--empty publisher in jimenez2024swebench
 Warning--empty address in jimenez2024swebench
 Warning--page numbers missing in both pages and numpages fields in jimenez2024swebench
-Warning--no number and no volume in logsage
-Warning--page numbers missing in both pages and numpages fields in logsage
-Warning--no number and no volume in multiswebench
-Warning--page numbers missing in both pages and numpages fields in multiswebench
 Warning--no number and no volume in mundler2024passerine
 Warning--page numbers missing in both pages and numpages fields in mundler2024passerine
 Warning--no number and no volume in mathai2024passerine
 Warning--page numbers missing in both pages and numpages fields in mathai2024passerine
-Warning--no number and no volume in prodcodebench2024
-Warning--page numbers missing in both pages and numpages fields in prodcodebench2024
 Warning--no number and no volume in repofusion
 Warning--page numbers missing in both pages and numpages fields in repofusion
-Warning--no number and no volume in swebenchlive
-Warning--page numbers missing in both pages and numpages fields in swebenchlive
-Warning--no number and no volume in swebenchpro2025
-Warning--page numbers missing in both pages and numpages fields in swebenchpro2025
+Warning--empty publisher in codevisor
+Warning--empty address in codevisor
+Warning--page numbers missing in both pages and numpages fields in codevisor
 Warning--no number and no volume in sweevo
 Warning--page numbers missing in both pages and numpages fields in sweevo
+Warning--no number and no volume in confucius
+Warning--page numbers missing in both pages and numpages fields in confucius
 Warning--no number and no volume in agentless
 Warning--page numbers missing in both pages and numpages fields in agentless
+Warning--no number and no volume in logsage
+Warning--page numbers missing in both pages and numpages fields in logsage
+Warning--no number and no volume in harness2025
+Warning--page numbers missing in both pages and numpages fields in harness2025
+Warning--no number and no volume in multiswebench
+Warning--page numbers missing in both pages and numpages fields in multiswebench
+Warning--no number and no volume in swebenchlive
+Warning--page numbers missing in both pages and numpages fields in swebenchlive
 You've used 23 entries,
             6273 wiz_defined-function locations,
-            1611 strings with 22099 characters,
-and the built_in function-call counts, 22766 in all, are:
-= -- 3264
-> -- 758
+            1613 strings with 22814 characters,
+and the built_in function-call counts, 24818 in all, are:
+= -- 3427
+> -- 1092
 < -- 0
-+ -- 237
-- -- 273
-* -- 1504
-:= -- 2196
-add.period$ -- 112
++ -- 372
+- -- 356
+* -- 1922
+:= -- 2497
+add.period$ -- 113
 call.type$ -- 23
-change.case$ -- 163
+change.case$ -- 197
 chr.to.int$ -- 22
 cite$ -- 66
-duplicate$ -- 1914
-empty$ -- 1390
-format.name$ -- 304
-if$ -- 5844
+duplicate$ -- 1915
+empty$ -- 1391
+format.name$ -- 439
+if$ -- 6258
 int.to.chr$ -- 3
 int.to.str$ -- 1
 missing$ -- 83
-newline$ -- 228
+newline$ -- 230
 num.names$ -- 160
-pop$ -- 891
+pop$ -- 924
 preamble$ -- 1
-purify$ -- 345
+purify$ -- 379
 quote$ -- 0
-skip$ -- 583
+skip$ -- 594
 stack$ -- 0
-substring$ -- 1231
+substring$ -- 1233
 swap$ -- 95
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 446
 warning$ -- 43
-while$ -- 129
+while$ -- 77
 width$ -- 0
-write$ -- 457
+write$ -- 459
 (There were 43 warnings)
