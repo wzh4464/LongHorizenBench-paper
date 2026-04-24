@@ -1,8 +1,8 @@
 \section{Harness Engineering}
 \label{sec:harness}
 
-The previous sections established that no agent configuration reliably completes industrial feature implementation (Section~\ref{sec:results}) and that failures cluster around engineering-addressable gaps---primarily incomplete file coverage (Section~\ref{sec:root-cause}).
-This section examines whether engineering interventions---specifically, detailed input specifications---can close the performance gap.
+The previous sections established that no agent configuration reliably completes industrial feature implementation (Section~\ref{sec:results}) and that failures cluster around incomplete file and test coverage (Section~\ref{sec:root-cause}).
+This section examines how much of the gap can be addressed by \emph{harness engineering}: changing the task scaffold, execution loop, and acceptance checks around an agent without changing the underlying model.
 
 %% ──────────────────────────────────────────────────────────────────
 \subsection{Definition and Taxonomy}
@@ -13,8 +13,8 @@ We distinguish three intervention points:
 
 \begin{itemize}
   \item \textbf{Input-side} (specification harness): detailed task descriptions, file-level scope constraints, or architecture guidelines provided before generation begins.  Our long prompts serve this role.
-  \item \textbf{Output-side} (validation harness): syntax checking, structure validation, and test execution that feed errors back to the agent for correction.  No configuration in our study implements this level.
-  \item \textbf{Process-side} (pipeline harness): enforced phases such as discovery-before-implementation, mandatory test generation, or CI-gated iteration.  No configuration in our study implements this level.
+  \item \textbf{Output-side} (validation harness): syntax checking, structure validation, and test execution that feed errors back to the agent for correction. Our main experiment does not include this level.
+  \item \textbf{Process-side} (pipeline harness): enforced phases such as discovery-before-implementation, mandatory test generation, or CI-gated iteration. Our main experiment does not include this level.
 \end{itemize}
 
 %% ──────────────────────────────────────────────────────────────────
@@ -43,17 +43,19 @@ The remaining gap stems from:
   \item \textbf{Discovery depth:} The harness does not control how thoroughly agents explore the codebase before writing code.
 \end{itemize}
 
-We identify three levels of harness improvement, ordered by estimated difficulty:
+The data supports input-side harnessing directly. The following two
+levels are roadmap items motivated by observed failures rather than
+measured ablations:
 \label{sec:harness-roadmap}
-(1)~\emph{language-aware validation} (adapt output checks to Go/Python/C++ conventions; estimated +2--5\% PASS);
-(2)~\emph{fix-cycle loops} (feed validation errors back for agent correction; estimated +10--15\% PASS); and
-(3)~\emph{architecture-aware planning} (enforce discovery-before-implementation phases; estimated +5--10\% PASS).
+(1)~\emph{language-aware validation}, adapting output checks to Go/Python/C++ conventions;
+(2)~\emph{fix-cycle loops}, feeding validation errors back for agent correction; and
+(3)~\emph{architecture-aware planning}, enforcing discovery-before-implementation phases and explicit test plans.
 
-\finding{Input-side prompt engineering (long vs.\ short) yields up to +25.0pp pass rate improvement for capable agents. The remaining 95\% non-pass gap requires output-side and process-side harnesses---particularly fix-cycle loops and enforced test generation---that no current configuration implements.}
+\finding{Input-side prompt engineering lifts Claude and Codex from 0\% to 4.8\% PASS and OpenCode from 0\% to 1.6\%; Cursor is prompt-insensitive at 3.2\%. Closing the remaining >95\% gap requires output-side and process-side harnesses---fix-cycle loops and enforced test coverage---that no current agent implements natively.}
 
 \paragraph{Deployment recipe for near-term production use.}
 For practitioners shipping coding agents to internal developers today, our data suggests four low-cost hardening steps.
 (i) \emph{Require a long-form task spec} before agent invocation; the $+$2--6~pp PASS uplift we measure for long prompts is the single largest free-lunch effect in the study.
 (ii) \emph{Gate outputs on syntax + unit tests} in a short post-agent loop; most failures are coverage miss, not syntactic errors, so this is cheap.
-(iii) \emph{Declare scope explicitly}---list the directories the agent may touch---to constrain the edit set and avoid the common failure of stopping at 40--60\% of the ground-truth file set.
+(iii) \emph{Declare scope explicitly}---list the directories the agent may touch---to constrain the edit set and avoid the common failure of stopping before all required files are identified.
 (iv) \emph{Run an evaluator panel} (minimum two evaluator models) before merging; we observed 42\%--75\% pairwise agreement between judges, so single-judge gating is noisy.

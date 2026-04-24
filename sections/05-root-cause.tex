@@ -42,7 +42,7 @@ we classify runs:
 
 Codex and Claude cluster more often in the engineering-addressable bucket (high A, lower B), suggesting their failures are most likely to be fixed by harness augmentation. Cursor and OpenCode fall more often into capability-limited (low A), indicating their underlying models struggle more with the core task semantics before any scope-management help can be applied.
 
-\finding{The dominant failure mode is engineering scope---agents write correct code, but only for a fraction of the required files. Across all 496 runs, roughly two-thirds of non-PASS outcomes are engineering-addressable rather than fundamental reasoning failures. Tooling that enforces complete scope coverage (multi-file planning, dependency discovery, automated verification) could substantially improve PASS rates without model changes.}
+\finding{The dominant failure mode is engineering scope---agents often write plausible code for part of the required change, but stop before covering the full file set. Tooling that enforces scope discovery, dependency tracing, and test coverage is therefore a plausible near-term improvement path; stronger models alone are unlikely to close the gap.}
 
 %% ------------------------------------------------------------------
 \subsection{Task Family Signatures}

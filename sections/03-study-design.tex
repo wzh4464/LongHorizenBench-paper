@@ -11,10 +11,10 @@ design, evaluation framework, and experiment execution protocol.
 %% ------------------------------------------------------------------
 \subsection{Task Selection}\label{sec:tasks}
 
-Our benchmark has 62 tasks in total: 12 from the Huawei ecosystem (Kubernetes, CANN operator kernels, MindSpeed, torch\_npu) that are actively maintained and for which Huawei engineers contributed the ground-truth PRs, and 50 from \textit{CapBench}, an open-source extension we assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor.  Table~\ref{tab:tasks} summarises the Huawei subset; the full CapBench task inventory is available in the supplementary material.
+Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kubernetes, CANN operator kernels, MindSpeed, torch\_npu) and 50 from \textit{CapBench}, an open-source extension assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor. Table~\ref{tab:tasks} summarises the Huawei/platform subset; the full CapBench task inventory is included in the replication package.
 
 \begin{table}[t]
-  \caption{Huawei-industrial task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code).  Complexity reflects file count, cross-component coordination, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite and are summarised in Appendix~A.}
+  \caption{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity reflects file count, cross-component coordination, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}
   \label{tab:tasks}
   \centering
   \small
@@ -177,10 +177,10 @@ expert-scored dimensions.
 
 \textbf{Evaluation scope.}
 Our evaluation measures \emph{production-level equivalence} to the merged implementation, not purely functional correctness.
-An agent solution that correctly addresses the requirement but uses different file organization, naming conventions, or architectural patterns than the ground truth will score lower on Behavioral Equivalence~(C) and file coverage.
-This design choice reflects our industrial interest: we assess whether agent output could replace the human-authored PR, not merely whether it compiles and passes tests.
-As a consequence, our \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally incorrect.''
-Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: the majority of non-PASS cases stem from engineering completeness gaps, not semantic misunderstanding.
+An agent solution that correctly addresses the requirement but uses a materially different file organization, naming convention, or architecture than the accepted PR will score lower on Behavioral Equivalence~(C) and file coverage.
+This design choice reflects our industrial interest: we assess whether agent output could replace a human-authored PR draft, not merely whether it contains a plausible local fix.
+As a consequence, our \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally impossible.''
+Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: many non-PASS cases stem from engineering completeness gaps rather than total semantic misunderstanding.
 
 \textbf{Multi-evaluator cross-validation.}
 To mitigate evaluator bias, every experiment is independently scored by

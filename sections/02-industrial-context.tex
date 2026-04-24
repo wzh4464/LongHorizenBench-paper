@@ -1,50 +1,145 @@
-\section{Industrial Context}
-\label{sec:industrial-context}
+\section{Industrial Context and Evaluation Scope}
 \label{sec:context}
+\label{sec:industrial-context}
 
-The motivation for this study comes from the engineering realities of maintaining large, heterogeneous, and fast-moving production codebases.
-At the repositories we study---Kubernetes, Kafka, CPython, Django, and the Huawei CANN and MindSpeed stacks---feature implementation is rarely confined to a single file or a single abstraction layer.
-A representative feature in Kubernetes, for example, touches the API-server type system, conversion generators, validation code paths, RBAC defaults, end-to-end test fixtures, and release-note templates; a representative operator change in CANN spans the schedule-emission pass, kernel-level AscendC code, autotuner entries, and the Python binding layer.
-The scale of a successful diff is the \emph{entire} multi-module change, not a patch to the unit under test.
+\subsection{The Deployment Decision We Had to Make}
+\label{sec:deployment-decision}
 
-\paragraph{Why this matters for coding agents.}
-Existing agent benchmarks (SWE-bench~\cite{jimenez2024swebench}, MBPP~\cite{austin2021program}, HumanEval~\cite{chen2021evaluating}) either restrict tasks to single-function edits or permit the agent to iterate against a hidden oracle test suite. In contrast, the engineers we interviewed at our industrial partner spend most of their time on \emph{feature implementation}: multi-file edits that touch an API definition, a runtime, a set of tests, and one or more generated artifacts, where correctness is only verifiable via human review plus an integration test matrix that runs for hours.
-The agent does not see the tests; it sees a natural-language specification and the codebase.
-Measured against this reality, ``the agent passed the hidden test'' is the wrong proxy; what matters is whether the agent produced a diff close enough to the diff a senior engineer would have produced that a reviewer can merge it with minor edits.
+The motivation for this study is an adoption decision rather than a
+leaderboard exercise.  Huawei engineering teams working on accelerator
+operators, distributed training, and Kubernetes-based platform software
+are evaluating whether commercial coding agents can safely take on
+\emph{feature-level} work, not just code completion or local bug fixes.
+The practical question is concrete: can an agent produce a first-draft
+pull request close enough to a senior engineer's implementation that a
+reviewer could land it with minor edits?
 
-\paragraph{Target repositories.}
-We study four representative classes of industrial repositories:
-
-\begin{itemize}
-  \item \textbf{Kubernetes / Kafka / CPython.}\quad Public infrastructure codebases with strong code-review norms, heavy use of generated code, and multi-file refactors as the dominant PR shape. These stand in for the ``large OSS we depend on'' case.
-  \item \textbf{Huawei CANN operator stack (C++/AscendC).}\quad A proprietary NPU operator library where feature-complete changes touch both host launcher code and device kernels. Representative of enterprise GPU/NPU accelerator stacks.
-  \item \textbf{MindSpeed and torch\_npu.} Training-stack integration code in Python and C++. Representative of enterprise ML platform work where a change must preserve training dynamics.
-  \item \textbf{CapBench (50 OSS tasks).} Independently sampled from 15 public repositories covering distributed systems, language runtimes, and web frameworks. Serves as an out-of-distribution test for generalization.
-\end{itemize}
-
-Across all four classes, the engineering pattern we observed is the same:
-a task requires coordinated edits across multiple files, some of which are
-non-obvious from the natural-language requirement (e.g.\ registry files,
-generated bindings, conversion tables, test fixtures, documentation).
-This is the industrial reality our evaluation is designed to capture.
-
-\subsection{Why Current Benchmarks Are Insufficient}
-\label{sec:why-now}
-
-Public agentic-coding benchmarks predominantly evaluate the
-\emph{fix-a-bug-and-pass-a-test} workflow: SWE-bench~\cite{jimenez2024swebench} measures patch
-acceptance on Python bug reports; LiveCodeBench and HumanEval measure
-function-level code synthesis; Agentless~\cite{xia2024agentless} and RepoBench evaluate
-retrieval-augmented repair. These benchmarks share three properties that
-misalign with enterprise feature implementation:
+This deployment question decomposes into four research questions:
 
 \begin{enumerate}
-  \item \textbf{Ground truth is a single file or function.} Real features span API + impl + tests + docs + migrations.
-  \item \textbf{A test oracle is available.} Agents iterate against failing tests; the feedback loop is closed within the benchmark harness. In industry, tests must be \emph{written} as part of the feature, and their presence is a scoring criterion rather than a supervision signal.
-  \item \textbf{Repository context is small.} Benchmarks typically use ${<}\!10{,}000$ files per task; our industrial repositories exceed 100{,}000 files.
+  \item \textbf{RQ1: Capability boundary.} Can current agents complete
+  production-equivalent feature PRs without human intervention?
+  \item \textbf{RQ2: Task-shape effect.} Does performance degrade
+  gradually as feature size grows, or is there a cliff for cross-module
+  work?
+  \item \textbf{RQ3: Harness leverage.} How much can richer task
+  specifications help without changing the underlying model or agent
+  framework?
+  \item \textbf{RQ4: Deployment policy.} Which task classes should be
+  routed to agents today, and which should remain human-owned?
+\end{enumerate}
+These questions shape the benchmark design, prompt variants, and
+deployment guidance reported in the rest of the paper.
+
+\subsection{Why Generic Benchmarks Were Insufficient}
+\label{sec:why-not-swe-bench}
+
+Before building our own evaluation, we considered existing coding-agent
+benchmarks. SWE-Bench~\cite{jimenez2024swebench} and its
+variants~\cite{chowdhury2024swebenchverified,swebenchpro2025} evaluate
+real repository patches, but the dominant workflow is bug fixing with
+an executable oracle.  Feature implementation in our setting has a
+different acceptance condition: the agent must discover every file that
+belongs to the feature, add tests where appropriate, and follow the
+project's architectural conventions. We therefore needed an evaluation
+that:
+\begin{itemize}
+  \item mirrored the \emph{structure} of the work our engineers actually do
+    (multi-file features, test additions, cross-subsystem refactors),
+  \item drew tasks from \emph{our} codebases so that language, API, and
+    architecture matched deployment reality, and
+  \item used a verdict rule robust to single-evaluator bias.
+\end{itemize}
+
+Existing public benchmarks cover parts of this space, but none provided
+all three properties simultaneously for our deployment decision.
+
+\subsection{Codebase and Task Scope}
+\label{sec:codebase-scope}
+
+The benchmark pairs 12 tasks mined from Huawei-maintained production
+repositories with 50 tasks sampled from widely-used open-source
+repositories so that results generalise beyond one organisation's coding
+style.
+
+\paragraph{Huawei and platform tasks (12 tasks).}
+The 12 industrial tasks span four product lines selected with our
+engineering partners as representative consumers of an internal agent
+deployment:
+\begin{itemize}
+  \item \textbf{CANN operator kernels} (\textsc{C1}--\textsc{C5}):
+    performance-sensitive C++/AscendC kernels implementing new operators
+    or refactoring existing ones; typical changes touch kernel code,
+    host-side launch wrappers, operator registration tables, and unit
+    tests.
+  \item \textbf{MindSpeed training framework} (\textsc{M1}--\textsc{M3}):
+    Python changes to the distributed-training runtime; typical tasks
+    modify scheduling, memory accounting, or loss-scaling logic and
+    require passing the MindSpeed integration suite.
+  \item \textbf{Kubernetes platform} (\textsc{K1}--\textsc{K4}): feature
+    work on the upstream open-source Kubernetes codebase (Go), including
+    API server extensions, controller changes, and generator-driven
+    conversion code spanning 10s of files per PR.
+\end{itemize}
+
+\paragraph{Open-source control set (50 tasks).}
+The CapBench tasks (\textsc{T01}--\textsc{T50}) are merged PRs sampled
+from 15 widely-deployed open-source projects (Kafka, CPython, Airflow,
+Django, gRPC, Spring, Kubernetes OSS, and others). They provide an
+out-of-organization control set with similar multi-file feature shapes
+but without Huawei-specific APIs.
+
+\subsection{Task Curation Funnel}
+\label{sec:task-funnel}
+
+Raw PR archives are unsuitable as benchmark tasks because many PRs are
+trivial, non-reproducible, or depend on unstated team context. We
+therefore used the same four-stage curation funnel for both the Huawei
+and CapBench subsets:
+
+\begin{enumerate}
+  \item \textbf{Feature-work filter.} Retain PRs that implement a
+  behaviour change, feature extension, or cross-file refactor; drop
+  typo fixes, dependency bumps, formatting-only changes, and
+  documentation-only changes.
+  \item \textbf{Reproducibility filter.} Retain tasks whose base
+  repository can be checked out and sanitised without requiring
+  unreleasable ground-truth history, hidden remotes, or production
+  credentials.
+  \item \textbf{Reviewability filter.} Retain tasks whose expected
+  outcome can be compared against a merged implementation with concrete
+  files, tests, or behaviour, rather than an open-ended design
+  discussion.
+  \item \textbf{Diversity filter.} Stratify by repository family,
+  language, file count, and diff size to avoid a benchmark dominated by
+  one project or one task style.
 \end{enumerate}
 
-\paragraph{What we expect from an ``industry-ready'' agent.}
-We define an agent as industry-ready for a task class if it can (i) identify every file that must change, (ii) produce edits that compile and pass existing tests, and (iii) add new tests that cover the behavior introduced by the change. All 62 tasks in our benchmark are derived from merged PRs that passed this bar in production; the ground truth is the merged PR itself.
-\paragraph{Positioning.}
-Our paper joins a recent line of industrial evaluations---Passerine at Google~\cite{mundler2024passerine}, WhatsNew at Meta~\cite{baumstark2024whatsnew}, ProdCodeBench~\cite{prodcodebench2024}, and FeatBench~\cite{featbench2024}---that move beyond single-function benchmarks. Where those works study \emph{bug fixing} or \emph{single-feature synthesis} in one setting, we focus on the \emph{multi-repository feature implementation} task across three industrial codebases plus a curated open-source extension, and we explicitly study the input-side leverage (prompt engineering) available to practitioners today.
+The final benchmark contains 62 tasks: 12 Huawei/platform tasks and 50
+CapBench tasks. We intentionally prefer a smaller, auditable benchmark
+over a large automatically harvested set because the study's purpose is
+deployment guidance, not training-data scale.
+
+\subsection{Deployment-Equivalence Criterion}
+\label{sec:deployment-criterion}
+
+We score agent outputs under a production-equivalence criterion: a PASS
+means the generated diff is close enough to the merged human PR that a
+reviewer could plausibly accept it after ordinary review. This criterion
+combines functional correctness, completeness of the edited scope, and
+behavioural equivalence to the accepted design. It is intentionally
+stricter than test-only resolution because industrial feature work often
+has multiple files, generated artifacts, and reviewer conventions that
+are not fully captured by a single fail-to-pass test. Section~\ref{sec:study-design}
+defines the evaluator panel and precise rubric.
+
+\subsection{Scope and Non-Goals}
+\label{sec:scope}
+
+We do not measure productivity impact, developer satisfaction, or
+long-term maintenance outcomes; those require live deployment studies.
+We also do not study pair-programming loops with intermediate human
+feedback. Every run is fully autonomous because that is the strongest
+claim a procurement or platform team would need before routing feature
+work to an agent. Finally, we deliberately exclude UI/design tasks,
+documentation-only PRs, and PRs that were reverted or superseded.

@@ -18,7 +18,7 @@ Our CapBench extension is closest in spirit but differs in two ways: (i)~we incl
 
 \subsection{LLM Coding Agents and Harness Design}
 
-\textbf{Model families.} The agents we evaluate embed different frontier models (Claude~4.6 Opus, GPT-5.4, GLM-4.5, and Cursor's proprietary routing system). Prior comparative studies such as MultiAgent~\cite{multiagent2024} and SWE-bench agents~\cite{jimenez2024swebench} evaluate agents on bug-fixing traces; we extend this to feature implementation across industrial repositories.
+\textbf{Model families.} The agents we evaluate embed different frontier models (Claude~4.6 Opus, GPT-5.4, GLM-5.1, and Cursor's proprietary routing system). Prior comparative studies such as MultiAgent~\cite{multiagent2024} and SWE-bench agents~\cite{jimenez2024swebench} evaluate agents on bug-fixing traces; we extend this to feature implementation across industrial repositories.
 
 \textbf{Agent architectures.} Commercial coding agents differ along three axes: (i)~tool budget and latency, (ii)~memory/planning architecture, and (iii)~prompt-handling harness. Prior harness-engineering work~\cite{harness2025,agentless,confucius} has shown that simple pipeline-level choices (file-level planning, edit localisation, self-reflection) dominate raw model capability on SWE-bench Verified. Our cross-agent comparison on enterprise tasks corroborates and extends this: no single framework wins across all complexity tiers.
 

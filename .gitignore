@@ -9,6 +9,7 @@
 *.pdf
 *.synctex.gz
 *.toc
+*.bak
 
 # Reference source PDFs/images (too large for git)
 ref_sources/

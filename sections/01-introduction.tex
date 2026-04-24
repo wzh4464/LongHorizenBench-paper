@@ -18,24 +18,24 @@ We evaluate four commercially available agent configurations across 496 experime
 The best configuration (Cursor Composer-2) achieves only 3.2\% PASS; Claude Opus~4.6 and GPT-5.4 (Codex) tie at 2.4\%; OpenCode GLM-5.1 reaches 0.8\%.
 Overall, only 11 of 496 runs pass (2.2\%), and \emph{all four} agents fail at 0\% on Kubernetes-scale refactors and on the High-complexity tier in aggregate.
 
-This paper makes five contributions:
+This paper makes five contributions aimed at industrial decision makers as
+well as benchmark designers:
 
 \begin{enumerate}
-  \item \textbf{First feature-level capability assessment across enterprise repositories.}
-    We design and execute a controlled evaluation of coding agents on 62 real feature-implementation tasks (12 Huawei enterprise + 50 CapBench open-source), spanning six languages and three complexity tiers, using merged production code as ground truth (\S\ref{sec:study-design}).
+  \item \textbf{An industrial feature-work evaluation setting.}
+    We define the deployment question, task scope, and production-equivalence criterion for judging whether a coding agent can replace the first draft of a human feature PR (\S\ref{sec:industrial-context}).
 
-  \item \textbf{Root cause taxonomy separating model problems from engineering problems.}
-    Analysis of all 485 non-PASS experiments reveals a four-category failure taxonomy.
-    The dominant failure mode is incomplete file coverage, and across 4 agents the majority of failures are engineering-addressable—the agent correctly identifies the problem direction but fails to cover the full scope of handwritten changes (\S\ref{sec:root-cause}).
+  \item \textbf{A controlled multi-repository benchmark.}
+    We evaluate 62 real feature-implementation tasks (12 Huawei enterprise + 50 CapBench open-source), spanning six languages and three complexity tiers, with merged production code as the reference implementation (\S\ref{sec:study-design}).
 
-  \item \textbf{Quantified prompt engineering effects.}
-    We measure the effect of input-side specification detail through a two-level prompt variant. On the industrial subset, detailed specifications improve PASS rates substantially (the best configuration reaches 4.8\% on long prompts vs. 0\% on short prompts), though the effect dissipates on the open-source CapBench tasks where baseline PASS rates are near zero (\S\ref{sec:results-prompt}).
+  \item \textbf{A conservative multi-evaluator protocol.}
+    Each generated diff is scored by four evaluator models under a three-dimensional rubric, enabling us to report both majority PASS rates and judge-disagreement statistics rather than relying on a single LLM-as-judge (\S\ref{sec:eval-framework}, \S\ref{sec:results-stats}).
 
-  \item \textbf{Complexity-driven completeness cliff.}
-    Across all 4 agents and both task families, no agent passes any High-complexity task (C5, M3, K4 in the Huawei set; the Kubernetes K1--K4 family is 0/32 across agents). File coverage data shows that agents systematically under-touch the handwritten target files, and this gap widens as GT file count grows (\S\ref{sec:root-cause}).
+  \item \textbf{Empirical capability boundaries.}
+    Across 496 runs, only 11 pass (2.2\%); no agent passes a High-complexity task; and richer prompts improve Claude/Codex but do not overcome the systems-code cliff (\S\ref{sec:results}).
 
-  \item \textbf{Harness engineering roadmap.}
-    We propose a phased adoption roadmap from language-aware validation through fix-cycle loops to architecture-aware planning, with estimated impact ranges grounded in our empirical gap analysis (\S\ref{sec:harness-roadmap}).
+  \item \textbf{Failure analysis and deployment guidance.}
+    We show that non-PASS outcomes are dominated by incomplete scope coverage rather than pure semantic misunderstanding, and translate this into concrete harness and routing recommendations for near-term production use (\S\ref{sec:root-cause}, \S\ref{sec:industrial-deployment}).
 \end{enumerate}
 
 The remainder of this paper is organized as follows.

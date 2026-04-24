@@ -15,7 +15,7 @@ During initial runs on Kubernetes task K4, one configuration exploited git histo
 \textbf{External validity.}
 Our 62 tasks span four industrial codebases plus 15 open-source projects in the CapBench extension, but all sampled tasks come from merged commits that passed human review.
 Selection is therefore biased toward \emph{tractable} feature implementations; ambiguous or cross-team tasks are underrepresented.
-Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, GPT-5.4, Composer-2, GLM-4.5) will be superseded within months of publication.
+Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, GPT-5.4, Composer-2, GLM-5.1) will be superseded within months of publication.
 We expect relative patterns---the Kubernetes cliff, long-prompt lift, coverage-dominated failure mode---to persist, but absolute PASS rates are a lower bound under today's models.
 
 \textbf{Evaluator honesty.}
@@ -30,7 +30,7 @@ Our behavioral-equivalence rubric (dimension C) partially mitigates this by rewa
 
 \textbf{Evaluator-task confound.}
 Low PASS rates on the hardest families (Kubernetes, High-complexity tier) could in principle reflect evaluator strictness rather than agent capability, because our evaluators were prompted to penalise incomplete file coverage.
-We partially mitigate this by (a) using four independent evaluator families with different training distributions, (b) spot-checking disagreements against human judgement for a random subsample, and (c) reporting per-dimension scores (A/B/C) so a reader can isolate coverage from correctness.
+We partially mitigate this by (a) using four independent evaluator families with different training distributions, (b) reporting per-dimension scores (A/B/C) so a reader can isolate coverage from correctness, and (c) using conservative majority aggregation rather than a single judge.
 Nonetheless, a harsher evaluator would pull majority verdicts toward FAIL on long-horizon tasks; readers should interpret the absolute 2.2\% PASS rate as indicative of the composite (agent+judge) system rather than of the agent alone.
 
 \textbf{Task-difficulty and evaluator-bias confound.} Our 4-evaluator rubric was designed to be task-agnostic, but harder tasks (K-family, high-complexity CapBench) systematically produce more ambiguous agent outputs, which in turn lower inter-evaluator agreement. We observe pairwise agreement of 42.7\% on the Codex/OpenCode judge pair for hard tasks versus 74.8\% on Claude/Cursor for easy tasks. This correlation is expected but means that an absolute "PASS rate" reported at aggregate level conflates two effects: genuine agent failure and rubric-resolution ambiguity on complex tasks. The qualitative ranking across agents is stable under all four single-judge aggregations; only the absolute PASS count is sensitive.

@@ -4,25 +4,23 @@
 Across 496 experiments spanning 62 real feature-implementation tasks
 and 4 state-of-the-art coding agents, we find that modern commercial
 agents are \emph{not ready} to autonomously complete production-quality
-feature work.  The best-performing configuration (GPT-5.4 / Codex)
-passes only 3.2\% of tasks and never clears the High-complexity tier.
-Two trends are consistent across the data:
+feature work.  The best-performing configuration (Cursor Composer-2)
+passes only 3.2\% of tasks; Codex GPT-5.4 and Claude Opus~4.6 tie at
+2.4\%; OpenCode reaches 0.8\%.  No agent clears any Kubernetes-family
+task.  Two trends are consistent across the data:
 
 \begin{itemize}
   \item \textbf{A complexity cliff.}  Pass rate collapses from 12.5\%
   on Low-complexity tasks to 0 on High-complexity tasks, with
-  Kubernetes-class multi-module refactors (K-family, 0/16 PASS)
+  Kubernetes-class multi-module refactors (K-family, 0/32 PASS)
   acting as an absolute ceiling for every agent we tested.
-  \item \textbf{Prompt leverage.}  The single largest observed
-  improvement was achieved by lengthening the prompt: long prompts lifted
-  PASS rate by up to 25.0 pp on a per-task basis, comparable in
-  magnitude to the full gap between the weakest and strongest agent
-  frameworks. Input-side engineering dominates model choice.
-  \item \textbf{Cursor passes short prompts best.}  Among the
-  four evaluated agents, only Cursor benefits from long prompts on a
-  \emph{per-task} basis; long prompts otherwise degrade the other
-  agents' outputs (0--8pp), driven by length-sensitive context
-  dilution (see \S\ref{sec:root-cause}).
+  \item \textbf{Prompt leverage, but not universal.}  Moving from short
+  to long prompts lifts Claude and Codex from 0\,\% to 4.8\,\% PASS
+  and OpenCode from 0\,\% to 1.6\,\%; Cursor is prompt-insensitive at
+  3.2\,\% under both regimes.  Detailed prompts therefore help three
+  of four configurations, but their effect (at most +4.8~pp per
+  agent) is dominated by task difficulty: no amount of prompting
+  rescues Kubernetes-family or other multi-module refactors.
 \end{itemize}
 
 \paragraph{Practitioner takeaways.}

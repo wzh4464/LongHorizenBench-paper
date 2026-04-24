@@ -1,19 +1,52 @@
 \section{Industrial Deployment Lessons}
 \label{sec:industrial-deployment}
 
-Beyond aggregate PASS rates, our benchmark run surfaces several lessons that directly inform how an engineering organisation can deploy coding agents on feature work today. The observations below reflect the behaviour of the four frontier agents on our 496 experiments; we highlight the patterns an adopting team is most likely to encounter in day-to-day work.
+Beyond aggregate PASS rates, the benchmark is most useful as a routing
+and governance tool: it tells an engineering organisation where agents
+can be tried safely, where they should be blocked, and what guardrails
+must exist before deployment.
 
-\paragraph{Observation 1: the coverage gap dominates, not semantic error.}
-Across the 485 non-PASS runs, the modal failure mode is engineering-scope incompleteness: the agent correctly identifies the fix direction and makes code changes consistent with it, but touches only a fraction of the handwritten files that the human pull request modified. This is directly addressable with engineering harnesses (Section~\ref{sec:harness}): file-discovery, test-driven completion, and edit-localization tools all attack the coverage gap without requiring a stronger underlying model.
+\paragraph{Route only bounded feature work to agents.}
+The only tasks that ever pass are small, reviewable changes with limited
+cross-component coordination. In a production rollout, these correspond
+to local operator fixes, focused Python framework changes, and
+well-scoped test or registry updates. Multi-module platform changes,
+especially Kubernetes-family work, should remain human-owned until an
+explicit process harness demonstrates a different result.
 
-\paragraph{Observation 2: long prompts mostly help the strong agents.}
-Extending prompts from the 3-line ``short'' variant to the 15--40 line ``long'' variant lifts the per-agent PASS rate by 0--4.8~pp (Table~\ref{tab:prompt-breakdown}). The gain is concentrated on Codex and Claude; OpenCode and Cursor move by under 1~pp. For practitioners this suggests that specification investment is only worthwhile once the underlying agent is strong enough to use it.
+\paragraph{Treat task specification as an engineering artifact.}
+Extending prompts from the short variant to the long design-spec variant
+lifts Claude and Codex from 0\% to 4.8\% PASS, and OpenCode from 0\%
+to 1.6\%; Cursor remains at 3.2\% under both prompt settings
+(Table~\ref{tab:prompt}). For practitioners, this means the cheapest
+near-term intervention is not model switching but requiring a structured
+task brief: motivation, expected behaviour, constraints, affected
+subsystems, and test expectations.
 
-\paragraph{Observation 3: the Kubernetes cliff is deployable-relevant.}
-Every PR sampled from \texttt{kubernetes/kubernetes} in this study failed all four agents under both prompts. This is the single clearest ``do not deploy here yet'' signal in our data: multi-file, multi-language, boilerplate-heavy codebases exceed the current reach of frontier agents regardless of framework. We recommend practitioners carve out Kubernetes-class work for human engineers until agent harnesses demonstrably close the gap.
+\paragraph{Require scope and test gates before review.}
+The dominant failure pattern is not that agents always write nonsensical
+code; it is that they stop early. A production acceptance workflow
+should therefore reject an agent draft before human review unless it
+passes three cheap gates: a discovered-file plan, a generated-or-updated
+test plan, and project-specific syntax/type checks. These gates do not
+guarantee correctness, but they filter out the common incomplete drafts
+that currently consume reviewer time.
 
-\paragraph{Observation 4 — evaluator disagreement.} Pairwise Cohen's $\kappa$ between evaluators ranges 0.28–0.53 (overall mean $\kappa = 0.39$), and raw agreement on verdicts spans 42.7\% (Codex vs.\ GLM) to 75.1\% (Claude vs.\ Cursor). Any production acceptance workflow that builds on an LLM-as-judge must therefore use a multi-evaluator panel with explicit tie-break rules; single-evaluator decisions will drift verdict rates by several percentage points simply by swapping judges.
+\paragraph{Use evaluator panels, not a single judge.}
+Raw pairwise agreement spans 42.7\% (Codex vs.\ GLM) to 75.1\%
+(Claude vs.\ Cursor), and Fleiss' $\kappa$ is only 0.29. Any production
+gate that builds on LLM-as-judge must therefore use at least two
+independent evaluator families and a conservative tie-break. Single
+judge gates will drift simply by swapping the judge model.
 
-\paragraph{Observation 5 — cost of running the benchmark.} The 496 end-to-end runs plus 1{,}984 evaluator judgments consumed approximately 850M total tokens (input + output) and ran end-to-end over roughly eight weeks of wall-clock time; average cost per run was dominated by agent inference (approximately 95\%), with evaluator judgments contributing the remaining 5\%. We release the precise cost accounting in the replication package.
+\paragraph{Separate offline evaluation from online rollout.}
+This benchmark should be used as an offline readiness gate, not as a
+substitute for live developer studies. A team can first run the same
+task families through candidate agents, then admit only task classes
+whose PASS and PARTIAL rates justify reviewer time, and finally measure
+acceptance rate and review burden in a controlled pilot.
 
-These observations inform a practical deployment recipe: use agents on isolated, single-file-scope work; maintain a multi-evaluator acceptance panel; and avoid autonomous multi-module work until harnesses demonstrably close the gap measured here.
+In short, the current recommendation is conservative: use agents as
+drafting aids for bounded work, keep multi-module feature ownership with
+humans, and invest in harnesses that force discovery, testing, and
+multi-model review before an agent draft reaches a human reviewer.

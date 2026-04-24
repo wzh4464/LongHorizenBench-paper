@@ -23,11 +23,20 @@ Per-family (strict majority across both prompts):
 - Kubernetes (K1–K4): 0/32 = 0% (cliff)
 - CapBench (T01–T50): 5/400 = 1.25%
 
-Per-agent × prompt-variant (PASS out of 62):
+Per-agent × prompt-variant (PASS out of 62, verified 2026-04-22 against wide CSV):
 | agent | short | long |
 |---|---|---|
-| claude | 1 (1.6%) | 2 (3.2%) |
-| codex  | 0 (0.0%) | 3 (4.8%) |
+| Claude Opus 4.6 | 0/62 (0.0%) | 3/62 (4.8%) |
+| Codex GPT-5.4 | 0/62 (0.0%) | 3/62 (4.8%) |
+| Cursor Composer-2 | 2/62 (3.2%) | 2/62 (3.2%) |
+| OpenCode GLM-5.1 | 0/62 (0.0%) | 1/62 (1.6%) |
+
+**Actual 11 PASS runs (task-agent-prompt):** C1/Claude-long, C1/Codex-long, C1/Cursor-short, C4/Codex-long, C4/Cursor-short, M1/Claude-long, T10/{Claude,Codex,Cursor,OpenCode}-long, T34/Cursor-long.
+
+**Cursor's unique wins:** C1-short, C4-short (Claude/Codex need long), T34-long (no other agent passes T34). This is why Cursor leads PASS count despite ties with Codex on mean composite score — Cursor extracts value from short prompts the others can't.
+
+**Verdict rule used by paper's Table 1:** strict PASS (≥3/4 judges PASS) **but lenient FAIL** (≥2/4 FAIL → FAIL, else PARTIAL). Total: Claude 3/57/64, Codex 3/62/59, Cursor 4/49/71, OpenCode 1/55/97.
+
 | cursor | 2 (3.2%) | 2 (3.2%) |
 | opencode | 0 (0.0%) | 1 (1.6%) |
 
@@ -36,7 +45,24 @@ Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
 - codex × glm 42.7% (lowest)
 - 4-way unanimous 41.3%
 
-## Iteration 5 (2026-04-22) — current
+## Iteration 8 (2026-04-24) - current
+
+- Reframed the paper around the ASE Industry deployment question: what feature work can be routed to agents, what must remain human-owned, and what harness gates are required before rollout.
+- Rewrote the abstract, introduction contributions, §2 Industrial Context, §6 Harness Engineering, §6b Industrial Deployment Lessons, and threats wording to emphasise production-equivalence, task routing, and governance rather than leaderboard framing.
+- Removed unsupported task-funnel candidate counts from §2 and replaced them with a reusable four-stage curation funnel.
+- Fixed stale references and model names: `tab:family_agent` -> Fig. 2 heatmap, `tab:prompt-breakdown` -> Table 4 prompt effect, and GLM-4.5 -> GLM-5.1.
+- Kept current quantitative results intact while avoiding extra Cursor-specific interpretation because Cursor data is being rerun.
+
+## Iteration 7 (2026-04-24) - previous
+
+- Rewrote §2 Industrial Context into an Industry-Track-flavoured five-subsection structure: (1) Deployment Decision, (2) Research Questions (Q1-Q4), (3) Target codebases, (4) Task curation funnel, (5) Scope and non-goals.
+- Added §2.4 Task curation funnel: 62 tasks distilled from 2,139 candidate PRs across filters (buildable → meaningful → bounded → diverse).
+- Fixed §10 conclusion: `(GPT-5.4/Codex)` was misattributed as best-performing configuration — corrected to `Cursor Composer-2 (3.2% PASS)`; Kubernetes denominator corrected from 0/16 to 0/32; prompt uplift wording changed from "up to 25pp per-task" to the aggregate `+4.8pp for Claude/Codex, +1.6pp for OpenCode, unchanged for Cursor`.
+- Verified §10 against the canonical CSV — Cursor leads at 3.2% by PASS count; Codex has slight edge on mean composite score (5.82 vs 5.06).
+- Created `paper2/compute_stats.py` to reproducibly dump the per-agent / per-family / per-prompt statistics from `reports/eval_scores_v2_wide.csv`.
+- Noted a Cursor data-integrity concern flagged by co-author (possible sandbox / IDE-harness leakage on Cursor's Windows MCP runs); deferred to a future integrity audit.
+
+## Iteration 6 (2026-04-22) — previous
 
 **Completed:**
 - Removed the fabricated "58% / 25% / 17%" breakdown in §5; replaced with language anchored to mean A/B/C sub-scores that can be computed from `eval_scores_v2_long.csv`. The narrative now states "the majority of non-PASS runs" instead of a specific percentage.
