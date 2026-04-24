@@ -33,6 +33,8 @@ All agents           & 496 & 11 & 194 & 291 & 2.2\% & 4.86 \\
 
 \input{figures/fig_pass_heatmap}
 
+\input{figures/fig_score_hist}
+
 Table~\ref{tab:family_agent} further breaks down PASS by task family, confirming that the Kubernetes family yields zero PASS across all agents.
 
 \finding{\textbf{Headline result.} Across 496 runs (62 tasks $\times$ 4 agents $\times$ 2 prompts), only 11 clear the full rubric (2.2\% PASS). The strongest configuration is Cursor Composer-2 at 3.2\%; the weakest is OpenCode at 0.8\%. No agent passes any Kubernetes-family task, and no agent exceeds 4.8\% PASS even on its best prompt variant.}
