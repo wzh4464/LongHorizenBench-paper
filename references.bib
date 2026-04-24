@@ -1,247 +1,171 @@
-% =============================================================================
-% references.bib — ASE 2026 Industry Showcase Paper
-% =============================================================================
+@article{agentless,
+  title   = {Agentless: Demystifying {LLM}-Based Software Engineering Agents},
+  author  = {Xia, Chunqiu Steven and Deng, Yinlin and Dunn, Soren and Zhang, Lingming},
+  journal = {arXiv preprint arXiv:2407.01489},
+  year    = {2024}
+}
 
-% ---------------------------------------------------------------------------
-% Coding benchmarks
-% ---------------------------------------------------------------------------
-
-@inproceedings{jimenez2024swebench,
-  title     = {{SWE}-bench: Can Language Models Resolve Real-World {GitHub} Issues?},
-  author    = {Carlos E. Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik Narasimhan},
-  booktitle = {Proceedings of the Twelfth International Conference on Learning Representations ({ICLR})},
+@inproceedings{alshahwan2024testgen,
+  title     = {Automated Unit Test Improvement using Large Language Models at Meta},
+  author    = {Alshahwan, Nadia and Chheda, Jubin and Finogenova, Anastasia and Gokkaya, Beliz and Harman, Mark and Harper, Inna and Marginean, Alexandru and Sengupta, Shubho and Wang, Eddy},
+  booktitle = {Companion Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering (FSE Companion)},
   year      = {2024},
-  url       = {https://arxiv.org/abs/2310.06770},
+  note      = {arXiv:2402.09171}
 }
 
-@article{chen2021humaneval,
-  title   = {Evaluating Large Language Models Trained on Code},
-  author  = {Mark Chen and Jerry Tworek and Heewoo Jun and Qiming Yuan and Henrique Ponde de Oliveira Pinto and Jared Kaplan and Harri Edwards and Yuri Burda and Nicholas Joseph and Greg Brockman and Alex Ray and Raul Puri and Gretchen Krueger and Michael Petrov and Heidy Khlaaf and Girish Sastry and Pamela Mishkin and Brooke Chan and Scott Gray and Nick Ryder and Mikhail Pavlov and Alethea Power and Lukasz Kaiser and Mohammad Bavarian and Clemens Winter and Philippe Tillet and Felipe Petroski Such and Dave Cummings and Matthias Plappert and Fotios Chantzis and Elizabeth Barnes and Ariel Herbert-Voss and William Hebgen Guss and Alex Nichol and Alex Paino and Nikolas Tezak and Jie Tang and Igor Babuschkin and Suchir Balaji and Shantanu Jain and William Saunders and Christopher Hesse and Andrew N. Carr and Jan Leike and Josh Achiam and Vedant Misra and Evan Morikawa and Alec Radford and Matthew Knight and Miles Brundage and Mira Murati and Katie Mayer and Peter Welinder and Bob McGrew and Dario Amodei and Sam McCandlish and Ilya Sutskever and Wojciech Zaremba},
-  journal = {arXiv preprint arXiv:2107.03374},
-  year    = {2021},
-  url     = {https://arxiv.org/abs/2107.03374},
-}
-
-@article{austin2021mbpp,
-  title   = {Program Synthesis with Large Language Models},
-  author  = {Jacob Austin and Augustus Odena and Maxwell Nye and Maarten Bosma and Henryk Michalewski and David Dohan and Ellen Jiang and Carrie Cai and Michael Terry and Quoc Le and Charles Sutton},
-  journal = {arXiv preprint arXiv:2108.07732},
-  year    = {2021},
-  url     = {https://arxiv.org/abs/2108.07732},
-}
-
-@article{li2024devbench,
-  title   = {{DevBench}: A Comprehensive Benchmark for Software Development},
-  author  = {Bowen Li and Wenhan Wu and Ziwei Tang and Lin Shi and John Yang and Jinyang Li and Shunyu Yao and Chen Qian and Binyuan Hui and Qicheng Zhang and Zhiyin Yu and He Du and Ping Yang and Dahua Lin and Chao Peng and Kai Chen},
-  journal = {arXiv preprint arXiv:2403.08604},
+@article{autobug,
+  title   = {{AutoBug}: Industrial Bug Fixing Pipeline Using {LLM}s},
+  author  = {Anonymous},
+  journal = {arXiv preprint},
   year    = {2024},
-  url     = {https://arxiv.org/abs/2403.08604},
-  note    = {Later versions renamed to DevEval},
+  note    = {VERIFY placeholder.}
 }
 
-@inproceedings{zhang2023repocodecompletion,
-  title     = {{RepoCoder}: Repository-Level Code Completion Through Iterative Retrieval and Generation},
-  author    = {Fengji Zhang and Bei Chen and Yue Zhang and Jacky Keung and Jin Liu and Daoguang Zan and Yi Mao and Jian-Guang Lou and Weizhu Chen},
-  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing ({EMNLP})},
-  pages     = {2471--2484},
-  year      = {2023},
-  address   = {Singapore},
-  publisher = {Association for Computational Linguistics},
-  doi       = {10.18653/v1/2023.emnlp-main.151},
-  url       = {https://aclanthology.org/2023.emnlp-main.151/},
-}
-
-% ---------------------------------------------------------------------------
-% Coding agents
-% ---------------------------------------------------------------------------
-
-@inproceedings{yang2024sweagent,
-  title     = {{SWE}-agent: Agent-Computer Interfaces Enable Automated Software Engineering},
-  author    = {John Yang and Carlos E. Jimenez and Alexander Wettig and Kilian Lieret and Shunyu Yao and Karthik Narasimhan and Ofir Press},
-  booktitle = {Advances in Neural Information Processing Systems 37 ({NeurIPS})},
-  year      = {2024},
-  url       = {https://arxiv.org/abs/2405.15793},
-}
-
-@misc{aider2024,
-  title        = {Aider: {AI} Pair Programming in Your Terminal},
-  author       = {Paul Gauthier},
+@misc{chowdhury2024swebenchverified,
+  title        = {Introducing {SWE-bench} Verified},
+  author       = {Chowdhury, Neil and Aung, James and Shern, Chan Jun and Jaffe, Oliver and Sherburn, Dane and Starace, Giulio and Mazeika, Mantas and Madry, Aleksander},
+  howpublished = {OpenAI Research release, \url{https://openai.com/index/introducing-swe-bench-verified/}},
   year         = {2024},
-  howpublished = {\url{https://github.com/Aider-AI/aider}},
-  note         = {Open-source AI coding assistant},
 }
 
-@misc{anthropic2025claudecode,
-  title        = {Claude Code: An Agentic Coding Tool},
-  author       = {{Anthropic}},
-  year         = {2025},
-  howpublished = {\url{https://github.com/anthropics/claude-code}},
-  note         = {Agentic coding tool that lives in your terminal},
+@article{codevisor,
+  title   = {{CodeVisor}: Production Code Review with LLMs},
+  author  = {Anonymous},
+  journal = {Preprint},
+  year    = {2024},
+  note    = {VERIFY placeholder.}
 }
 
-@misc{openai2025codexcli,
-  title        = {Codex {CLI}: Lightweight Coding Agent That Runs in Your Terminal},
-  author       = {{OpenAI}},
-  year         = {2025},
-  howpublished = {\url{https://github.com/openai/codex}},
-  note         = {Open-source terminal-based AI coding agent},
+@article{confucius,
+  title   = {Confucius-Coder: An Industrial-Scale Coding Agent},
+  author  = {Wang, Zhuoren and Cui, Zhenting and others},
+  journal = {arXiv preprint arXiv:2512.10398},
+  year    = {2025},
+  note    = {VERIFY: entry tentative; confirm canonical citation.}
 }
 
-% ---------------------------------------------------------------------------
-% Industry surveys and productivity studies
-% ---------------------------------------------------------------------------
+@article{crbench,
+  title   = {CodeFuse-CR-Bench: A Comprehensiveness-Aware Benchmark for End-to-End Code Review},
+  author  = {Guo, Hanyang and Zheng, Xunqin and Li, Wei and others},
+  journal = {arXiv preprint arXiv:2509.14856},
+  year    = {2025}
+}
+
+@article{featbench2025,
+  title   = {FeatBench: Evaluating Coding Agents on Feature Implementation},
+  author  = {Chen, Hao and Li, Chengliang and others},
+  journal = {arXiv preprint arXiv:2509.22237},
+  year    = {2025}
+}
 
 @misc{github2024survey,
-  title        = {Survey: The {AI} Wave Continues to Grow on Software Development Teams},
+  title        = {Octoverse: The state of open source in 2024},
   author       = {{GitHub}},
+  howpublished = {\url{https://github.blog/news-insights/octoverse-2024/}},
   year         = {2024},
-  howpublished = {\url{https://github.blog/news-insights/research/survey-ai-wave-grows/}},
-  note         = {Survey of 2,000 enterprise developers across four countries; 97\% reported using AI coding tools},
 }
 
-@article{google2025rct,
-  title   = {How Much Does {AI} Impact Development Speed? {An} Enterprise-Based Randomized Controlled Trial},
-  author  = {Elise Paradis and Kate Grey and Quinn Madison and Daye Nam and Andrew Macvean and Vahid Meimand and Nan Zhang and Ben Ferrari-Church and Satish Chandra},
-  journal = {arXiv preprint arXiv:2410.12944},
-  year    = {2024},
-  url     = {https://arxiv.org/abs/2410.12944},
-  note    = {RCT with 96 Google engineers; AI features shortened task time by $\sim$21\%},
-}
-
-@misc{dora2025,
-  title        = {Accelerate State of {DevOps} Report 2024},
-  author       = {Derek DeBellis and Kevin Storer and Amanda Lewis and Ben Good and Daniella Villalba and Eric Maxwell and Kim Castillo and Michelle Irvine and Nathen Harvey},
-  year         = {2024},
-  howpublished = {\url{https://dora.dev/research/2024/dora-report/}},
-  note         = {DORA/Google Cloud; +25\% AI adoption correlated with $-$1.5\% delivery throughput},
-}
-
-@article{metr2025copilot,
-  title   = {Measuring the Impact of Early-2025 {AI} on Experienced Open-Source Developer Productivity},
-  author  = {Joel Becker and Nate Rush and Elizabeth Barnes and David Rein},
-  journal = {arXiv preprint arXiv:2507.09089},
+@article{harness2025,
+  title   = {Harness Engineering for LLM Coding Agents},
+  author  = {Bui, Nghi D. Q. and others},
+  journal = {arXiv preprint},
   year    = {2025},
-  url     = {https://arxiv.org/abs/2507.09089},
-  note    = {RCT with 16 experienced OSS developers; AI increased task time by 19\% despite self-reported 20\% speedup},
+  note    = {VERIFY placeholder.}
 }
 
-@misc{jetbrains2025survey,
-  title        = {The State of Developer Ecosystem 2025},
-  author       = {{JetBrains}},
-  year         = {2025},
-  howpublished = {\url{https://devecosystem-2025.jetbrains.com/}},
-  note         = {Survey of 24,534 developers; 85\% regularly use AI tools for coding},
+@inproceedings{jimenez2024swebench,
+  title     = {{SWE-bench}: Can Language Models Resolve Real-World {GitHub} Issues?},
+  author    = {Jimenez, Carlos E. and Yang, John and Wettig, Alexander and Yao, Shunyu and Pei, Kexin and Press, Ofir and Narasimhan, Karthik},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  note      = {arXiv:2310.06770}
 }
 
-% ---------------------------------------------------------------------------
-% Industrial evaluations of LLMs
-% ---------------------------------------------------------------------------
-
-@inproceedings{mundhra2025EvaluatingLLMsASML,
-  title     = {Evaluating Large Language Models for Functional and Maintainable Code in Industrial Settings: A Case Study at {ASML}},
-  author    = {Yash Mundhra and Max Valk and Maliheh Izadi},
-  booktitle = {Proceedings of the 40th {IEEE/ACM} International Conference on Automated Software Engineering ({ASE}), Industry Track},
-  year      = {2025},
-  url       = {https://arxiv.org/abs/2509.12395},
+@article{logsage,
+  title   = {{L}og{S}age: An LLM-Based Framework for CI/CD Failure Detection and Remediation},
+  author  = {Xu, Weiyan and Luo, Junhao and others},
+  journal = {arXiv preprint arXiv:2506.03691},
+  year    = {2025}
 }
 
-@article{liu2026EvaluatingLLMsAerospace,
-  title   = {Evaluating Large Language Models for Time Series Anomaly Detection in Aerospace Software},
-  author  = {Yang Liu and Yixing Luo and Xiaofeng Li and Xiaogang Dong and Bin Gu and Zhi Jin},
-  journal = {arXiv preprint arXiv:2601.12448},
-  year    = {2026},
-  url     = {https://arxiv.org/abs/2601.12448},
+@article{mathai2024passerine,
+  title   = {Evaluating Agent-based Program Repair at {Google}},
+  author  = {Rondon, Pat and Wei, Renyuan and Cambronero, Jos\'{e} and others},
+  journal = {arXiv preprint arXiv:2501.07531 (ICSE-SEIP 2025)},
+  year    = {2025}
 }
 
-% ---------------------------------------------------------------------------
-% Kubernetes
-% ---------------------------------------------------------------------------
-
-@misc{k8s-kep-process,
-  title        = {Kubernetes Enhancement Proposals ({KEPs})},
-  author       = {{Kubernetes Contributors}},
-  year         = {2024},
-  howpublished = {\url{https://www.kubernetes.dev/resources/keps/}},
-  note         = {Process documentation for proposing and tracking Kubernetes enhancements},
+@article{multiagent2024,
+  title   = {CodeR: Multi-Agent Issue Resolution with Task Graphs},
+  author  = {Chen, Dong and Zan, Daoguang and Lin, Shaoxin and others},
+  journal = {arXiv preprint arXiv:2406.01304},
+  year    = {2024}
 }
 
-% -- Added during iteration 6 (auto-generated stubs; need human check before camera-ready) --
-@misc{jimenez2024swebench, title = {Alias for SWE-Bench (see \cite{jimenez2024swebench} above).}, author = {Jimenez, Carlos and others}, year = {2024}, note = {Duplicate key placeholder.}}
-@misc{austin2021program, author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and Sutton, Charles}, title = {Program Synthesis with Large Language Models (MBPP)}, year = {2021}, howpublished = {arXiv:2108.07732}}
-@misc{chen2021evaluating, author = {Chen, Mark and others}, title = {Evaluating Large Language Models Trained on Code (HumanEval)}, year = {2021}, howpublished = {arXiv:2107.03374}}
-@misc{chowdhury2024swebenchverified, author = {Chowdhury, Neil and others}, title = {Introducing {SWE}-bench {V}erified}, year = {2024}, howpublished = {OpenAI blog}}
-@misc{xia2024agentless, author = {Xia, Chunqiu Steven and Deng, Yinlin and Dunn, Soren and Zhang, Lingming}, title = {Agentless: Demystifying {LLM}-based Software Engineering Agents}, year = {2024}, howpublished = {arXiv:2407.01489}}
-@misc{mathai2024passerine, title={Passerine: Agent-based Bug Repair at Google}, author={Mathai, Aravind and others}, year={2024}}
-@misc{featbench2024, title={FeatBench: Feature-level Benchmark for Coding Agents}, author={Anonymous}, year={2025}}
-@misc{alshahwan2024testgenllm, title={Automated Unit Test Improvement using Large Language Models at Meta}, author={Alshahwan, Nadia and others}, year={2024}}
-@misc{prodcodebench2024, title={ProdCodeBench: Production Code Completion Benchmark}, author={Anonymous}, year={2024}}
-@misc{github2024survey, title={Stack Overflow Developer Survey 2024}, author={Stack Overflow}, year={2024}}
-@misc{autocoder2025harness, title={Harness Engineering for Code Agents}, author={Anonymous}, year={2025}}
-@misc{logsage, title={LogSage: Industrial-scale Log Analysis with LLM Agents}, author={Anonymous}, year={2025}}
-@misc{confucius-coder, title={Confucius: Industrial Coding Agent Case Study}, author={Anonymous}, year={2024}}
-@misc{tddbench, title={TDDBench: Test-Driven Development Benchmark}, author={Anonymous}, year={2025}}
-@misc{swebenchpro, author={Anonymous}, title={SWE-Bench Pro}, year={2025}}
-@misc{swebenchlive, author={Anonymous}, title={SWE-Bench Live}, year={2025}}
-@misc{swebenchverified, author={Anonymous}, title={SWE-Bench Verified}, year={2024}}
-@misc{multiswebench, author={Anonymous}, title={Multi-SWE-Bench}, year={2025}}
-@misc{crosscodeeval, author={Anonymous}, title={CrossCodeEval}, year={2024}}
-@misc{intercode, author={Anonymous}, title={InterCode}, year={2024}}
-@misc{multiswebenchcpp, author={Anonymous}, title={Multi-SWE-Bench C++}, year={2025}}
-@misc{swebench, author={Anonymous}, title={SWE-Bench original}, year={2023}}
-@misc{liveswebench, author={Anonymous}, title={SWE-Bench Live variant}, year={2025}}
-@misc{sweeval, author={Anonymous}, title={SWE-Eval}, year={2025}}
-@misc{openai2024swegym, author={Anonymous}, title={OpenAI SWE-Gym}, year={2024}}
-@misc{aider2024, author={Anonymous}, title={Aider.chat}, year={2024}}
-@misc{devinai, author={Anonymous}, title={Devin AI}, year={2024}}
-@misc{cognitioncline, author={Cline}, title={Cline coding agent}, year={2024}}
-@misc{agentless, author={Agentless team}, title={Agentless: Framework-free SWE-Bench}, year={2024}}
-@misc{confucius, author={Anonymous}, title={Confucius code reviewer}, year={2024}}
-@misc{harness2025, author={Anonymous}, title={Harness engineering for LLM coding}, year={2025}}
-@misc{codevisor, author={Anonymous}, title={CodeVisor}, year={2025}}
-@misc{featbench2025, author={Anonymous}, title={FeatBench}, year={2025}}
-@misc{crbench, author={Anonymous}, title={CRBench}, year={2025}}
-@misc{sweevo, author={Anonymous}, title={SWE-Evo}, year={2025}}
-@misc{swebench_pro, author={Anonymous}, title={SWE-Bench Pro}, year={2025}}
-@misc{featurebench2024, author={Anonymous}, title={FeatureBench}, year={2024}}
-@misc{featbench2024, author={Anonymous}, title={FeatBench}, year={2024}}
-@misc{prodcodebench2024, author={Anonymous}, title={ProdCodeBench}, year={2024}}
-@misc{repobench2024, author={Anonymous}, title={RepoBench}, year={2024}}
-@misc{logsage, author={Anonymous}, title={LogSage: Industrial log analysis with LLMs}, year={2025}}
-@misc{autobug, title={AutoBug}, author={Anonymous}, year={2024}}
-@misc{baumstark2024passerine, author={Baumstark, Josh and others}, title={Passerine: Automated Program Repair at Google}, year={2024}}
-@misc{testgenllm, author={Anonymous}, title={TestGen-LLM}, year={2024}}
-@misc{alshahwan2024testgen, author={Alshahwan, Nadia and others}, title={Automated Unit Test Improvement using Large Language Models}, year={2024}}
-@misc{github2024survey_ref, title={GitHub Developer Survey 2024}, author={Anonymous}, year={2024}}
-@misc{crosscodeevalref, title={CrossCodeEval}, author={Anonymous}, year={2024}}
-@misc{codevisor, title={CodeVisor}, author={Anonymous}, year={2024}}
-@misc{multiswebench, title={Multi SWE Bench}, author={Anonymous}, year={2025}}
-@misc{multiagent, title={Multi-Agent}, author={Anonymous}, year={2024}}
-@misc{crbench2, title={CRBench}, author={Anonymous}, year={2024}}
-@misc{mundler2024passerine, title={Passerine}, author={Mundler}, year={2024}}
-@misc{mundler2024passerineref, title={Passerine at Google}, year={2024}}
-@misc{repofusion, title={RepoFusion}, year={2023}}
-@misc{confucius, title={Confucius multi-agent coding framework}, year={2025}}
-@misc{multiagent2024, title={MultiAgent2024}, year={2024}}
-@misc{harness2025, title={Harness engineering practices}, year={2025}}
-@misc{aider2024, title={Aider: AI pair programming}, year={2024}}
-@misc{anthropic2025claude46, title={Claude 4.6 model card}, year={2025}}
-@misc{featbench2024, title={Featbench2024 duplicate}, year={2024}}
-@misc{openaicodex2024, title={Codex CLI}, year={2024}}
-@misc{featbench2025, title={FeatBench 2025 edition}, year={2025}}
-@misc{crbench, title={Code Review Benchmark}, year={2025}}
-@misc{autobug, title={AutoBug: Automated Bug Fixing}, year={2025}}
-@misc{prodcodebench2024, title={ProdCodeBench2024 duplicate}, year={2024}}
-@misc{baumstark2024whatscode, title={WhatsCode at Meta}, author={Baumstark et al}, year={2024}}
-@misc{baumstark2024whatsnew, title={WhatsCode variant}, author={Baumstark et al}, year={2024}}
-@misc{mathai2024passerine2, title={Passerine extensions}, year={2024}}
-@misc{jimenez2024swebenchverified, title={SWE-Bench Verified Subset}, year={2024}}
-@misc{swebenchmulti, title={Multi-file SWE Benchmark}, year={2024}}
-@misc{swebench_live, title={SWE-Bench Live}, year={2024}}
-@misc{multi_agent_bench, title={Multi Agent Bench}, year={2024}}
-@misc{sweagent, author={Yang et al}, title={SWE-Agent: Autonomous LLM-Based Agents for Software Engineering}, year={2024}}
-@misc{swegyms, title={SWE Gyms}, year={2024}}
-@misc{testbench, title={Test Benchmark}, year={2024}}
-@misc{autobench2024, title={AutoBench}, year={2024}}
-@misc{featurebench, title={FeatureBench}, year={2025}}
-@misc{crbenchraw, title={CRBench Raw Data}, year={2025}}
-@misc{devbench, title={DevBench}, year={2024}}
+@article{multiswebench,
+  title   = {{Multi-SWE-bench}: A Multilingual Benchmark for Issue Resolving},
+  author  = {Zan, Daoguang and Huang, Zhirong and Liu, Wei and others},
+  journal = {arXiv preprint arXiv:2504.02605},
+  year    = {2025}
+}
+
+@article{mundler2024passerine,
+  title   = {{SWT-Bench}: Testing and Validating Real-World Bug-Fixes with Code Agents},
+  author  = {M\"{u}ndler, Niels and M\"{u}ller, Mark Niklas and He, Jingxuan and Vechev, Martin},
+  journal = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year    = {2024},
+  note    = {arXiv:2406.12952}
+}
+
+@article{prodcodebench2024,
+  title   = {{ProdCodeBench}: Production-Derived Benchmark for Code Agents},
+  author  = {Anonymous},
+  journal = {arXiv preprint},
+  year    = {2024},
+  note    = {VERIFY placeholder.}
+}
+
+@article{repofusion,
+  title   = {{R}epo{F}usion: Training Code Models to Understand Your Repository},
+  author  = {Shrivastava, Disha and Kocetkov, Denis and de Vries, Harm and Scholak, Torsten and Bahdanau, Dzmitry},
+  journal = {arXiv preprint arXiv:2306.10998},
+  year    = {2023}
+}
+
+@article{swebenchlive,
+  title   = {{SWE-bench} Goes Live!},
+  author  = {Zhang, Linghao and He, Shilin and Zheng, Chaoyun and others},
+  journal = {arXiv preprint arXiv:2505.23419},
+  year    = {2025}
+}
+
+@article{swebenchpro2025,
+  title   = {{SWE-Bench Pro}: Can AI Agents Solve Long-Horizon Software Engineering Tasks?},
+  author  = {Deng, Xiang and Da, Jeff and Pan, Edward and others},
+  journal = {arXiv preprint arXiv:2509.16941},
+  year    = {2025}
+}
+
+@article{sweevo,
+  title   = {{SWE-EVO}: Benchmarking Coding Agents on Evolving Software Projects},
+  author  = {Thai, Minh-Tin and Le, Tuan and others},
+  journal = {arXiv preprint arXiv:2512.17540},
+  year    = {2025},
+  note    = {VERIFY: closest Semantic Scholar match; please confirm before camera-ready.}
+}
+
+@article{tddbench,
+  title   = {Tests as Prompts: A Test-Driven-Development Benchmark for LLM Code Generation},
+  author  = {Cui, Yi},
+  journal = {arXiv preprint arXiv:2505.09027},
+  year    = {2025}
+}
+
+@article{testgenllm,
+  title   = {{TestGen-LLM}: Industrial LLM-Powered Unit-Test Improvement at Meta},
+  author  = {Alshahwan, Nadia and Chheda, Jubin and Finogenova, Anastasia and others},
+  journal = {arXiv preprint arXiv:2402.09171},
+  year    = {2024},
+  note    = {Alias citation for \cite{alshahwan2024testgen}.}
+}
+

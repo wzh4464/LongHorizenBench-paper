@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{13}
+\begin{thebibliography}{23}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -36,123 +36,159 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
-\bibitem[Austin et~al\mbox{.}(2021)]%
-        {austin2021mbpp}
-\bibfield{author}{\bibinfo{person}{Jacob Austin}, \bibinfo{person}{Augustus
-  Odena}, \bibinfo{person}{Maxwell Nye}, \bibinfo{person}{Maarten Bosma},
-  \bibinfo{person}{Henryk Michalewski}, \bibinfo{person}{David Dohan},
-  \bibinfo{person}{Ellen Jiang}, \bibinfo{person}{Carrie Cai},
-  \bibinfo{person}{Michael Terry}, \bibinfo{person}{Quoc Le}, {and}
-  \bibinfo{person}{Charles Sutton}.} \bibinfo{year}{2021}\natexlab{}.
-\newblock \showarticletitle{Program Synthesis with Large Language Models}.
-\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2108.07732}}
-  (\bibinfo{year}{2021}).
+\bibitem[Alshahwan et~al\mbox{.}(2024a)]%
+        {testgenllm}
+\bibfield{author}{\bibinfo{person}{Nadia Alshahwan}, \bibinfo{person}{Jubin
+  Chheda}, \bibinfo{person}{Anastasia Finogenova}, {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{a}.
+\newblock \showarticletitle{{TestGen-LLM}: Industrial LLM-Powered Unit-Test
+  Improvement at Meta}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2402.09171}}
+  (\bibinfo{year}{2024}).
 \newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2108.07732}
-\showURL{%
-\tempurl}
+\newblock
+\shownote{Alias citation for \cite{alshahwan2024testgen}.}.
 
 
-\bibitem[Becker et~al\mbox{.}(2025)]%
-        {metr2025copilot}
-\bibfield{author}{\bibinfo{person}{Joel Becker}, \bibinfo{person}{Nate Rush},
-  \bibinfo{person}{Elizabeth Barnes}, {and} \bibinfo{person}{David Rein}.}
+\bibitem[Alshahwan et~al\mbox{.}(2024b)]%
+        {alshahwan2024testgen}
+\bibfield{author}{\bibinfo{person}{Nadia Alshahwan}, \bibinfo{person}{Jubin
+  Chheda}, \bibinfo{person}{Anastasia Finogenova}, \bibinfo{person}{Beliz
+  Gokkaya}, \bibinfo{person}{Mark Harman}, \bibinfo{person}{Inna Harper},
+  \bibinfo{person}{Alexandru Marginean}, \bibinfo{person}{Shubho Sengupta},
+  {and} \bibinfo{person}{Eddy Wang}.} \bibinfo{year}{2024}\natexlab{b}.
+\newblock \showarticletitle{Automated Unit Test Improvement using Large
+  Language Models at Meta}. In \bibinfo{booktitle}{\emph{Companion Proceedings
+  of the 32nd ACM International Conference on the Foundations of Software
+  Engineering (FSE Companion)}}.
+\newblock
+\newblock
+\shownote{arXiv:2402.09171}.
+
+
+\bibitem[Anonymous(2024a)]%
+        {autobug}
+\bibfield{author}{\bibinfo{person}{Anonymous}.}
+  \bibinfo{year}{2024}\natexlab{a}.
+\newblock \showarticletitle{{AutoBug}: Industrial Bug Fixing Pipeline Using
+  {LLM}s}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint}} (\bibinfo{year}{2024}).
+\newblock
+\newblock
+\shownote{VERIFY placeholder.}.
+
+
+\bibitem[Anonymous(2024b)]%
+        {codevisor}
+\bibfield{author}{\bibinfo{person}{Anonymous}.}
+  \bibinfo{year}{2024}\natexlab{b}.
+\newblock \showarticletitle{{CodeVisor}: Production Code Review with LLMs}.
+\newblock \bibinfo{journal}{\emph{Preprint}} (\bibinfo{year}{2024}).
+\newblock
+\newblock
+\shownote{VERIFY placeholder.}.
+
+
+\bibitem[Anonymous(2024c)]%
+        {prodcodebench2024}
+\bibfield{author}{\bibinfo{person}{Anonymous}.}
+  \bibinfo{year}{2024}\natexlab{c}.
+\newblock \showarticletitle{{ProdCodeBench}: Production-Derived Benchmark for
+  Code Agents}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint}} (\bibinfo{year}{2024}).
+\newblock
+\newblock
+\shownote{VERIFY placeholder.}.
+
+
+\bibitem[Bui et~al\mbox{.}(2025)]%
+        {harness2025}
+\bibfield{author}{\bibinfo{person}{Nghi D.~Q. Bui} {et~al\mbox{.}}}
   \bibinfo{year}{2025}\natexlab{}.
-\newblock \showarticletitle{Measuring the Impact of Early-2025 {AI} on
-  Experienced Open-Source Developer Productivity}.
-\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2507.09089}}
+\newblock \showarticletitle{Harness Engineering for LLM Coding Agents}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint}} (\bibinfo{year}{2025}).
+\newblock
+\newblock
+\shownote{VERIFY placeholder.}.
+
+
+\bibitem[Chen et~al\mbox{.}(2024)]%
+        {multiagent2024}
+\bibfield{author}{\bibinfo{person}{Dong Chen}, \bibinfo{person}{Daoguang Zan},
+  \bibinfo{person}{Shaoxin Lin}, {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{CodeR: Multi-Agent Issue Resolution with Task
+  Graphs}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2406.01304}}
+  (\bibinfo{year}{2024}).
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2025)]%
+        {featbench2025}
+\bibfield{author}{\bibinfo{person}{Hao Chen}, \bibinfo{person}{Chengliang Li},
+  {et~al\mbox{.}}} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{FeatBench: Evaluating Coding Agents on Feature
+  Implementation}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2509.22237}}
   (\bibinfo{year}{2025}).
 \newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2507.09089}
-\showURL{%
-\tempurl}
-\newblock
-\shownote{RCT with 16 experienced OSS developers; AI increased task time by
-  19\% despite self-reported 20\% speedup}.
 
 
-\bibitem[Chen et~al\mbox{.}(2021)]%
-        {chen2021humaneval}
-\bibfield{author}{\bibinfo{person}{Mark Chen}, \bibinfo{person}{Jerry Tworek},
-  \bibinfo{person}{Heewoo Jun}, \bibinfo{person}{Qiming Yuan},
-  \bibinfo{person}{Henrique~Ponde de Oliveira~Pinto}, \bibinfo{person}{Jared
-  Kaplan}, \bibinfo{person}{Harri Edwards}, \bibinfo{person}{Yuri Burda},
-  \bibinfo{person}{Nicholas Joseph}, \bibinfo{person}{Greg Brockman},
-  \bibinfo{person}{Alex Ray}, \bibinfo{person}{Raul Puri},
-  \bibinfo{person}{Gretchen Krueger}, \bibinfo{person}{Michael Petrov},
-  \bibinfo{person}{Heidy Khlaaf}, \bibinfo{person}{Girish Sastry},
-  \bibinfo{person}{Pamela Mishkin}, \bibinfo{person}{Brooke Chan},
-  \bibinfo{person}{Scott Gray}, \bibinfo{person}{Nick Ryder},
-  \bibinfo{person}{Mikhail Pavlov}, \bibinfo{person}{Alethea Power},
-  \bibinfo{person}{Lukasz Kaiser}, \bibinfo{person}{Mohammad Bavarian},
-  \bibinfo{person}{Clemens Winter}, \bibinfo{person}{Philippe Tillet},
-  \bibinfo{person}{Felipe~Petroski Such}, \bibinfo{person}{Dave Cummings},
-  \bibinfo{person}{Matthias Plappert}, \bibinfo{person}{Fotios Chantzis},
-  \bibinfo{person}{Elizabeth Barnes}, \bibinfo{person}{Ariel Herbert-Voss},
-  \bibinfo{person}{William~Hebgen Guss}, \bibinfo{person}{Alex Nichol},
-  \bibinfo{person}{Alex Paino}, \bibinfo{person}{Nikolas Tezak},
-  \bibinfo{person}{Jie Tang}, \bibinfo{person}{Igor Babuschkin},
-  \bibinfo{person}{Suchir Balaji}, \bibinfo{person}{Shantanu Jain},
-  \bibinfo{person}{William Saunders}, \bibinfo{person}{Christopher Hesse},
-  \bibinfo{person}{Andrew~N. Carr}, \bibinfo{person}{Jan Leike},
-  \bibinfo{person}{Josh Achiam}, \bibinfo{person}{Vedant Misra},
-  \bibinfo{person}{Evan Morikawa}, \bibinfo{person}{Alec Radford},
-  \bibinfo{person}{Matthew Knight}, \bibinfo{person}{Miles Brundage},
-  \bibinfo{person}{Mira Murati}, \bibinfo{person}{Katie Mayer},
-  \bibinfo{person}{Peter Welinder}, \bibinfo{person}{Bob McGrew},
-  \bibinfo{person}{Dario Amodei}, \bibinfo{person}{Sam McCandlish},
-  \bibinfo{person}{Ilya Sutskever}, {and} \bibinfo{person}{Wojciech Zaremba}.}
-  \bibinfo{year}{2021}\natexlab{}.
-\newblock \showarticletitle{Evaluating Large Language Models Trained on Code}.
-\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2107.03374}}
-  (\bibinfo{year}{2021}).
-\newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2107.03374}
-\showURL{%
-\tempurl}
-
-
-\bibitem[DeBellis et~al\mbox{.}(2024)]%
-        {dora2025}
-\bibfield{author}{\bibinfo{person}{Derek DeBellis}, \bibinfo{person}{Kevin
-  Storer}, \bibinfo{person}{Amanda Lewis}, \bibinfo{person}{Ben Good},
-  \bibinfo{person}{Daniella Villalba}, \bibinfo{person}{Eric Maxwell},
-  \bibinfo{person}{Kim Castillo}, \bibinfo{person}{Michelle Irvine}, {and}
-  \bibinfo{person}{Nathen Harvey}.} \bibinfo{year}{2024}\natexlab{}.
-\newblock \bibinfo{title}{Accelerate State of {DevOps} Report 2024}.
-\newblock
-  \bibinfo{howpublished}{\url{https://dora.dev/research/2024/dora-report/}}.
-\newblock
-\newblock
-\shownote{DORA/Google Cloud; +25\% AI adoption correlated with $-$1.5\%
-  delivery throughput}.
-
-
-\bibitem[Gauthier(2024)]%
-        {aider2024}
-\bibfield{author}{\bibinfo{person}{Paul Gauthier}.}
+\bibitem[Chowdhury et~al\mbox{.}(2024)]%
+        {chowdhury2024swebenchverified}
+\bibfield{author}{\bibinfo{person}{Neil Chowdhury}, \bibinfo{person}{James
+  Aung}, \bibinfo{person}{Chan~Jun Shern}, \bibinfo{person}{Oliver Jaffe},
+  \bibinfo{person}{Dane Sherburn}, \bibinfo{person}{Giulio Starace},
+  \bibinfo{person}{Mantas Mazeika}, {and} \bibinfo{person}{Aleksander Madry}.}
   \bibinfo{year}{2024}\natexlab{}.
-\newblock \bibinfo{title}{Aider: {AI} Pair Programming in Your Terminal}.
-\newblock \bibinfo{howpublished}{\url{https://github.com/Aider-AI/aider}}.
+\newblock \bibinfo{title}{Introducing {SWE-bench} Verified}.
+\newblock \bibinfo{howpublished}{OpenAI Research release,
+  \url{https://openai.com/index/introducing-swe-bench-verified/}}.
 \newblock
+
+
+\bibitem[Cui(2025)]%
+        {tddbench}
+\bibfield{author}{\bibinfo{person}{Yi Cui}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Tests as Prompts: A Test-Driven-Development
+  Benchmark for LLM Code Generation}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2505.09027}}
+  (\bibinfo{year}{2025}).
 \newblock
-\shownote{Open-source AI coding assistant}.
+
+
+\bibitem[Deng et~al\mbox{.}(2025)]%
+        {swebenchpro2025}
+\bibfield{author}{\bibinfo{person}{Xiang Deng}, \bibinfo{person}{Jeff Da},
+  \bibinfo{person}{Edward Pan}, {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{SWE-Bench Pro}: Can AI Agents Solve Long-Horizon
+  Software Engineering Tasks?}
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2509.16941}}
+  (\bibinfo{year}{2025}).
+\newblock
 
 
 \bibitem[{GitHub}(2024)]%
         {github2024survey}
 \bibfield{author}{\bibinfo{person}{{GitHub}}.} \bibinfo{year}{2024}\natexlab{}.
-\newblock \bibinfo{title}{Survey: The {AI} Wave Continues to Grow on Software
-  Development Teams}.
+\newblock \bibinfo{title}{Octoverse: The state of open source in 2024}.
 \newblock
-  \bibinfo{howpublished}{\url{https://github.blog/news-insights/research/survey-ai-wave-grows/}}.
+  \bibinfo{howpublished}{\url{https://github.blog/news-insights/octoverse-2024/}}.
 \newblock
+
+
+\bibitem[Guo et~al\mbox{.}(2025)]%
+        {crbench}
+\bibfield{author}{\bibinfo{person}{Hanyang Guo}, \bibinfo{person}{Xunqin
+  Zheng}, \bibinfo{person}{Wei Li}, {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{CodeFuse-CR-Bench: A Comprehensiveness-Aware
+  Benchmark for End-to-End Code Review}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2509.14856}}
+  (\bibinfo{year}{2025}).
 \newblock
-\shownote{Survey of 2,000 enterprise developers across four countries; 97\%
-  reported using AI coding tools}.
 
 
 \bibitem[Jimenez et~al\mbox{.}(2024)]%
@@ -161,123 +197,122 @@
   Yang}, \bibinfo{person}{Alexander Wettig}, \bibinfo{person}{Shunyu Yao},
   \bibinfo{person}{Kexin Pei}, \bibinfo{person}{Ofir Press}, {and}
   \bibinfo{person}{Karthik Narasimhan}.} \bibinfo{year}{2024}\natexlab{}.
-\newblock \showarticletitle{{SWE}-bench: Can Language Models Resolve Real-World
-  {GitHub} Issues?}. In \bibinfo{booktitle}{\emph{Proceedings of the Twelfth
-  International Conference on Learning Representations ({ICLR})}}.
+\newblock \showarticletitle{{SWE-bench}: Can Language Models Resolve Real-World
+  {GitHub} Issues?}. In \bibinfo{booktitle}{\emph{International Conference on
+  Learning Representations (ICLR)}}.
 \newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2310.06770}
-\showURL{%
-\tempurl}
+\newblock
+\shownote{arXiv:2310.06770}.
 
 
-\bibitem[Li et~al\mbox{.}(2024)]%
-        {li2024devbench}
-\bibfield{author}{\bibinfo{person}{Bowen Li}, \bibinfo{person}{Wenhan Wu},
-  \bibinfo{person}{Ziwei Tang}, \bibinfo{person}{Lin Shi},
-  \bibinfo{person}{John Yang}, \bibinfo{person}{Jinyang Li},
-  \bibinfo{person}{Shunyu Yao}, \bibinfo{person}{Chen Qian},
-  \bibinfo{person}{Binyuan Hui}, \bibinfo{person}{Qicheng Zhang},
-  \bibinfo{person}{Zhiyin Yu}, \bibinfo{person}{He Du}, \bibinfo{person}{Ping
-  Yang}, \bibinfo{person}{Dahua Lin}, \bibinfo{person}{Chao Peng}, {and}
-  \bibinfo{person}{Kai Chen}.} \bibinfo{year}{2024}\natexlab{}.
-\newblock \showarticletitle{{DevBench}: A Comprehensive Benchmark for Software
-  Development}.
-\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2403.08604}}
+\bibitem[M\"{u}ndler et~al\mbox{.}(2024)]%
+        {mundler2024passerine}
+\bibfield{author}{\bibinfo{person}{Niels M\"{u}ndler},
+  \bibinfo{person}{Mark~Niklas M\"{u}ller}, \bibinfo{person}{Jingxuan He},
+  {and} \bibinfo{person}{Martin Vechev}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{SWT-Bench}: Testing and Validating Real-World
+  Bug-Fixes with Code Agents}.
+\newblock \bibinfo{journal}{\emph{Advances in Neural Information Processing
+  Systems (NeurIPS)}} (\bibinfo{year}{2024}).
+\newblock
+\newblock
+\shownote{arXiv:2406.12952}.
+
+
+\bibitem[Rondon et~al\mbox{.}(2025)]%
+        {mathai2024passerine}
+\bibfield{author}{\bibinfo{person}{Pat Rondon}, \bibinfo{person}{Renyuan Wei},
+  \bibinfo{person}{Jos\'{e} Cambronero}, {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Evaluating Agent-based Program Repair at {Google}}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2501.07531 (ICSE-SEIP
+  2025)}} (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Shrivastava et~al\mbox{.}(2023)]%
+        {repofusion}
+\bibfield{author}{\bibinfo{person}{Disha Shrivastava}, \bibinfo{person}{Denis
+  Kocetkov}, \bibinfo{person}{Harm de Vries}, \bibinfo{person}{Torsten
+  Scholak}, {and} \bibinfo{person}{Dzmitry Bahdanau}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{{R}epo{F}usion: Training Code Models to Understand
+  Your Repository}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2306.10998}}
+  (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Thai et~al\mbox{.}(2025)]%
+        {sweevo}
+\bibfield{author}{\bibinfo{person}{Minh-Tin Thai}, \bibinfo{person}{Tuan Le},
+  {et~al\mbox{.}}} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{SWE-EVO}: Benchmarking Coding Agents on Evolving
+  Software Projects}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2512.17540}}
+  (\bibinfo{year}{2025}).
+\newblock
+\newblock
+\shownote{VERIFY: closest Semantic Scholar match; please confirm before
+  camera-ready.}.
+
+
+\bibitem[Wang et~al\mbox{.}(2025)]%
+        {confucius}
+\bibfield{author}{\bibinfo{person}{Zhuoren Wang}, \bibinfo{person}{Zhenting
+  Cui}, {et~al\mbox{.}}} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Confucius-Coder: An Industrial-Scale Coding Agent}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2512.10398}}
+  (\bibinfo{year}{2025}).
+\newblock
+\newblock
+\shownote{VERIFY: entry tentative; confirm canonical citation.}.
+
+
+\bibitem[Xia et~al\mbox{.}(2024)]%
+        {agentless}
+\bibfield{author}{\bibinfo{person}{Chunqiu~Steven Xia}, \bibinfo{person}{Yinlin
+  Deng}, \bibinfo{person}{Soren Dunn}, {and} \bibinfo{person}{Lingming Zhang}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Agentless: Demystifying {LLM}-Based Software
+  Engineering Agents}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2407.01489}}
   (\bibinfo{year}{2024}).
 \newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2403.08604}
-\showURL{%
-\tempurl}
+
+
+\bibitem[Xu et~al\mbox{.}(2025)]%
+        {logsage}
+\bibfield{author}{\bibinfo{person}{Weiyan Xu}, \bibinfo{person}{Junhao Luo},
+  {et~al\mbox{.}}} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{L}og{S}age: An LLM-Based Framework for CI/CD
+  Failure Detection and Remediation}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2506.03691}}
+  (\bibinfo{year}{2025}).
 \newblock
-\shownote{Later versions renamed to DevEval}.
 
 
-\bibitem[Liu et~al\mbox{.}(2026)]%
-        {liu2026EvaluatingLLMsAerospace}
-\bibfield{author}{\bibinfo{person}{Yang Liu}, \bibinfo{person}{Yixing Luo},
-  \bibinfo{person}{Xiaofeng Li}, \bibinfo{person}{Xiaogang Dong},
-  \bibinfo{person}{Bin Gu}, {and} \bibinfo{person}{Zhi Jin}.}
-  \bibinfo{year}{2026}\natexlab{}.
-\newblock \showarticletitle{Evaluating Large Language Models for Time Series
-  Anomaly Detection in Aerospace Software}.
-\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2601.12448}}
-  (\bibinfo{year}{2026}).
+\bibitem[Zan et~al\mbox{.}(2025)]%
+        {multiswebench}
+\bibfield{author}{\bibinfo{person}{Daoguang Zan}, \bibinfo{person}{Zhirong
+  Huang}, \bibinfo{person}{Wei Liu}, {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{Multi-SWE-bench}: A Multilingual Benchmark for
+  Issue Resolving}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2504.02605}}
+  (\bibinfo{year}{2025}).
 \newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2601.12448}
-\showURL{%
-\tempurl}
 
 
-\bibitem[Mundhra et~al\mbox{.}(2025)]%
-        {mundhra2025EvaluatingLLMsASML}
-\bibfield{author}{\bibinfo{person}{Yash Mundhra}, \bibinfo{person}{Max Valk},
-  {and} \bibinfo{person}{Maliheh Izadi}.} \bibinfo{year}{2025}\natexlab{}.
-\newblock \showarticletitle{Evaluating Large Language Models for Functional and
-  Maintainable Code in Industrial Settings: A Case Study at {ASML}}. In
-  \bibinfo{booktitle}{\emph{Proceedings of the 40th {IEEE/ACM} International
-  Conference on Automated Software Engineering ({ASE}), Industry Track}}.
+\bibitem[Zhang et~al\mbox{.}(2025)]%
+        {swebenchlive}
+\bibfield{author}{\bibinfo{person}{Linghao Zhang}, \bibinfo{person}{Shilin He},
+  \bibinfo{person}{Chaoyun Zheng}, {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{SWE-bench} Goes Live!}
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2505.23419}}
+  (\bibinfo{year}{2025}).
 \newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2509.12395}
-\showURL{%
-\tempurl}
-
-
-\bibitem[Paradis et~al\mbox{.}(2024)]%
-        {google2025rct}
-\bibfield{author}{\bibinfo{person}{Elise Paradis}, \bibinfo{person}{Kate Grey},
-  \bibinfo{person}{Quinn Madison}, \bibinfo{person}{Daye Nam},
-  \bibinfo{person}{Andrew Macvean}, \bibinfo{person}{Vahid Meimand},
-  \bibinfo{person}{Nan Zhang}, \bibinfo{person}{Ben Ferrari-Church}, {and}
-  \bibinfo{person}{Satish Chandra}.} \bibinfo{year}{2024}\natexlab{}.
-\newblock \showarticletitle{How Much Does {AI} Impact Development Speed? {An}
-  Enterprise-Based Randomized Controlled Trial}.
-\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2410.12944}}
-  (\bibinfo{year}{2024}).
-\newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2410.12944}
-\showURL{%
-\tempurl}
-\newblock
-\shownote{RCT with 96 Google engineers; AI features shortened task time by
-  $\sim$21\%}.
-
-
-\bibitem[Yang et~al\mbox{.}(2024)]%
-        {yang2024sweagent}
-\bibfield{author}{\bibinfo{person}{John Yang}, \bibinfo{person}{Carlos~E.
-  Jimenez}, \bibinfo{person}{Alexander Wettig}, \bibinfo{person}{Kilian
-  Lieret}, \bibinfo{person}{Shunyu Yao}, \bibinfo{person}{Karthik Narasimhan},
-  {and} \bibinfo{person}{Ofir Press}.} \bibinfo{year}{2024}\natexlab{}.
-\newblock \showarticletitle{{SWE}-agent: Agent-Computer Interfaces Enable
-  Automated Software Engineering}. In \bibinfo{booktitle}{\emph{Advances in
-  Neural Information Processing Systems 37 ({NeurIPS})}}.
-\newblock
-\urldef\tempurl%
-\url{https://arxiv.org/abs/2405.15793}
-\showURL{%
-\tempurl}
-
-
-\bibitem[Zhang et~al\mbox{.}(2023)]%
-        {zhang2023repocodecompletion}
-\bibfield{author}{\bibinfo{person}{Fengji Zhang}, \bibinfo{person}{Bei Chen},
-  \bibinfo{person}{Yue Zhang}, \bibinfo{person}{Jacky Keung},
-  \bibinfo{person}{Jin Liu}, \bibinfo{person}{Daoguang Zan},
-  \bibinfo{person}{Yi Mao}, \bibinfo{person}{Jian-Guang Lou}, {and}
-  \bibinfo{person}{Weizhu Chen}.} \bibinfo{year}{2023}\natexlab{}.
-\newblock \showarticletitle{{RepoCoder}: Repository-Level Code Completion
-  Through Iterative Retrieval and Generation}. In
-  \bibinfo{booktitle}{\emph{Proceedings of the 2023 Conference on Empirical
-  Methods in Natural Language Processing ({EMNLP})}}.
-  \bibinfo{publisher}{Association for Computational Linguistics},
-  \bibinfo{address}{Singapore}, \bibinfo{pages}{2471--2484}.
-\newblock
-\href{https://doi.org/10.18653/v1/2023.emnlp-main.151}{doi:\nolinkurl{10.18653/v1/2023.emnlp-main.151}}
 
 
 \end{thebibliography}
