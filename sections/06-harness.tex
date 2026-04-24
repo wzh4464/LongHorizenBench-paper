@@ -26,7 +26,7 @@ Table~\ref{tab:prompt} (in \S\ref{sec:results-prompt}) shows the effect across a
 
 For the two strongest agents, long prompts improve composite scores by +1.2 to +1.7/15 and pass rates by 4.8 percentage points.
 Claude and Codex show similar prompt deltas (+4.8~pp), passing 4.8\% of tasks with long prompts vs.\ 0\% with short prompts.
-However, the effect is not universal: Cursor shows no change in pass rate (both short and long remain at 3.2\%), and OpenCode reaches only 1.6\% with long prompts.
+However, the effect is not universal: Cursor and OpenCode each reach only 1.6\% PASS with long prompts and 0\% with short prompts.
 
 \finding{Detailed specifications improve PASS rates by up to 4.8 percentage points and composite scores by +1.2 to +1.7/15 for the two strongest configurations.
 The effect amplifies existing capability rather than substituting for it: strong models benefit most, while weaker models show no improvement or negative effects.}
@@ -51,7 +51,7 @@ measured ablations:
 (2)~\emph{fix-cycle loops}, feeding validation errors back for agent correction; and
 (3)~\emph{architecture-aware planning}, enforcing discovery-before-implementation phases and explicit test plans.
 
-\finding{Input-side prompt engineering lifts Claude and Codex from 0\% to 4.8\% PASS and OpenCode from 0\% to 1.6\%; Cursor is prompt-insensitive at 3.2\%. Closing the remaining >95\% gap requires output-side and process-side harnesses---fix-cycle loops and enforced test coverage---that no current agent implements natively.}
+\finding{Input-side prompt engineering lifts Claude and Codex from 0\% to 4.8\% PASS and Cursor/OpenCode from 0\% to 1.6\%. Closing the remaining >95\% gap requires output-side and process-side harnesses---fix-cycle loops and enforced test coverage---that no current agent implements natively.}
 
 \paragraph{Deployment recipe for near-term production use.}
 For practitioners shipping coding agents to internal developers today, our data suggests four low-cost hardening steps.

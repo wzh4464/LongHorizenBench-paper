@@ -17,7 +17,7 @@ explicit process harness demonstrates a different result.
 \paragraph{Treat task specification as an engineering artifact.}
 Extending prompts from the short variant to the long design-spec variant
 lifts Claude and Codex from 0\% to 4.8\% PASS, and OpenCode from 0\%
-to 1.6\%; Cursor remains at 3.2\% under both prompt settings
+to 1.6\%; Cursor likewise reaches only 1.6\% under long prompts
 (Table~\ref{tab:prompt}). For practitioners, this means the cheapest
 near-term intervention is not model switching but requiring a structured
 task brief: motivation, expected behaviour, constraints, affected
@@ -33,8 +33,8 @@ guarantee correctness, but they filter out the common incomplete drafts
 that currently consume reviewer time.
 
 \paragraph{Use evaluator panels, not a single judge.}
-Raw pairwise agreement spans 42.7\% (Codex vs.\ GLM) to 75.1\%
-(Claude vs.\ Cursor), and Fleiss' $\kappa$ is only 0.29. Any production
+Raw pairwise agreement spans 42.5\% (Codex vs.\ GLM) to 74.4\%
+(Claude vs.\ Cursor), and Fleiss' $\kappa$ is only 0.30. Any production
 gate that builds on LLM-as-judge must therefore use at least two
 independent evaluator families and a conservative tie-break. Single
 judge gates will drift simply by swapping the judge model.

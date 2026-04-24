@@ -7,45 +7,49 @@ Running log of iterative improvements to `paper2/`. Every round records: what wa
 
 ## Canonical Data Table (verified against `reports/eval_scores_v2_long.csv`)
 
-Majority-of-4 voting, strict: PASS iff ≥3 of 4 evaluators vote PASS; FAIL iff ≥3 vote FAIL; else PARTIAL.
+Majority-of-4 voting with conservative tie-break: PASS iff >=3 of 4 evaluators vote PASS; FAIL iff >=2 vote FAIL; else PARTIAL.
 
 | Agent          | N   | PASS | PARTIAL | FAIL | PASS% |
 |----------------|----:|-----:|--------:|-----:|------:|
-| Claude Opus 4.6|124|3|91|30|2.4%|
-| Codex GPT-5.4  |124|3|?|?|2.4%|
-| Cursor Composer|124|4|66|54|3.2%|
-| OpenCode GLM   |124|1|55|68|0.8%|
-| **All**        |496|**11**|—|—|**2.2%**|
+| Claude Opus 4.6|124|3|57|64|2.4%|
+| Codex GPT-5.4  |124|3|62|59|2.4%|
+| Cursor Composer|124|1|49|74|0.8%|
+| OpenCode GLM   |124|1|26|97|0.8%|
+| **All**        |496|**8**|194|294|**1.6%**|
 
 Per-family (strict majority across both prompts):
-- CANN (C1–C5): 5/40 = 12.5%
+- CANN (C1-C5): 3/40 = 7.5%
 - MindSpeed (M1–M3): 1/24 = 4.2%
 - Kubernetes (K1–K4): 0/32 = 0% (cliff)
-- CapBench (T01–T50): 5/400 = 1.25%
+- CapBench (T01-T50): 4/400 = 1.0%
 
-Per-agent × prompt-variant (PASS out of 62, verified 2026-04-22 against wide CSV):
+Per-agent × prompt-variant (PASS out of 62, verified 2026-04-24 against long CSV):
 | agent | short | long |
 |---|---|---|
 | Claude Opus 4.6 | 0/62 (0.0%) | 3/62 (4.8%) |
 | Codex GPT-5.4 | 0/62 (0.0%) | 3/62 (4.8%) |
-| Cursor Composer-2 | 2/62 (3.2%) | 2/62 (3.2%) |
+| Cursor Composer-2 | 0/62 (0.0%) | 1/62 (1.6%) |
 | OpenCode GLM-5.1 | 0/62 (0.0%) | 1/62 (1.6%) |
 
-**Actual 11 PASS runs (task-agent-prompt):** C1/Claude-long, C1/Codex-long, C1/Cursor-short, C4/Codex-long, C4/Cursor-short, M1/Claude-long, T10/{Claude,Codex,Cursor,OpenCode}-long, T34/Cursor-long.
+**Actual 8 PASS runs (task-agent-prompt):** C1/Claude-long, C1/Codex-long, C4/Codex-long, M1/Claude-long, T10/{Claude,Codex,Cursor,OpenCode}-long.
 
-**Cursor's unique wins:** C1-short, C4-short (Claude/Codex need long), T34-long (no other agent passes T34). This is why Cursor leads PASS count despite ties with Codex on mean composite score — Cursor extracts value from short prompts the others can't.
+**Cursor rerun update:** the disputed Cursor PASS cases C1-short, C4-short, and T34-long were rerun on 2026-04-24 and now fail under the majority rubric. Cursor retains only T10-long.
 
-**Verdict rule used by paper's Table 1:** strict PASS (≥3/4 judges PASS) **but lenient FAIL** (≥2/4 FAIL → FAIL, else PARTIAL). Total: Claude 3/57/64, Codex 3/62/59, Cursor 4/49/71, OpenCode 1/55/97.
-
-| cursor | 2 (3.2%) | 2 (3.2%) |
-| opencode | 0 (0.0%) | 1 (1.6%) |
+**Verdict rule used by paper's Table 1:** strict PASS (>=3/4 judges PASS) **but lenient FAIL** (>=2/4 FAIL -> FAIL, else PARTIAL). Total: Claude 3/57/64, Codex 3/62/59, Cursor 1/49/74, OpenCode 1/26/97.
 
 Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
-- claude × cursor 74.8% (highest)
-- codex × glm 42.7% (lowest)
-- 4-way unanimous 41.3%
+- claude × cursor 74.4% (highest)
+- codex × glm 42.5% (lowest)
+- 4-way unanimous 33.7%
 
-## Iteration 8 (2026-04-24) - current
+## Iteration 9 (2026-04-24) - current
+
+- Updated all headline numbers after the Cursor rerun in `reports/eval_scores_v2_long.csv`.
+- PASS count drops from 11/496 to 8/496; Cursor drops from 4/124 to 1/124 after C1-short, C4-short, and T34-long fail under the rerun.
+- Reframed the agent ranking: Claude and Codex tie on PASS (3/124 each), Codex leads on mean score, Cursor/OpenCode each pass only T10-long.
+- Updated §4 tables, heatmap, score histogram, prompt effect, evaluator agreement, root-cause counts, harness/deployment wording, and conclusion.
+
+## Iteration 8 (2026-04-24) - previous
 
 - Reframed the paper around the ASE Industry deployment question: what feature work can be routed to agents, what must remain human-owned, and what harness gates are required before rollout.
 - Rewrote the abstract, introduction contributions, §2 Industrial Context, §6 Harness Engineering, §6b Industrial Deployment Lessons, and threats wording to emphasise production-equivalence, task routing, and governance rather than leaderboard framing.

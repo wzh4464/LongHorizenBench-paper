@@ -4,21 +4,21 @@
 Across 496 experiments spanning 62 real feature-implementation tasks
 and 4 state-of-the-art coding agents, we find that modern commercial
 agents are \emph{not ready} to autonomously complete production-quality
-feature work.  The best-performing configuration (Cursor Composer-2)
-passes only 3.2\% of tasks; Codex GPT-5.4 and Claude Opus~4.6 tie at
-2.4\%; OpenCode reaches 0.8\%.  No agent clears any Kubernetes-family
-task.  Two trends are consistent across the data:
+feature work.  The best-performing configurations, Codex GPT-5.4 and
+Claude Opus~4.6, pass only 2.4\% of runs; Cursor Composer-2 and
+OpenCode GLM-5.1 each reach 0.8\%.  No agent clears any
+Kubernetes-family task.  Two trends are consistent across the data:
 
 \begin{itemize}
-  \item \textbf{A complexity cliff.}  Pass rate collapses from 12.5\%
-  on Low-complexity tasks to 0 on High-complexity tasks, with
-  Kubernetes-class multi-module refactors (K-family, 0/32 PASS)
-  acting as an absolute ceiling for every agent we tested.
+  \item \textbf{A systems-code cliff.}  Pass rate is concentrated in
+  small CANN, MindSpeed, and CapBench cases, while Kubernetes-class
+  multi-module refactors (K-family, 0/32 PASS) act as an absolute
+  ceiling for every agent we tested.
   \item \textbf{Prompt leverage, but not universal.}  Moving from short
   to long prompts lifts Claude and Codex from 0\,\% to 4.8\,\% PASS
-  and OpenCode from 0\,\% to 1.6\,\%; Cursor is prompt-insensitive at
-  3.2\,\% under both regimes.  Detailed prompts therefore help three
-  of four configurations, but their effect (at most +4.8~pp per
+  and Cursor/OpenCode from 0\,\% to 1.6\,\%.  Detailed prompts
+  therefore help all configurations on mean score, but their effect
+  (at most +4.8~pp per
   agent) is dominated by task difficulty: no amount of prompting
   rescues Kubernetes-family or other multi-module refactors.
 \end{itemize}
@@ -27,7 +27,7 @@ task.  Two trends are consistent across the data:
 For engineering teams considering LLM-based coding agents on production feature workloads, three guidelines emerge from our data.
 \emph{First}, invest in prompt engineering before model selection: a well-specified task at the \emph{long} level of detail closes more of the capability gap than swapping models.
 \emph{Second}, route Low-complexity refactors and single-file edits to agents, but keep multi-module feature work (particularly Kubernetes-family or protobuf-touching changes) with human engineers until an explicit harness (§\ref{sec:harness}) is in place.
-\emph{Third}, the 42.7\% Codex-vs-GLM pairwise evaluator agreement implies that single-judge acceptance gates will mis-verdict at scale; any production adoption should ensemble at least three independent LLM judges with a conservative tie-break.
+\emph{Third}, the 42.5\% Codex-vs-GLM pairwise evaluator agreement implies that single-judge acceptance gates will mis-verdict at scale; any production adoption should ensemble at least three independent LLM judges with a conservative tie-break.
 
 \paragraph{Future work.}
 Our results motivate a research agenda centered on \emph{harness engineering}:

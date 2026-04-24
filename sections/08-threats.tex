@@ -4,7 +4,7 @@
 \textbf{Construct validity.}
 Every experiment is independently scored by four LLM evaluators from different model families (Claude Opus~4.6, Codex GPT-5.4, Cursor Composer-2, and OpenCode GLM-5.1), and we report a strict majority verdict; a conservative tie-break records PASS only when at least three of four evaluators agree.
 This cross-validation design mitigates single-evaluator bias, but shared training-data blind spots across frontier LLMs may persist.
-Pairwise verdict agreement ranges from 42.7\% (Codex vs.\ OpenCode) to 75.1\% (Claude vs.\ Cursor); unanimous four-way agreement covers 41.3\% of runs.
+Pairwise verdict agreement ranges from 42.5\% (Codex vs.\ GLM) to 74.4\% (Claude vs.\ Cursor); unanimous four-way agreement covers 33.7\% of runs.
 Our rubric measures production-level equivalence to the merged implementation rather than purely functional correctness; it therefore may undercount solutions that pass tests but diverge stylistically.
 
 \textbf{Internal validity.}
@@ -31,6 +31,6 @@ Our behavioral-equivalence rubric (dimension C) partially mitigates this by rewa
 \textbf{Evaluator-task confound.}
 Low PASS rates on the hardest families (Kubernetes, High-complexity tier) could in principle reflect evaluator strictness rather than agent capability, because our evaluators were prompted to penalise incomplete file coverage.
 We partially mitigate this by (a) using four independent evaluator families with different training distributions, (b) reporting per-dimension scores (A/B/C) so a reader can isolate coverage from correctness, and (c) using conservative majority aggregation rather than a single judge.
-Nonetheless, a harsher evaluator would pull majority verdicts toward FAIL on long-horizon tasks; readers should interpret the absolute 2.2\% PASS rate as indicative of the composite (agent+judge) system rather than of the agent alone.
+Nonetheless, a harsher evaluator would pull majority verdicts toward FAIL on long-horizon tasks; readers should interpret the absolute 1.6\% PASS rate as indicative of the composite (agent+judge) system rather than of the agent alone.
 
-\textbf{Task-difficulty and evaluator-bias confound.} Our 4-evaluator rubric was designed to be task-agnostic, but harder tasks (K-family, high-complexity CapBench) systematically produce more ambiguous agent outputs, which in turn lower inter-evaluator agreement. We observe pairwise agreement of 42.7\% on the Codex/OpenCode judge pair for hard tasks versus 74.8\% on Claude/Cursor for easy tasks. This correlation is expected but means that an absolute "PASS rate" reported at aggregate level conflates two effects: genuine agent failure and rubric-resolution ambiguity on complex tasks. The qualitative ranking across agents is stable under all four single-judge aggregations; only the absolute PASS count is sensitive.
+\textbf{Task-difficulty and evaluator-bias confound.} Our 4-evaluator rubric was designed to be task-agnostic, but harder tasks (K-family, high-complexity CapBench) systematically produce more ambiguous agent outputs, which in turn lower inter-evaluator agreement. We observe pairwise agreement of 42.5\% on the Codex/GLM judge pair versus 74.4\% on Claude/Cursor. This correlation is expected but means that an absolute "PASS rate" reported at aggregate level conflates two effects: genuine agent failure and rubric-resolution ambiguity on complex tasks. The qualitative ranking across agents is stable at the coarse level, but the rerun of disputed Cursor cases shows that absolute PASS count is sensitive for borderline outputs.
