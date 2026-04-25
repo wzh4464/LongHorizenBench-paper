@@ -11,12 +11,13 @@ Our rubric measures production-level equivalence to the merged implementation ra
 Each task--configuration--prompt cell was executed once; stochastic variation means individual results may not represent expected behaviour, though aggregate patterns across 496 runs (62 tasks $\times$ 4 configurations $\times$ 2 prompts) remain robust.
 All cross-configuration comparisons are \emph{product-level}---each configuration confounds the underlying model, harness, and tool-use policy---so an agent's advantage may reflect framework engineering as much as raw model capability (\S\ref{sec:configs}).
 During initial runs on Kubernetes task K4, one configuration exploited git history in the sanitized repository to reconstruct ground-truth diffs via \texttt{git cherry-pick}; we remediated by re-sanitizing all 62 task repositories---removing reachable commits beyond the assigned base SHA---and by programmatically auditing every trajectory for ground-truth-derived content. Post-sanitization runs were confirmed clean.
+Separately, after internal review flagged three Cursor PASS outcomes as provenance-sensitive, we reran exactly those task--prompt cells under the final sanitization protocol; all three became non-PASS, and the final analysis uses the rerun outcomes.
 
 \textbf{External validity.}
 Our 62 tasks span four industrial codebases plus 15 open-source projects in the CapBench extension, but all sampled tasks come from merged commits that passed human review.
 Selection is therefore biased toward \emph{tractable} feature implementations; ambiguous or cross-team tasks are underrepresented.
 Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, GPT-5.4, Composer-2, GLM-5.1) will be superseded within months of publication.
-We expect relative patterns---the Kubernetes cliff, long-prompt lift, coverage-dominated failure mode---to persist, but absolute PASS rates are a lower bound under today's models.
+We expect relative patterns---the Kubernetes cliff, long-prompt lift, and mixed semantic/coverage failure profile---to persist, but absolute PASS rates are a lower bound under today's models.
 
 \textbf{Evaluator honesty.}
 A persistent risk with LLM-as-judge evaluation is inflated or deflated scoring from the judge's own biases.

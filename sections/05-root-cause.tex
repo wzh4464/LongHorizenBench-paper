@@ -2,72 +2,104 @@
 \label{sec:root-cause}
 
 Of the 496 experiments, only 8 achieved PASS (1.6\%); 488 were non-PASS (194 PARTIAL, 294 FAIL).
-This section decomposes the non-PASS population into failure modes, distinguishes engineering-addressable gaps from fundamental model-capability limits, and contrasts the 12-task industrial subset with the 50-task CapBench extension.
+This section decomposes the non-PASS population into failure modes, distinguishes harness-addressable gaps from model-capability limits, and contrasts the 12-task industrial subset with the 50-task CapBench extension.
 
 %% ------------------------------------------------------------------
-\subsection{Failure Mode Taxonomy}
+\subsection{CSV-Derived Failure Signatures}
 \label{sec:failure-modes}
 
-Using the four evaluators' majority vote, each non-PASS run is classified by its lowest dimension:
-
+We classify each non-PASS run using the same four-evaluator record used for the headline tables.
+For a run, we average the four judges' $A$ (functional correctness), $B$ (completeness/coverage), and $C$ (behavioral equivalence) scores, then assign the first matching signature:
 \begin{itemize}
-  \item \textbf{Incomplete coverage} ($B < 2$): agent failed to touch most required files.
-  \item \textbf{Partial coverage with quality gaps} ($B \ge 2$, $A < 2$): agent touched the right area but produced semantically wrong code.
-  \item \textbf{Structural mismatch} ($A, B \ge 2$ but $C < 2$): superficially correct code that diverges from the ground-truth design.
-  \item \textbf{No output} ($A = B = 0$): agent produced no diff, abandoned the task, or crashed.
+  \item \textbf{Semantic/correctness failure}: $\bar{A} < 2$.
+  \item \textbf{Coverage gap}: $\bar{A} \ge 2$ and $\bar{B} < 2$.
+  \item \textbf{Behavioral/design mismatch}: $\bar{A} \ge 2$, $\bar{B} \ge 2$, and $\bar{C} < 2$.
+  \item \textbf{Borderline partial}: no dimension is critically deficient, but the run does not reach the PASS thresholds.
 \end{itemize}
 
-Across the 485 non-PASS runs, incomplete coverage dominates in every task family:
-CANN operator tasks (C1--C5) fail predominantly at partial scope (multi-file function additions),
-MindSpeed tasks (M1--M3) show boundary-condition misses,
-Kubernetes refactors (K1--K4) exhibit severe coverage gaps (avg 25\% file coverage),
-and the CapBench OSS tasks frequently result in FAIL due to missing scaffolding (tests, types, docs).
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt{eval\_scores\_v2\_long.csv}.}
+\label{tab:failure-signatures}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+\textbf{Signature} & \textbf{Rule} & \textbf{Runs} & \textbf{Share} \\
+\midrule
+Semantic failure & $\bar{A} < 2$ & 202 & 41.4\% \\
+Coverage gap & $\bar{A} \ge 2, \bar{B} < 2$ & 128 & 26.2\% \\
+Design mismatch & $\bar{A},\bar{B} \ge 2, \bar{C} < 2$ & 49 & 10.0\% \\
+Borderline partial & all $\ge 2$, not PASS & 109 & 22.3\% \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{Finding 5:} Across all 4 agents and 62 tasks, the dominant failure signal is incomplete scope
-(missing files/functions), not incorrect code. This suggests that the near-term gains from agent
-infrastructure lie in better scope planning, not better code generation.
+Table~\ref{tab:failure-signatures} changes the interpretation of the failures in an important way.
+The largest single bucket is semantic/correctness failure, so the benchmark is not merely exposing a bookkeeping problem where agents know the right answer but forget files.
+At the same time, coverage gaps account for 26.2\% of all non-PASS runs, and another 22.3\% are borderline partials with no critically deficient dimension.
+Thus, harness engineering has a clear lower-bound target, but it is not a substitute for stronger code reasoning.
 
-%% ------------------------------------------------------------------
-\subsection{Engineering-Addressable Gaps}
-
-Following the definition that a failure is \emph{engineering-addressable} if
-$B < A$ (the agent's code is of higher quality than its coverage),
-we classify runs:
-
-\begin{itemize}
-  \item \emph{Engineering-addressable (B $<$ A):} agent could PASS with better scope-management infrastructure. the majority of non-PASS runs.
-  \item \emph{Capability-limited (A $\le$ 1):} core reasoning error; code is wrong, not merely incomplete. a substantial minority (mean $A < 2$ across the four evaluators).
-  \item \emph{Borderline (A $\approx$ B, C low):} remaining runs where agents produced code with both correctness and scope issues that also diverged structurally from the reference PR.
-\end{itemize}
-
-Codex and Claude cluster more often in the engineering-addressable bucket (high A, lower B), suggesting their failures are most likely to be fixed by harness augmentation. Cursor and OpenCode fall more often into capability-limited (low A), indicating their underlying models struggle more with the core task semantics before any scope-management help can be applied.
-
-\finding{The dominant failure mode is engineering scope---agents often write plausible code for part of the required change, but stop before covering the full file set. Tooling that enforces scope discovery, dependency tracing, and test coverage is therefore a plausible near-term improvement path; stronger models alone are unlikely to close the gap.}
+\textbf{Finding 5:} Non-PASS outcomes split into two large families rather than one dominant cause: 41.4\% are semantic/correctness failures, while 26.2\% are coverage gaps with some demonstrated understanding. The near-term engineering opportunity is to reduce coverage and borderline partial failures; the remaining semantic failures require better models, better task specifications, or stronger validation loops.
 
 %% ------------------------------------------------------------------
-\subsection{Task Family Signatures}
+\subsection{Agent and Family Signatures}
 \label{sec:family-signatures}
 
-The 50-task CapBench OSS subset widens our observational window: whereas the original 12 Huawei-ecosystem tasks showed a clear Low/Medium/High complexity gradient, CapBench reveals that task-domain matters as much as task-size. For example:
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes.}
+\label{tab:failure-agent}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Agent} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
+\midrule
+Claude   & 41 & 32 & 29 & 19 \\
+Codex    & 33 & 36 & 42 & 10 \\
+Cursor   & 50 & 34 & 30 & 9 \\
+OpenCode & 78 & 26 & 8  & 11 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\begin{itemize}
-  \item \textbf{Data-systems tasks} (Kafka, CockroachDB) score the lowest PASS rates ($<2\%$); their tight coupling between protocol, storage, and test infrastructure creates high scope demands.
-  \item \textbf{ML/DL tasks} (PyTorch, TensorFlow) show moderate PASS rates; agents handle focused API work well.
-  \item \textbf{Web framework tasks} (Django, Spring) accommodate agents best, with 2--3 agents passing on the simplest tasks.
-  \item \textbf{Infra / OS-level tasks} (Kubernetes, Linux) uniformly defeat all agents; 0 PASS across 32 runs in this benchmark.
-\end{itemize}
+Table~\ref{tab:failure-agent} explains why mean composite score and PASS count tell slightly different stories.
+Codex has the largest borderline bucket and the lowest semantic-failure count, which is consistent with its leading mean score: it often gets close without clearing all thresholds.
+OpenCode has the largest semantic-failure bucket, explaining its lower mean score even though it shares the same one-PASS count as Cursor.
+Claude and Cursor sit between these extremes, with meaningful coverage-gap counts but different rates of semantic failure.
 
-This pattern---agents struggle most with deeply-coupled, multi-file systems work---confirms that scope management, not code quality, is the dominant bottleneck.
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Failure signatures by task family, excluding PASS runs.}
+\label{tab:failure-family}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Family} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
+\midrule
+CANN       & 12  & 11  & 11 & 3  \\
+MindSpeed  & 6   & 12  & 4  & 1  \\
+Kubernetes & 7   & 4   & 19 & 2  \\
+CapBench   & 177 & 101 & 75 & 43 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Task families fail differently.
+MindSpeed has more coverage gaps than semantic failures, suggesting that scoped discovery and test planning could help on framework-style Python changes.
+Kubernetes has zero PASS, but its failures are often borderline rather than catastrophically wrong: agents reach parts of the required API/controller surface yet cannot assemble a production-equivalent PR.
+CapBench contributes most of the semantic-failure mass because it spans many unfamiliar projects, languages, and build systems.
+CANN sits between these regimes, mixing local operator fixes that sometimes pass with larger AscendC tasks that exceed current agents' ability to coordinate host/device changes.
+
+\finding{The root-cause profile is heterogeneous. Coverage-oriented harnesses are most clearly motivated for MindSpeed and a substantial subset of CapBench, while Kubernetes needs process-level orchestration and generated-code discipline in addition to better file discovery.}
 
 %% ------------------------------------------------------------------
 \subsection{Engineering-Addressable vs.\ Model-Capability Gaps}
 \label{sec:root-cause-addressable}
 
-Combining the failure-mode taxonomy with the task-family signatures, we classify each non-PASS run as either:
+We define a conservative lower bound on \emph{engineering-addressable} failures as the coverage-gap bucket: runs where $\bar{A} \ge 2$ but $\bar{B} < 2$.
+These 128 runs (26.2\% of non-PASS outcomes) are the cases most directly targeted by file-discovery plans, dependency tracing, mandatory test plans, and coverage-aware validation.
+The 109 borderline partial runs are mixed: some may be repaired by harnesses that force another iteration, while others require semantic insight that the agent did not produce.
 
-\begin{itemize}
-\item \textbf{Engineering-addressable}: $B < 2$ dominates the failure signature, with $A \ge 2$---the agent shows some understanding of each edited file but did not cover enough files.
-\item \textbf{Model-capability-limited}: $A \le 1$ or structural-mismatch ($C < 2$ with $A, B \ge 3$)---the agent failed to understand the problem or picked a wrong approach.
-\end{itemize}
-
-Qualitatively, the majority of non-PASS runs fall into the engineering-addressable bucket rather than the capability-limited bucket, suggesting that prompting and harness improvements--rather than waiting for newer models--are the highest-leverage interventions for practitioners today. We deliberately avoid attaching a precise percentage to the split: the boundary between categories depends on evaluator score cut-offs, and evaluator disagreement (Sec.~\ref{sec:eval-framework}) propagates into any fixed threshold.
+Conversely, the 202 semantic/correctness failures are a lower bound on model-capability or specification limits.
+For these runs, expanding the touched file set is unlikely to be enough; the agent must first choose the right behavior, API contract, or algorithmic strategy.
+This split supports a more practical deployment message: harnesses can reduce reviewer waste and recover a meaningful minority of failures, but production feature work still needs human ownership for high-complexity systems changes.

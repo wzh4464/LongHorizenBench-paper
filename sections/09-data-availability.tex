@@ -1,8 +1,9 @@
-The replication package is available at \url{TBD}.  It includes:
-(1)~task descriptions for all 62 benchmark tasks (12 industrial plus 50 CapBench), with per-task metadata recording repository, parent commit, ground-truth commit, handwritten-file list, and natural-language prompt;
+The replication package will be released with the camera-ready artifact; the public URL is omitted during anonymous review.
+It includes:
+(1)~task descriptions for all 62 benchmark tasks (12 industrial plus 50 CapBench), with per-task metadata recording repository, parent commit, ground-truth commit, handwritten-file list, complexity tier, and natural-language prompt;
 (2)~the full set of 124 agent prompts (62 tasks $\times$ 2 prompt variants);
 (3)~the rubric and evaluator prompt template used by all four LLM evaluators;
-(4)~per-run artifacts for all 496 experiments---final diffs, timing metadata, session logs, and sanitization verification---with per-evaluator scores, composite scores, and verdicts;
+(4)~per-run artifacts for all 496 experiments---final diffs, timing metadata, session logs, sanitization verification, and rerun provenance for the disputed Cursor cases;
 (5)~the scoring scripts, aggregation notebooks, and sanitization harness.
-We also distribute the per-evaluator scoring CSV (\texttt{eval\_scores\_4evaluators.csv}) used to produce every results table in this paper.
-The replication package contains no proprietary source code; only the public upstream repositories referenced by each task are required.
+We distribute \path{reports/eval_scores_v2_long.csv} as the canonical per-evaluator long-form CSV used to produce the headline tables, together with \path{reports/eval_scores_v2_wide.csv} for run-level cross-checks and \path{paper2/compute_stats.py} for recomputing the aggregate statistics.
+The artifact contains no proprietary Huawei source code; for restricted industrial tasks it provides sanitized metadata, prompts, scores, and patch summaries, while public upstream repositories referenced by CapBench tasks can be reconstructed from the recorded SHAs.

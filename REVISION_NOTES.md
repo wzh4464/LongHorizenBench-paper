@@ -42,7 +42,15 @@ Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
 - codex × glm 42.5% (lowest)
 - 4-way unanimous 33.7%
 
-## Iteration 9 (2026-04-24) - current
+## Iteration 10 (2026-04-25) - current
+
+- Unified the complexity taxonomy across §3 and §4: Low = C1/M1, Medium = C2/C3/M2/M3, High = C4/C5/K1-K4, matching `eval_scores_v2_long.csv`.
+- Replaced the qualitative §5 root-cause discussion with CSV-derived failure signatures: semantic/correctness failure 202/488 (41.4%), coverage gap 128/488 (26.2%), borderline partial 109/488 (22.3%), behavioral/design mismatch 49/488 (10.0%).
+- Extended `compute_stats.py` so the root-cause tables can be recomputed from the long-form CSV.
+- Documented the Cursor disputed-verdict rerun policy in §3 and §8.
+- Updated §9 Data Availability to name the current CSV artifacts and remove the stale `TBD` URL / old CSV filename.
+
+## Iteration 9 (2026-04-24) - previous
 
 - Updated all headline numbers after the Cursor rerun in `reports/eval_scores_v2_long.csv`.
 - PASS count drops from 11/496 to 8/496; Cursor drops from 4/124 to 1/124 after C1-short, C4-short, and T34-long fail under the rerun.

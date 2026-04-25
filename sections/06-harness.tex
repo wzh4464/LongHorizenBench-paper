@@ -1,7 +1,7 @@
 \section{Harness Engineering}
 \label{sec:harness}
 
-The previous sections established that no agent configuration reliably completes industrial feature implementation (Section~\ref{sec:results}) and that failures cluster around incomplete file and test coverage (Section~\ref{sec:root-cause}).
+The previous sections established that no agent configuration reliably completes industrial feature implementation (Section~\ref{sec:results}) and that a large engineering-addressable share of failures involves incomplete file and test coverage (Section~\ref{sec:root-cause}).
 This section examines how much of the gap can be addressed by \emph{harness engineering}: changing the task scaffold, execution loop, and acceptance checks around an agent without changing the underlying model.
 
 %% ──────────────────────────────────────────────────────────────────
@@ -56,6 +56,6 @@ measured ablations:
 \paragraph{Deployment recipe for near-term production use.}
 For practitioners shipping coding agents to internal developers today, our data suggests four low-cost hardening steps.
 (i) \emph{Require a long-form task spec} before agent invocation; the $+$2--6~pp PASS uplift we measure for long prompts is the single largest free-lunch effect in the study.
-(ii) \emph{Gate outputs on syntax + unit tests} in a short post-agent loop; most failures are coverage miss, not syntactic errors, so this is cheap.
+(ii) \emph{Gate outputs on syntax + unit tests} in a short post-agent loop; coverage gaps are the clearest harness-addressable failure bucket, so this is cheap.
 (iii) \emph{Declare scope explicitly}---list the directories the agent may touch---to constrain the edit set and avoid the common failure of stopping before all required files are identified.
 (iv) \emph{Run an evaluator panel} (minimum two evaluator models) before merging; we observed 42\%--75\% pairwise agreement between judges, so single-judge gating is noisy.

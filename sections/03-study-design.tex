@@ -14,7 +14,7 @@ design, evaluation framework, and experiment execution protocol.
 Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kubernetes, CANN operator kernels, MindSpeed, torch\_npu) and 50 from \textit{CapBench}, an open-source extension assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor. Table~\ref{tab:tasks} summarises the Huawei/platform subset; the full CapBench task inventory is included in the replication package.
 
 \begin{table}[t]
-  \caption{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity reflects file count, cross-component coordination, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}
+  \caption{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}
   \label{tab:tasks}
   \centering
   \small
@@ -23,18 +23,18 @@ Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kube
     \textbf{ID} & \textbf{Repository} & \textbf{Complexity} & \textbf{Lang} & \textbf{GT Files} & \textbf{GT Lines} \\
     \midrule
     C1 & cann-ops-adv  & Low    & C++          &   1 &       3 \\
-    C2 & cann-ops      & Low    & C++          &   4 &       9 \\
     M1 & MindSpeed     & Low    & Python       &   3 &      19 \\
-    K1 & kubernetes    & Low    & Go           &  13 &   1{,}010 \\
     \midrule
+    C2 & cann-ops      & Medium & C++          &   4 &       9 \\
     C3 & torch\_npu    & Medium & Python       &   9 &     637 \\
-    C4 & cann-ops      & Medium & AscendC  &  24 &   1{,}273 \\
     M2 & MindSpeed     & Medium & Python       &   6 &     150 \\
-    K2 & kubernetes    & Medium & Go           &  35 &   3{,}759 \\
-    K3 & kubernetes    & Medium & Go           &  49 &  11{,}000 \\
+    M3 & MindSpeed     & Medium & Python       &  10 &     948 \\
     \midrule
-    C5 & cann-ops      & High   & AscendC  &  27 &   3{,}372 \\
-    M3 & MindSpeed     & High   & Python       &  10 &     948 \\
+    C4 & cann-ops      & High   & AscendC      &  24 &   1{,}273 \\
+    C5 & cann-ops      & High   & AscendC      &  27 &   3{,}372 \\
+    K1 & kubernetes    & High   & Go           &  13 &   1{,}010 \\
+    K2 & kubernetes    & High   & Go           &  35 &   3{,}759 \\
+    K3 & kubernetes    & High   & Go           &  49 &  11{,}000 \\
     K4 & kubernetes    & High   & Go           &  98 &   6{,}507 \\
     \bottomrule
   \end{tabular}
@@ -52,22 +52,27 @@ open-source engineering.
 
 \textbf{Complexity classification.}
 We classify tasks into three tiers based on the number of ground-truth
-files, cross-component coordination requirements, and domain-specific
-knowledge needed:
+files, cross-component coordination requirements, generated-code or API
+surface, and domain-specific knowledge needed. The thresholds are not
+pure file-count bins: a small Kubernetes API change can be High because
+it requires generated types, validation, tests, and release-cycle
+knowledge, while a bounded Python change can remain Medium even with a
+larger diff.
 \begin{itemize}
-  \item \emph{Low} (C1, C2, M1, K1): 1--13 files, localised changes
-    within a single module or subsystem.
-  \item \emph{Medium} (C3, C4, M2, K2, K3): 6--49 files, requiring
-    coordination across multiple components (e.g., host and device code,
-    API types and controllers).
-  \item \emph{High} (C5, M3, K4): 10--98 files, demanding architectural
-    understanding, multi-module orchestration, and extensive testing.
+  \item \emph{Low} (C1, M1): localised edits with limited architectural
+    coupling.
+  \item \emph{Medium} (C2, C3, M2, M3): bounded multi-file changes or
+    domain-specific implementation work that remains inside a narrow
+    subsystem.
+  \item \emph{High} (C4, C5, K1--K4): cross-component changes that
+    require architectural understanding, generated/API surface updates,
+    multi-module orchestration, or extensive testing.
 \end{itemize}
 
 The Huawei-industrial tasks span four languages (C++, AscendC, Python, Go) and three complexity tiers.
 
 \paragraph{CapBench extension (50 tasks).}
-To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--50 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks are complexity-classified by the same rubric (GT files $\leq 5$ = Low; 6--15 = Medium; $> 15$ = High). Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
+To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--50 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks use the same metadata rubric: Low tasks are local edits, Medium tasks are bounded multi-file changes, and High tasks require broader cross-component coordination. Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
 
 %% ------------------------------------------------------------------
 \subsection{Agent Configurations}\label{sec:configs}
@@ -226,6 +231,18 @@ implementation details against ground truth.
 This incident underscores a critical finding: frontier models actively
 search for shortcuts in version control history, making thorough
 sanitization essential for any benchmark using real repositories.
+
+\textbf{Rerun policy for disputed verdicts.}
+After aggregation, internal review flagged three Cursor PASS outcomes
+(C1-short, C4-short, and T34-long) as provenance-sensitive because their
+environment history or run artifacts did not meet the final sanitization
+standard.  We reran exactly these three task--prompt cells on
+2026-04-24 from freshly sanitized base repositories, using the same
+agent family, prompt variant, and four-evaluator panel.  Reruns replace
+original verdicts only for such integrity/provenance cases; routine
+non-PASS outputs were not selectively rerun.  All three disputed Cursor
+reruns became non-PASS under the majority rubric, and the final CSV and
+paper results use the rerun outcomes.
 
 \textbf{Experiment scale.}
 In total, we executed 496 experiments across 62~tasks $\times$

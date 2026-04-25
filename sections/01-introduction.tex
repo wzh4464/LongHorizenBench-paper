@@ -35,7 +35,7 @@ well as benchmark designers:
     Across 496 runs, only 8 pass (1.6\%); all Kubernetes-family attempts fail; and richer prompts improve Claude/Codex but do not overcome the systems-code cliff (\S\ref{sec:results}).
 
   \item \textbf{Failure analysis and deployment guidance.}
-    We show that non-PASS outcomes are dominated by incomplete scope coverage rather than pure semantic misunderstanding, and translate this into concrete harness and routing recommendations for near-term production use (\S\ref{sec:root-cause}, \S\ref{sec:industrial-deployment}).
+    We decompose non-PASS outcomes into semantic failures, coverage gaps, borderline partials, and design mismatches, then translate the engineering-addressable portion into concrete harness and routing recommendations for near-term production use (\S\ref{sec:root-cause}, \S\ref{sec:industrial-deployment}).
 \end{enumerate}
 
 The remainder of this paper is organized as follows.
