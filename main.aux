@@ -35,9 +35,9 @@
 \newlabel{fig:pipeline}{{1}{4}{Evaluation pipeline. 62 tasks $\times $ 2 prompt variants $\times $ 4 agents yield 496 runs; each run is scored by four LLM judges (including the same model families as the agents themselves), then combined by majority vote with a conservative tie-break favouring PARTIAL over PASS. The pipeline produces 1,984 evaluator judgments in total}{figure.caption.5}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}}{4}{table.caption.6}\protected@file@percent }
 \newlabel{tab:tasks}{{1}{4}{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite}{table.caption.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{CapBench extension (50 tasks).}{4}{section*.7}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Agent configurations evaluated across the full 62-task benchmark (12 Huawei-industrial + 50 CapBench). Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments.}}{4}{table.caption.8}\protected@file@percent }
 \newlabel{tab:configs}{{2}{4}{Agent configurations evaluated across the full 62-task benchmark (12 Huawei-industrial + 50 CapBench). Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{CapBench extension (50 tasks).}{4}{section*.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Agent Configurations}{4}{subsection.3.2}\protected@file@percent }
 \newlabel{sec:configs}{{3.2}{4}{Agent Configurations}{subsection.3.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Prompt Design}{4}{subsection.3.3}\protected@file@percent }
@@ -91,20 +91,33 @@
 \newlabel{sec:failure-modes}{{5.1}{8}{CSV-Derived Failure Signatures}{subsection.5.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Agent and Family Signatures}{8}{subsection.5.2}\protected@file@percent }
 \newlabel{sec:family-signatures}{{5.2}{8}{Agent and Family Signatures}{subsection.5.2}{}}
+\citation{agentless}
 \@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes.}}{9}{table.caption.24}\protected@file@percent }
 \newlabel{tab:failure-agent}{{9}{9}{Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes}{table.caption.24}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Failure signatures by task family, excluding PASS runs.}}{9}{table.caption.25}\protected@file@percent }
 \newlabel{tab:failure-family}{{10}{9}{Failure signatures by task family, excluding PASS runs}{table.caption.25}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Engineering-Addressable vs.\ Model-Capability Gaps}{9}{subsection.5.3}\protected@file@percent }
 \newlabel{sec:root-cause-addressable}{{5.3}{9}{Engineering-Addressable vs.\ Model-Capability Gaps}{subsection.5.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Harness Engineering}{9}{section.6}\protected@file@percent }
-\newlabel{sec:harness}{{6}{9}{Harness Engineering}{section.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Definition and Taxonomy}{9}{subsection.6.1}\protected@file@percent }
-\newlabel{sec:harness-def}{{6.1}{9}{Definition and Taxonomy}{subsection.6.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Input-Side Harness: The Prompt Effect}{9}{subsection.6.2}\protected@file@percent }
-\newlabel{sec:harness-prompt}{{6.2}{9}{Input-Side Harness: The Prompt Effect}{subsection.6.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Harness Limitations and Future Directions}{9}{subsection.6.3}\protected@file@percent }
-\newlabel{sec:harness-limits}{{6.3}{9}{Harness Limitations and Future Directions}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Harness Engineering: A Cross-Vendor Comparison}{9}{section.6}\protected@file@percent }
+\newlabel{sec:harness}{{6}{9}{Harness Engineering: A Cross-Vendor Comparison}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Four harnesses, one task suite}{9}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:harness-products}{{6.1}{9}{Four harnesses, one task suite}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Three Harness Layers}{9}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:harness-layers}{{6.2}{9}{Three Harness Layers}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Input-side Specification Harness: The Prompt-Length Effect}{10}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:harness-prompt}{{6.3}{10}{Input-side Specification Harness: The Prompt-Length Effect}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Where Today's Harnesses Fail}{10}{subsection.6.4}\protected@file@percent }
+\newlabel{sec:harness-failures}{{6.4}{10}{Where Today's Harnesses Fail}{subsection.6.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Concrete Recommendations}{10}{subsection.6.5}\protected@file@percent }
+\newlabel{sec:harness-recommendations}{{6.5}{10}{Concrete Recommendations}{subsection.6.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Limitation.}{10}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Industrial Deployment Lessons}{10}{section.7}\protected@file@percent }
+\newlabel{sec:industrial-deployment}{{7}{10}{Industrial Deployment Lessons}{section.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Route only bounded feature work to agents.}{10}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Treat task specification as an engineering artifact.}{10}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Require scope and test gates before review.}{10}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Use evaluator panels, not a single judge.}{10}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Separate offline evaluation from online rollout.}{10}{section*.31}\protected@file@percent }
 \citation{jimenez2024swebench}
 \citation{chowdhury2024swebenchverified}
 \citation{swebenchpro2025}
@@ -119,19 +132,6 @@
 \citation{alshahwan2024testgen}
 \citation{multiagent2024}
 \citation{jimenez2024swebench}
-\newlabel{sec:harness-roadmap}{{6.3}{10}{Harness Limitations and Future Directions}{subsection.6.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Deployment recipe for near-term production use.}{10}{section*.26}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Industrial Deployment Lessons}{10}{section.7}\protected@file@percent }
-\newlabel{sec:industrial-deployment}{{7}{10}{Industrial Deployment Lessons}{section.7}{}}
-\@writefile{toc}{\contentsline {paragraph}{Route only bounded feature work to agents.}{10}{section*.27}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Treat task specification as an engineering artifact.}{10}{section*.28}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Require scope and test gates before review.}{10}{section*.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Use evaluator panels, not a single judge.}{10}{section*.30}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Separate offline evaluation from online rollout.}{10}{section*.31}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Related Work}{10}{section.8}\protected@file@percent }
-\newlabel{sec:related-work}{{8}{10}{Related Work}{section.8}{}}
-\newlabel{sec:related}{{8}{10}{Related Work}{section.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Benchmarks for LLM Code Agents}{10}{subsection.8.1}\protected@file@percent }
 \citation{harness2025,agentless,confucius}
 \citation{logsage}
 \citation{mathai2024passerine,autobug}
@@ -140,6 +140,10 @@
 \citation{codevisor}
 \citation{prodcodebench2024}
 \citation{repofusion}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Related Work}{11}{section.8}\protected@file@percent }
+\newlabel{sec:related-work}{{8}{11}{Related Work}{section.8}{}}
+\newlabel{sec:related}{{8}{11}{Related Work}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Benchmarks for LLM Code Agents}{11}{subsection.8.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.2}LLM Coding Agents and Harness Design}{11}{subsection.8.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Industrial deployment studies.}{11}{section*.32}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Complementary evaluation perspectives.}{11}{section*.33}\protected@file@percent }
@@ -149,6 +153,11 @@
 \bibdata{references}
 \bibcite{alshahwan2024testgen}{{1}{2024}{{Alshahwan et~al\mbox  {.}}}{{}}}
 \bibcite{multiagent2024}{{2}{2024}{{Chen et~al\mbox  {.}}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusion}{12}{section.10}\protected@file@percent }
+\newlabel{sec:conclusion}{{10}{12}{Conclusion}{section.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{Practitioner takeaways.}{12}{section*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Future work.}{12}{section*.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{12}{section*.38}\protected@file@percent }
 \bibcite{featbench2025}{{3}{2025}{{Chen et~al\mbox  {.}}}{{}}}
 \bibcite{autobug}{{4}{2025}{{Cheng et~al\mbox  {.}}}{{}}}
 \bibcite{chowdhury2024swebenchverified}{{5}{2024}{{Chowdhury et~al\mbox  {.}}}{{}}}
@@ -162,11 +171,6 @@
 \bibcite{jimenez2024swebench}{{13}{2024b}{{Jimenez et~al\mbox  {.}}}{{}}}
 \bibcite{mathai2024passerine}{{14}{2025}{{Rondon et~al\mbox  {.}}}{{}}}
 \bibcite{repofusion}{{15}{2023}{{Shrivastava et~al\mbox  {.}}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusion}{12}{section.10}\protected@file@percent }
-\newlabel{sec:conclusion}{{10}{12}{Conclusion}{section.10}{}}
-\@writefile{toc}{\contentsline {paragraph}{Practitioner takeaways.}{12}{section*.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Future work.}{12}{section*.35}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{12}{section*.38}\protected@file@percent }
 \bibcite{codevisor}{{16}{2025}{{Sun et~al\mbox  {.}}}{{}}}
 \bibcite{sweevo}{{17}{2025}{{Thai et~al\mbox  {.}}}{{}}}
 \bibcite{confucius}{{18}{2025}{{Wong et~al\mbox  {.}}}{{}}}
