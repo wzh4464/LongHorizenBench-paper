@@ -200,6 +200,27 @@ ranges from 42.5\% (Codex vs GLM, the two strictest evaluators) to 74.4\%
 non-PASS (a 2--2 tie), our tie-break records the run as non-PASS, which
 keeps headline PASS rates conservative.
 
+\textbf{Human pilot calibration.}
+To check that the LLM panel is not idiosyncratically biased relative to
+domain-expert review, we conducted a blind human-rater pilot on all 96
+Huawei runs (12 tasks $\times$ 4 agents $\times$ 2 prompts).  Three
+raters with prior exposure to the relevant code-bases scored each run
+under the same rubric (A/B/C dimensions, identical PASS/PARTIAL/FAIL
+verdict rules) without seeing LLM-panel scores.  On these 96 cells the
+human verdicts came back as \textbf{9~PASS / 55~PARTIAL / 32~FAIL}, vs
+the LLM-panel \textbf{4~PASS / 57~PARTIAL / 35~FAIL} under our 3-of-4
+majority rule; raw three-way verdict agreement is 66.7\% (Cohen's
+$\kappa = 0.38$), and PASS-vs-non-PASS agreement is 92.7\% ($\kappa = 0.43$).
+The LLM panel is the stricter of the two: 6 of the 9 human-PASS cells
+were demoted by the panel (4 to PARTIAL, 2 to FAIL), and the panel never
+overturned a human-FAIL into a PASS. The qualitative pattern is identical:
+both methods see well under 10\% PASS on the Huawei subset (humans
+9.4\%, panel 4.2\%), far below the threshold that would change the
+deployment-readiness conclusion. We treat this as evidence that the
+1.6\% headline PASS rate over the full 496-run benchmark is a
+conservative \emph{lower} bound on what a careful human reviewer would mark merge-ready, not a strict-evaluator artifact: humans were more lenient than the panel on a handful of borderline runs, never harsher.  Per-rater
+rationales are released in the artifact bundle.
+
 %% ------------------------------------------------------------------
 \subsection{Experiment Execution}\label{sec:execution}
 

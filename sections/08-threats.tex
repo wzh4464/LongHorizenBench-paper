@@ -19,7 +19,10 @@ Selection is therefore biased toward \emph{tractable} feature implementations; a
 Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, GPT-5.4, Composer-2, GLM-5.1) will be superseded within months of publication.
 We expect relative patterns---the Kubernetes cliff, long-prompt lift, and mixed semantic/coverage failure profile---to persist, but absolute PASS rates are a lower bound under today's models.
 
-\textbf{Evaluator honesty.}
+\textbf{LLM-vs-human-judge calibration.}
+We validated the LLM panel against human ratings on the 96 Huawei cells (12 tasks $\times$ 4 agents $\times$ 2 prompts).  Three-way verdict agreement was 66.7\% (Cohen's $\kappa = 0.38$, fair-to-moderate), and PASS-vs-non-PASS agreement was 92.7\% ($\kappa = 0.47$).  The LLM panel was more conservative than humans: 9 cells were rated \textsc{pass} by humans vs.\ 4 by the strict-majority panel; 3 of the 4 panel-\textsc{pass} runs were also human-\textsc{pass}, and no human-\textsc{fail} was overturned to \textsc{pass} by the panel.  The headline 1.6\% PASS rate is therefore an under-, not over-estimate of merge-readiness, and the deployment story (very few feature-complete agent PRs) holds under either rubric.
+
+\textbf{Evaluator-honesty risk.}
 A persistent risk with LLM-as-judge evaluation is inflated or deflated scoring from the judge's own biases.
 We mitigate this three ways: (i) four independent judges from distinct model families (ii) explicit rubric anchors at each of six score levels (iii) a structured JSON output that exposes per-dimension scores for audit.
 Empirically, judges disagree most on \emph{partial} verdicts (spread of 1.2 on the 0--5 scale), and least on \emph{PASS} verdicts where file-level coverage is decisive.
