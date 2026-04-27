@@ -12,88 +12,44 @@ Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=200001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Warning--empty publisher in alshahwan2024testgen
-Warning--empty address in alshahwan2024testgen
-Warning--page numbers missing in both pages and numpages fields in alshahwan2024testgen
-Warning--no number and no volume in multiagent2024
-Warning--page numbers missing in both pages and numpages fields in multiagent2024
-Warning--no number and no volume in featbench2025
-Warning--page numbers missing in both pages and numpages fields in featbench2025
-Warning--no number and no volume in autobug
-Warning--page numbers missing in both pages and numpages fields in autobug
-Warning--no number and no volume in tddbench
-Warning--page numbers missing in both pages and numpages fields in tddbench
-Warning--no number and no volume in swebenchpro2025
-Warning--page numbers missing in both pages and numpages fields in swebenchpro2025
-Warning--no number and no volume in crbench
-Warning--page numbers missing in both pages and numpages fields in crbench
-Warning--no number and no volume in prodcodebench2024
-Warning--page numbers missing in both pages and numpages fields in prodcodebench2024
-Warning--empty publisher in jimenez2024swebench
-Warning--empty address in jimenez2024swebench
-Warning--page numbers missing in both pages and numpages fields in jimenez2024swebench
-Warning--no number and no volume in mundler2024passerine
-Warning--page numbers missing in both pages and numpages fields in mundler2024passerine
-Warning--no number and no volume in mathai2024passerine
-Warning--page numbers missing in both pages and numpages fields in mathai2024passerine
-Warning--no number and no volume in repofusion
-Warning--page numbers missing in both pages and numpages fields in repofusion
-Warning--empty publisher in codevisor
-Warning--empty address in codevisor
-Warning--page numbers missing in both pages and numpages fields in codevisor
-Warning--no number and no volume in sweevo
-Warning--page numbers missing in both pages and numpages fields in sweevo
-Warning--no number and no volume in confucius
-Warning--page numbers missing in both pages and numpages fields in confucius
-Warning--no number and no volume in agentless
-Warning--page numbers missing in both pages and numpages fields in agentless
-Warning--no number and no volume in logsage
-Warning--page numbers missing in both pages and numpages fields in logsage
-Warning--no number and no volume in harness2025
-Warning--page numbers missing in both pages and numpages fields in harness2025
-Warning--no number and no volume in multiswebench
-Warning--page numbers missing in both pages and numpages fields in multiswebench
-Warning--no number and no volume in swebenchlive
-Warning--page numbers missing in both pages and numpages fields in swebenchlive
-You've used 23 entries,
+You've used 22 entries,
             6273 wiz_defined-function locations,
-            1613 strings with 22814 characters,
-and the built_in function-call counts, 24818 in all, are:
-= -- 3427
-> -- 1092
+            1666 strings with 25139 characters,
+and the built_in function-call counts, 27359 in all, are:
+= -- 2812
+> -- 1653
 < -- 0
-+ -- 372
-- -- 356
-* -- 1922
-:= -- 2497
-add.period$ -- 113
-call.type$ -- 23
-change.case$ -- 197
-chr.to.int$ -- 22
-cite$ -- 66
-duplicate$ -- 1915
-empty$ -- 1391
-format.name$ -- 439
-if$ -- 6258
++ -- 584
+- -- 569
+* -- 2613
+:= -- 3192
+add.period$ -- 98
+call.type$ -- 22
+change.case$ -- 295
+chr.to.int$ -- 21
+cite$ -- 22
+duplicate$ -- 1973
+empty$ -- 1403
+format.name$ -- 648
+if$ -- 5931
 int.to.chr$ -- 3
 int.to.str$ -- 1
-missing$ -- 83
-newline$ -- 230
-num.names$ -- 160
-pop$ -- 924
+missing$ -- 39
+newline$ -- 246
+num.names$ -- 153
+pop$ -- 834
 preamble$ -- 1
-purify$ -- 379
+purify$ -- 449
 quote$ -- 0
-skip$ -- 594
+skip$ -- 778
 stack$ -- 0
-substring$ -- 1233
-swap$ -- 95
+substring$ -- 1634
+swap$ -- 175
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 446
-warning$ -- 43
-while$ -- 77
+type$ -- 640
+warning$ -- 0
+while$ -- 95
 width$ -- 0
-write$ -- 459
-(There were 43 warnings)
+write$ -- 475
