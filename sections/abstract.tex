@@ -1,7 +1,14 @@
-Frontier coding agents now solve a large fraction of single-file bug-fix benchmarks, but industrial teams mainly need help with multi-file feature implementation: API changes, cross-module wiring, generated artifacts, and tests that must land as one coherent pull request.
-We report an industrial capability assessment designed to answer a deployment question faced by Huawei engineering teams: which feature tasks, if any, can current commercial agents complete autonomously?
-We evaluate four coding agents---Claude Opus~4.6, GPT-5.4 (Codex), Composer-2 (Cursor Agent), and GLM-5.1 (OpenCode)---on 62 real feature-implementation tasks: 12 from Huawei CANN, MindSpeed, torch\_npu, and Kubernetes workflows, plus 50 open-source CapBench tasks spanning Kafka, CPython, Airflow, TensorFlow, Django, and other production projects.
-Each of the $4 \times 62 \times 2 = 496$ task--agent--prompt combinations is independently scored by four LLM judges using a three-dimension production-equivalence rubric (functional correctness, completeness, behavioral equivalence), then combined by majority vote with conservative tie-breaking.
-Across 496 experiments, only 8 runs PASS (1.6\%); Claude Opus~4.6 and Codex GPT-5.4 tie at 2.4\%, while Cursor Composer-2 and OpenCode GLM-5.1 each pass 0.8\%.
-Three patterns emerge: (i) a systems-code cliff, with Kubernetes refactors yielding 0\% PASS across 32 runs; (ii) a strong task-concentration effect, where all PASS outcomes occur on only four of 62 tasks; and (iii) limited prompt leverage, where long specifications lift Claude and Codex from 0\% to 4.8\% PASS but do not rescue multi-module tasks.
-The results argue against autonomous deployment for feature work today, but identify a practical path forward: restrict agents to small, reviewable tasks and invest in harnesses that enforce scope discovery, test generation, and multi-evaluator acceptance.
+Frontier coding agents now solve over 70\% of {SWE-bench} bug-fix tasks, prompting industry teams to ask whether they are ready to deliver \emph{feature pull requests}---multi-file, API-bearing, test-and-doc-bundled changes that engineers actually merge.
+We report an industrial-scale assessment that addresses this deployment question for Huawei's coding-agent rollout, evaluating four commercial agents (Claude Opus~4.6, GPT-5.4 / Codex, Composer-2 / Cursor, GLM-5.1 / OpenCode) on 62 feature-implementation tasks: 12 internal Huawei tasks (CANN operator kernels, MindSpeed training, torch\_npu, and a Kubernetes workflow) and 50 open-source tasks from CapBench (Kafka, CPython, Airflow, TiDB, Elasticsearch, and others).
+Each agent is run with both short ($\sim$3-line) and long ($\sim$30-line) requirement prompts, producing $4\times62\times2=496$ runs.
+Every run is scored independently by four LLM judges (Claude, Codex, Cursor, GLM) on a three-dimension rubric (functional correctness, completeness, behavioral equivalence) with majority-vote (3-of-4) adjudication.
+
+The benchmark exposes a sharp \emph{feature-implementation gap}.
+Only 8 of 496 runs reach a production-equivalent verdict (1.6\%); the strongest agents---Claude and Codex---each pass 2.4\% of their runs, Cursor and OpenCode pass under 1\%, and the per-pair evaluator agreement is 42--75\%.
+The gap is concentrated, not noisy: every PASS comes from one of just four tasks (C1, C4, M1, T10), and the Kubernetes family yields 0\% PASS across 32 runs.
+A long requirement prompt raises Claude/Codex from 0\% to 4.8\% PASS but does not rescue weaker agents.
+On the engineering side, the dominant non-PASS failure mode is \emph{incomplete scope coverage}: agents understand the requirement but stop before touching all the files a real PR has to change.
+
+These results reframe the open question.
+The interesting industrial design space is not "which model writes the best diff", but which \emph{harness} (input scaffolding, output validation, scope enforcement, multi-evaluator gating) lets a moderately good model ship feature-level pull requests safely.
+We turn this into a four-step deployment recipe and an empirical lower bound: with 4 leading agents and 496 attempts, current autonomous coding agents are not yet ready for unsupervised feature work in industrial repositories, but their failure modes are concrete enough to engineer around.

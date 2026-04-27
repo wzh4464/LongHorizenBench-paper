@@ -42,7 +42,15 @@ Evaluator pairwise raw agreement (from reports/summary.md, recomputed):
 - codex × glm 42.5% (lowest)
 - 4-way unanimous 33.7%
 
-## Iteration 10 (2026-04-25) - current
+## Iteration 11 (2026-04-25) - current
+
+- Rebuilt `references.bib` from the 22 actually cited keys and checked paper metadata against Semantic Scholar.
+- Removed the duplicate `testgenllm` placeholder entry and reused the verified TestGen-LLM/FSE citation.
+- Corrected mismatched related-work wording: BitsAI-CR instead of CodeVisor, Google repair studies instead of Meta AutoBug, and SWT-Bench as a benchmark rather than a deployment study.
+- Added DOI/eprint/pages/publisher metadata where available and reduced BibTeX warnings to zero.
+- Added `BIBLIOGRAPHY_VERIFICATION.md` as the per-key verification log.
+
+## Iteration 10 (2026-04-25) - previous
 
 - Unified the complexity taxonomy across §3 and §4: Low = C1/M1, Medium = C2/C3/M2/M3, High = C4/C5/K1-K4, matching `eval_scores_v2_long.csv`.
 - Replaced the qualitative §5 root-cause discussion with CSV-derived failure signatures: semantic/correctness failure 202/488 (41.4%), coverage gap 128/488 (26.2%), borderline partial 109/488 (22.3%), behavioral/design mismatch 49/488 (10.0%).

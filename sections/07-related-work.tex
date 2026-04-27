@@ -23,8 +23,9 @@ Our CapBench extension is closest in spirit but differs in two ways: (i)~we incl
 \textbf{Agent architectures.} Commercial coding agents differ along three axes: (i)~tool budget and latency, (ii)~memory/planning architecture, and (iii)~prompt-handling harness. Prior harness-engineering work~\cite{harness2025,agentless,confucius} has shown that simple pipeline-level choices (file-level planning, edit localisation, self-reflection) dominate raw model capability on SWE-bench Verified. Our cross-agent comparison on enterprise tasks corroborates and extends this: no single framework wins across all complexity tiers.
 
 \paragraph{Industrial deployment studies.}
-LogSage~\cite{logsage}, Passerine~\cite{mundler2024passerine}, and Meta's AutoBug~\cite{autobug} report deployments at Huawei, Google, and Meta respectively, each on a narrower task class (CI/CD triage, test-bug fix, auto-remediation).
+LogSage~\cite{logsage} reports industrial validation for CI/CD failure detection, while Google's repair studies~\cite{mathai2024passerine,autobug} evaluate agent-based program repair and bug reproduction in production settings.
+SWT-Bench~\cite{mundler2024passerine} adds a test-based benchmark for validating real-world bug fixes with code agents.
 Our work complements these by evaluating the \emph{generic} feature-implementation task across four commercial agents and twelve industrial tasks plus fifty open-source controls.
 
 \paragraph{Complementary evaluation perspectives.}
-TestGen-LLM~\cite{testgenllm} and CodeVisor~\cite{codevisor} evaluate test-centric code generation; ProdCodeBench~\cite{prodcodebench2024} and RepoFusion~\cite{repofusion} evaluate repository completion. These targets are complementary to ours: successful feature implementation presupposes the test synthesis and code-completion capabilities they measure in isolation.
+TestGen-LLM~\cite{alshahwan2024testgen} evaluates unit-test generation, while BitsAI-CR~\cite{codevisor} evaluates LLM-assisted code review in practice. ProdCodeBench~\cite{prodcodebench2024} and RepoFusion~\cite{repofusion} evaluate repository-level code generation and completion. These targets are complementary to ours: successful feature implementation presupposes the test synthesis, review, and code-completion capabilities they measure in isolation.

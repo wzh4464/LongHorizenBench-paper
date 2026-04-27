@@ -16,16 +16,14 @@
 \newlabel{sec:deployment-decision}{{2.1}{2}{The Deployment Decision We Had to Make}{subsection.2.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Why Generic Benchmarks Were Insufficient}{2}{subsection.2.2}\protected@file@percent }
 \newlabel{sec:why-not-swe-bench}{{2.2}{2}{Why Generic Benchmarks Were Insufficient}{subsection.2.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Codebase and Task Scope}{2}{subsection.2.3}\protected@file@percent }
-\newlabel{sec:codebase-scope}{{2.3}{2}{Codebase and Task Scope}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Codebase and Task Scope}{3}{subsection.2.3}\protected@file@percent }
+\newlabel{sec:codebase-scope}{{2.3}{3}{Codebase and Task Scope}{subsection.2.3}{}}
 \@writefile{toc}{\contentsline {paragraph}{Huawei and platform tasks (12 tasks).}{3}{section*.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Open-source control set (50 tasks).}{3}{section*.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Task Curation Funnel}{3}{subsection.2.4}\protected@file@percent }
 \newlabel{sec:task-funnel}{{2.4}{3}{Task Curation Funnel}{subsection.2.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Deployment-Equivalence Criterion}{3}{subsection.2.5}\protected@file@percent }
 \newlabel{sec:deployment-criterion}{{2.5}{3}{Deployment-Equivalence Criterion}{subsection.2.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}}{3}{table.caption.6}\protected@file@percent }
-\newlabel{tab:tasks}{{1}{3}{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite}{table.caption.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Scope and Non-Goals}{3}{subsection.2.6}\protected@file@percent }
 \newlabel{sec:scope}{{2.6}{3}{Scope and Non-Goals}{subsection.2.6}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Study Design}{3}{section.3}\protected@file@percent }
@@ -35,64 +33,66 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Evaluation pipeline. 62 tasks $\times $ 2 prompt variants $\times $ 4 agents yield 496 runs; each run is scored by four LLM judges (including the same model families as the agents themselves), then combined by majority vote with a conservative tie-break favouring PARTIAL over PASS. The pipeline produces 1,984 evaluator judgments in total.}}{4}{figure.caption.5}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:pipeline}{{1}{4}{Evaluation pipeline. 62 tasks $\times $ 2 prompt variants $\times $ 4 agents yield 496 runs; each run is scored by four LLM judges (including the same model families as the agents themselves), then combined by majority vote with a conservative tie-break favouring PARTIAL over PASS. The pipeline produces 1,984 evaluator judgments in total}{figure.caption.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}}{4}{table.caption.6}\protected@file@percent }
+\newlabel{tab:tasks}{{1}{4}{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite}{table.caption.6}{}}
 \@writefile{toc}{\contentsline {paragraph}{CapBench extension (50 tasks).}{4}{section*.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Agent Configurations}{4}{subsection.3.2}\protected@file@percent }
-\newlabel{sec:configs}{{3.2}{4}{Agent Configurations}{subsection.3.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Agent configurations evaluated across the full 62-task benchmark (12 Huawei-industrial + 50 CapBench). Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments.}}{4}{table.caption.8}\protected@file@percent }
 \newlabel{tab:configs}{{2}{4}{Agent configurations evaluated across the full 62-task benchmark (12 Huawei-industrial + 50 CapBench). Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Agent Configurations}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:configs}{{3.2}{4}{Agent Configurations}{subsection.3.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Prompt Design}{4}{subsection.3.3}\protected@file@percent }
 \newlabel{sec:prompts}{{3.3}{4}{Prompt Design}{subsection.3.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Evaluation Framework}{5}{subsection.3.4}\protected@file@percent }
 \newlabel{sec:eval-framework}{{3.4}{5}{Evaluation Framework}{subsection.3.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Experiment Execution}{5}{subsection.3.5}\protected@file@percent }
 \newlabel{sec:execution}{{3.5}{5}{Experiment Execution}{subsection.3.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Results: The Gap Between Hype and Reality}{5}{section.4}\protected@file@percent }
-\newlabel{sec:results}{{4}{5}{Results: The Gap Between Hype and Reality}{section.4}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Per-agent PASS/PARTIAL/FAIL distribution across all 496 runs. Verdict = majority of four LLM judges; mean score is averaged across four evaluators on a 0--15 scale (sum of three 0--5 dimensions).}}{6}{table.caption.9}\protected@file@percent }
 \newlabel{tab:config-pass}{{3}{6}{Per-agent PASS/PARTIAL/FAIL distribution across all 496 runs. Verdict = majority of four LLM judges; mean score is averaged across four evaluators on a 0--15 scale (sum of three 0--5 dimensions)}{table.caption.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Pass rate (\%) by agent and task family under the majority-of-4 verdict. Rows top-to-bottom: \emph  {CANN}, \emph  {MindSpeed}, \emph  {Kubernetes}, \emph  {CapBench}. Kubernetes (K1--K4) is a \emph  {uniform zero-pass} cliff across all agents.}}{6}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:pass-heatmap}{{2}{6}{Pass rate (\%) by agent and task family under the majority-of-4 verdict. Rows top-to-bottom: \emph {CANN}, \emph {MindSpeed}, \emph {Kubernetes}, \emph {CapBench}. Kubernetes (K1--K4) is a \emph {uniform zero-pass} cliff across all agents}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results: The Gap Between Hype and Reality}{6}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{6}{Results: The Gap Between Hype and Reality}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Agent-Level Performance}{6}{subsection.4.1}\protected@file@percent }
 \newlabel{sec:results-overall}{{4.1}{6}{Agent-Level Performance}{subsection.4.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Pass rate (\%) by agent and task family under the majority-of-4 verdict. Rows top-to-bottom: \emph  {CANN}, \emph  {MindSpeed}, \emph  {Kubernetes}, \emph  {CapBench}. Kubernetes (K1--K4) is a \emph  {uniform zero-pass} cliff across all agents.}}{6}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:pass-heatmap}{{2}{6}{Pass rate (\%) by agent and task family under the majority-of-4 verdict. Rows top-to-bottom: \emph {CANN}, \emph {MindSpeed}, \emph {Kubernetes}, \emph {CapBench}. Kubernetes (K1--K4) is a \emph {uniform zero-pass} cliff across all agents}{figure.caption.10}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Per-run mean composite score distribution across four agents ($n{=}124$ runs each). Scores are averages of the four judges' total A+B+C per run (on a 0--5 scale). Most runs fall in the 2--3 bucket across all agents, reflecting partial-pass behavior; full-rubric PASS requires scores well above 4.}}{6}{figure.caption.11}\protected@file@percent }
 \newlabel{fig:score-histogram}{{3}{6}{Per-run mean composite score distribution across four agents ($n{=}124$ runs each). Scores are averages of the four judges' total A+B+C per run (on a 0--5 scale). Most runs fall in the 2--3 bucket across all agents, reflecting partial-pass behavior; full-rubric PASS requires scores well above 4}{figure.caption.11}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces PASS rate by task family (averaged across 4 agents, 2 prompts = 8 runs per task).}}{6}{table.caption.12}\protected@file@percent }
 \newlabel{tab:family}{{4}{6}{PASS rate by task family (averaged across 4 agents, 2 prompts = 8 runs per task)}{table.caption.12}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Task-Family Effect}{6}{subsection.4.2}\protected@file@percent }
 \newlabel{sec:results-family}{{4.2}{6}{Task-Family Effect}{subsection.4.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Per-Task Pass Distribution}{6}{subsection.4.3}\protected@file@percent }
-\newlabel{sec:per-task}{{4.3}{6}{Per-Task Pass Distribution}{subsection.4.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Tasks that any agent passed (majority-PASS across 4 judges) in at least one prompt variant.}}{7}{table.caption.13}\protected@file@percent }
 \newlabel{tab:task-pass-distribution}{{5}{7}{Tasks that any agent passed (majority-PASS across 4 judges) in at least one prompt variant}{table.caption.13}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces PASS rate by complexity tier, for the 12 Huawei industrial tasks.}}{7}{table.caption.15}\protected@file@percent }
-\newlabel{tab:complexity-hw}{{6}{7}{PASS rate by complexity tier, for the 12 Huawei industrial tasks}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Per-Task Pass Distribution}{7}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:per-task}{{4.3}{7}{Per-Task Pass Distribution}{subsection.4.3}{}}
 \@writefile{toc}{\contentsline {paragraph}{Task concentration.}{7}{section*.14}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Complexity-driven failures}{7}{subsection.4.4}\protected@file@percent }
 \newlabel{sec:results-complexity}{{4.4}{7}{Complexity-driven failures}{subsection.4.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Prompt Effect (Long vs Short)}{7}{subsection.4.5}\protected@file@percent }
-\newlabel{sec:results-prompt}{{4.5}{7}{Prompt Effect (Long vs Short)}{subsection.4.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces PASS rate by complexity tier, for the 12 Huawei industrial tasks.}}{7}{table.caption.15}\protected@file@percent }
+\newlabel{tab:complexity-hw}{{6}{7}{PASS rate by complexity tier, for the 12 Huawei industrial tasks}{table.caption.15}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Prompt effect. $\Delta $ = long $-$ short, percentage points.}}{7}{table.caption.16}\protected@file@percent }
 \newlabel{tab:prompt}{{7}{7}{Prompt effect. $\Delta $ = long $-$ short, percentage points}{table.caption.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Prompt Effect (Long vs Short)}{7}{subsection.4.5}\protected@file@percent }
+\newlabel{sec:results-prompt}{{4.5}{7}{Prompt Effect (Long vs Short)}{subsection.4.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Evaluator Agreement}{7}{subsection.4.6}\protected@file@percent }
 \newlabel{sec:results-agreement}{{4.6}{7}{Evaluator Agreement}{subsection.4.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Statistical Robustness}{7}{subsection.4.7}\protected@file@percent }
-\newlabel{sec:results-stats}{{4.7}{7}{Statistical Robustness}{subsection.4.7}{}}
-\@writefile{toc}{\contentsline {paragraph}{Inter-evaluator agreement (Fleiss' $\kappa $).}{7}{section*.17}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Judge-severity spread.}{7}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Statistical Robustness}{8}{subsection.4.7}\protected@file@percent }
+\newlabel{sec:results-stats}{{4.7}{8}{Statistical Robustness}{subsection.4.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Inter-evaluator agreement (Fleiss' $\kappa $).}{8}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Judge-severity spread.}{8}{section*.18}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Agent ranking is stable at the coarse level.}{8}{section*.19}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Prompt-length effect is statistically significant.}{8}{section*.20}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Task-size determines feasibility.}{8}{section*.21}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Self-bias of evaluators.}{8}{section*.22}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt  {eval\_scores\_v2\_long.csv}.}}{8}{table.caption.23}\protected@file@percent }
+\newlabel{tab:failure-signatures}{{8}{8}{Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt {eval\_scores\_v2\_long.csv}}{table.caption.23}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Root Cause Analysis}{8}{section.5}\protected@file@percent }
 \newlabel{sec:root-cause}{{5}{8}{Root Cause Analysis}{section.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}CSV-Derived Failure Signatures}{8}{subsection.5.1}\protected@file@percent }
 \newlabel{sec:failure-modes}{{5.1}{8}{CSV-Derived Failure Signatures}{subsection.5.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt  {eval\_scores\_v2\_long.csv}.}}{8}{table.caption.23}\protected@file@percent }
-\newlabel{tab:failure-signatures}{{8}{8}{Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt {eval\_scores\_v2\_long.csv}}{table.caption.23}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes.}}{8}{table.caption.24}\protected@file@percent }
-\newlabel{tab:failure-agent}{{9}{8}{Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes}{table.caption.24}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Agent and Family Signatures}{8}{subsection.5.2}\protected@file@percent }
 \newlabel{sec:family-signatures}{{5.2}{8}{Agent and Family Signatures}{subsection.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes.}}{9}{table.caption.24}\protected@file@percent }
+\newlabel{tab:failure-agent}{{9}{9}{Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes}{table.caption.24}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Failure signatures by task family, excluding PASS runs.}}{9}{table.caption.25}\protected@file@percent }
 \newlabel{tab:failure-family}{{10}{9}{Failure signatures by task family, excluding PASS runs}{table.caption.25}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Engineering-Addressable vs.\ Model-Capability Gaps}{9}{subsection.5.3}\protected@file@percent }
@@ -105,8 +105,6 @@
 \newlabel{sec:harness-prompt}{{6.2}{9}{Input-Side Harness: The Prompt Effect}{subsection.6.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Harness Limitations and Future Directions}{9}{subsection.6.3}\protected@file@percent }
 \newlabel{sec:harness-limits}{{6.3}{9}{Harness Limitations and Future Directions}{subsection.6.3}{}}
-\newlabel{sec:harness-roadmap}{{6.3}{9}{Harness Limitations and Future Directions}{subsection.6.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Deployment recipe for near-term production use.}{9}{section*.26}\protected@file@percent }
 \citation{jimenez2024swebench}
 \citation{chowdhury2024swebenchverified}
 \citation{swebenchpro2025}
@@ -121,10 +119,8 @@
 \citation{alshahwan2024testgen}
 \citation{multiagent2024}
 \citation{jimenez2024swebench}
-\citation{harness2025,agentless,confucius}
-\citation{logsage}
-\citation{mathai2024passerine,autobug}
-\citation{mundler2024passerine}
+\newlabel{sec:harness-roadmap}{{6.3}{10}{Harness Limitations and Future Directions}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Deployment recipe for near-term production use.}{10}{section*.26}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7}Industrial Deployment Lessons}{10}{section.7}\protected@file@percent }
 \newlabel{sec:industrial-deployment}{{7}{10}{Industrial Deployment Lessons}{section.7}{}}
 \@writefile{toc}{\contentsline {paragraph}{Route only bounded feature work to agents.}{10}{section*.27}\protected@file@percent }
@@ -136,17 +132,19 @@
 \newlabel{sec:related-work}{{8}{10}{Related Work}{section.8}{}}
 \newlabel{sec:related}{{8}{10}{Related Work}{section.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Benchmarks for LLM Code Agents}{10}{subsection.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}LLM Coding Agents and Harness Design}{10}{subsection.8.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Industrial deployment studies.}{10}{section*.32}\protected@file@percent }
+\citation{harness2025,agentless,confucius}
+\citation{logsage}
+\citation{mathai2024passerine,autobug}
+\citation{mundler2024passerine}
 \citation{alshahwan2024testgen}
 \citation{codevisor}
 \citation{prodcodebench2024}
 \citation{repofusion}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}LLM Coding Agents and Harness Design}{11}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Industrial deployment studies.}{11}{section*.32}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Complementary evaluation perspectives.}{11}{section*.33}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {9}Threats to Validity}{11}{section.9}\protected@file@percent }
 \newlabel{sec:threats}{{9}{11}{Threats to Validity}{section.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusion}{11}{section.10}\protected@file@percent }
-\newlabel{sec:conclusion}{{10}{11}{Conclusion}{section.10}{}}
 \bibstyle{ACM-Reference-Format}
 \bibdata{references}
 \bibcite{alshahwan2024testgen}{{1}{2024}{{Alshahwan et~al\mbox  {.}}}{{}}}
@@ -164,15 +162,17 @@
 \bibcite{jimenez2024swebench}{{13}{2024b}{{Jimenez et~al\mbox  {.}}}{{}}}
 \bibcite{mathai2024passerine}{{14}{2025}{{Rondon et~al\mbox  {.}}}{{}}}
 \bibcite{repofusion}{{15}{2023}{{Shrivastava et~al\mbox  {.}}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusion}{12}{section.10}\protected@file@percent }
+\newlabel{sec:conclusion}{{10}{12}{Conclusion}{section.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{Practitioner takeaways.}{12}{section*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Future work.}{12}{section*.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{12}{section*.38}\protected@file@percent }
 \bibcite{codevisor}{{16}{2025}{{Sun et~al\mbox  {.}}}{{}}}
 \bibcite{sweevo}{{17}{2025}{{Thai et~al\mbox  {.}}}{{}}}
 \bibcite{confucius}{{18}{2025}{{Wong et~al\mbox  {.}}}{{}}}
 \bibcite{agentless}{{19}{2025}{{Xia et~al\mbox  {.}}}{{}}}
 \bibcite{logsage}{{20}{2025}{{Xu et~al\mbox  {.}}}{{}}}
 \bibcite{multiswebench}{{21}{2025}{{Zan et~al\mbox  {.}}}{{}}}
-\@writefile{toc}{\contentsline {paragraph}{Practitioner takeaways.}{12}{section*.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Future work.}{12}{section*.35}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{12}{section*.38}\protected@file@percent }
 \bibcite{swebenchlive}{{22}{2025}{{Zhang et~al\mbox  {.}}}{{}}}
 \newlabel{tocindent-1}{0pt}
 \newlabel{tocindent0}{0pt}
