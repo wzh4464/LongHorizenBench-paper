@@ -1,47 +1,53 @@
+% !TEX root = ../main.tex
 \section{Introduction}
 \label{sec:introduction}
 
-Software engineering teams are rapidly integrating AI into their development workflows; at Huawei, for example, multiple stack-level teams (CANN, MindSpeed, Kubernetes) are actively deciding whether to adopt coding agents for production feature work in the coming planning cycle, which motivates the evaluation we report here.
-Industry surveys report that over 80\% of professional developers now use AI-assisted coding tools~\cite{github2024survey}, and frontier coding agents---autonomous systems that navigate codebases, write code, and run tests---have demonstrated remarkable progress on established benchmarks.
-On SWE-bench Verified, the most widely cited evaluation for coding agents, top systems now resolve over 70\% of tasks~\cite{jimenez2024swebench}.
-These results have generated significant enthusiasm for deploying coding agents on increasingly ambitious engineering tasks, including full feature implementation in enterprise codebases.
+Software engineering organizations are under growing pressure to turn coding agents from research demonstrations into deployable engineering infrastructure.
+The decision they face is not whether an agent can suggest code in an IDE, but whether it can produce a reviewable pull request for substantive feature work in a production codebase.
+At Huawei, this question is operational: multiple stack-level teams---Kubernetes, the CANN compiler stack (CANN), the MindSpeed training framework, and \texttt{torch\_npu}---are deciding in 2026 whether to route portions of their feature backlog through coding agents.
+The deployment decision turns on a concrete question: \emph{when an agent is given a feature specification and the corresponding repository, can it produce a candidate PR that a human reviewer would accept with at most light revision?}
 
-However, SWE-bench and similar benchmarks overwhelmingly evaluate \emph{bug fixing}: localized edits to 1--3 files, typically under 50 lines of change, in well-documented open-source Python repositories.
-Feature implementation in industrial settings is a fundamentally different class of task.
-It requires API design, feature gate lifecycle management, cross-module coordination, backward compatibility constraints, test suite construction, and adherence to project-specific conventions---engineering activities that demand architectural reasoning, not just code generation.
-A Kubernetes feature gate, for example, touches API types, validation, defaulting, conversion, controllers, and dozens of generated files across 50--100 files; a CANN operator implementation requires host code, device kernels, tiling engines, and framework integration layers spanning C++, AscendC, and Python.
-No systematic evaluation exists for how coding agents perform on this class of tasks in production codebases.
+\paragraph{Why existing benchmarks do not answer this question.}
+Coding-agent benchmarks have made fast progress on bug-fix and short-task settings.
+Industry-watched leaderboards report that the strongest agent configurations now resolve over 70\% of issues on SWE-bench Verified~\cite{jimenez2024swebench}, and many leaderboards exist for short, well-localized tasks.
+But these tasks are predominantly bug repair: they target a small set of files identified in advance, often supply the failing test, and reward minimal local edits.
+Feature implementation differs in kind, not degree.
+A new feature requires the agent to identify the right architectural surface, modify several files in coordinated ways, add or update tests, respect repository-specific conventions, and produce a change set that integrates with parallel ongoing work.
+Industry surveys (e.g.,\@~\cite{github2024survey}) confirm that feature work---rather than localized bug fixes---is the bottleneck developers most want help with.
+The gap between bug-repair benchmark scores and merge-ready feature pull requests is therefore not just a question of model size; it is a question about whether today's agents can deliver value on the part of the workflow that matters most to engineering teams.
 
-We present the first industrial-scale capability assessment of coding agents on feature implementation tasks.
-Our benchmark comprises 62 tasks: 12 industrial tasks drawn from four Huawei production repositories---Kubernetes (Go), CANN operator kernels (C++/AscendC), MindSpeed training framework (Python), and torch\_npu (Python)---spanning three complexity tiers from single-file fixes to 98-file architectural changes, plus 50 multi-file tasks from the CapBench open-source suite (Kafka, Airflow, CPython, Django, Spring, and others).
-We evaluate four commercially available agent configurations across 496 experiments---each independently scored by four LLM evaluators (Claude, Codex, Cursor, GLM) for cross-validation via majority-vote verdicts with conservative tie-breaking---and find a clear answer: \textbf{no.}
-The best configurations, Claude Opus~4.6 and GPT-5.4 (Codex), achieve only 2.4\% PASS; Cursor Composer-2 and OpenCode GLM-5.1 each reach 0.8\%.
-Overall, only 8 of 496 runs pass (1.6\%), and \emph{all four} agents fail at 0\% on Kubernetes-scale refactors.
+\paragraph{An industrial audit.}
+We answer the deployment question directly by auditing four leading commercial coding agents on a curated 62-task feature-implementation benchmark.
+The benchmark combines 12 \emph{Huawei industrial tasks} drawn from the codebases that the rollout would touch (Kubernetes, the CANN/\texttt{torch\_npu} accelerator stack, and MindSpeed) with 50 \emph{open-source feature tasks} from a curated extension we call CapBench, drawn from 15 production-grade open source projects (Kafka, CPython, Airflow, TensorFlow, Apache Spark, Postgres, ClickHouse, etc.).
+Each task is paired with a \emph{long} prompt (a multi-paragraph design proposal that mirrors a real feature spec) and a \emph{short} prompt (a one-sentence ticket-style description), giving us $62\times2=124$ task instances per agent.
+We evaluate four agents---Claude Code (Opus 4.6), OpenAI Codex (GPT-5.4), Cursor Composer-2, and OpenCode/GLM-5.1---producing $124\times4=496$ end-to-end agent runs.
+Each run is independently scored on three production-relevant axes (functional correctness, completeness/coverage, and behavioral equivalence to the reference implementation) by an automated four-evaluator panel; the verdict is decided by 3-of-4 majority.
+We treat the four agents not as four versions of the same model but as four \emph{harnesses}: each ships its own planning loop, tool integration, code-search retrieval, and verification logic, and these harness choices turn out to dominate the results.
 
-This paper makes five contributions aimed at industrial decision makers as
-well as benchmark designers:
+This setup gives us a clean answer to the question Huawei's deployment teams asked: \emph{can today's coding agents take over feature delivery for our internal codebases?}
 
+\paragraph{Headline findings.}
+
+The result is a clear boundary, not a flat yes or no:
+
+\begin{itemize}
+\item \textbf{Aggregate verdict: 8 of 496 runs pass strict majority review (1.6\%).} Treating the four evaluators as a panel and requiring 3-of-4 PASS, only 8 runs reach production-equivalent quality. The remaining 488 runs are split across PARTIAL (194 runs, 39\%) and FAIL (294 runs, 59\%).
+\item \textbf{Harness gap dominates the model gap.} The two strongest harnesses (Claude Code and Codex CLI) tie at 2.4\% PASS each; the two weaker harnesses (Cursor Agent and OpenCode CLI) sit at 0.8\% PASS each---a 3$\times$ gap. The underlying base models (Claude Opus 4.6 and GPT-5 with reasoning) are state of the art; the harness layer (planning loop, retrieval policy, verification step, edit boundaries) explains most of the variance we observe.
+\item \textbf{Long-prompt advantage is asymmetric.} On long prompts (with full design context), the strong harnesses lift PASS rate from 0\% to 4.8\%; the weaker harnesses improve only to 1.6\%. Better specification helps strong harnesses ship; for weak harnesses, more context improves scores but rarely converts outputs into production-equivalent PRs.
+\item \textbf{Kubernetes-class tasks are still out of reach.} All 4 harnesses produce 0/8 PASS on the four K-tasks (Kubernetes scheduler / kubelet feature work). Cross-cutting feature work in mature Go infrastructure remains the hardest deployment frontier we measured.
+\item \textbf{Failures are heterogeneous, but many are harness-addressable.} The 488 non-PASS runs split into semantic/correctness failures (41.4\%), coverage gaps (26.2\%), behavioral/design mismatches (10.0\%), and borderline partials (22.3\%). The important deployment signal is not that every failure is mere incompleteness, but that a large recoverable slice involves stopping early, omitting tests or generated artifacts, or failing to wire cross-module changes.
+\end{itemize}
+
+This negative result for autonomous feature delivery is also a positive result for harness engineering:
+\textbf{a meaningful share of the failures is systematically addressable even though semantic limits remain.}
+Coverage gaps plus borderline partials account for 48.5\% of the non-PASS population, giving harnesses a concrete target: force scope discovery, test evidence, invariant checks, and cross-module closure before a draft reaches human review.
+
+\paragraph{Contributions.} This paper presents:
 \begin{enumerate}
-  \item \textbf{An industrial feature-work evaluation setting.}
-    We define the deployment question, task scope, and production-equivalence criterion for judging whether a coding agent can replace the first draft of a human feature PR (\S\ref{sec:industrial-context}).
-
-  \item \textbf{A controlled multi-repository benchmark.}
-    We evaluate 62 real feature-implementation tasks (12 Huawei enterprise + 50 CapBench open-source), spanning six languages and three complexity tiers, with merged production code as the reference implementation (\S\ref{sec:study-design}).
-
-  \item \textbf{A conservative multi-evaluator protocol.}
-    Each generated diff is scored by four evaluator models under a three-dimensional rubric, enabling us to report both majority PASS rates and judge-disagreement statistics rather than relying on a single LLM-as-judge (\S\ref{sec:eval-framework}, \S\ref{sec:results-stats}).
-
-  \item \textbf{Empirical capability boundaries.}
-    Across 496 runs, only 8 pass (1.6\%); all Kubernetes-family attempts fail; and richer prompts improve Claude/Codex but do not overcome the systems-code cliff (\S\ref{sec:results}).
-
-  \item \textbf{Failure analysis and deployment guidance.}
-    We decompose non-PASS outcomes into semantic failures, coverage gaps, borderline partials, and design mismatches, then translate the engineering-addressable portion into concrete harness and routing recommendations for near-term production use (\S\ref{sec:root-cause}, \S\ref{sec:industrial-deployment}).
+    \item An industrial benchmark of 62 feature implementation tasks (12 Huawei + 50 CapBench, an OSS extension we release alongside) with reference implementations and structured grading rubrics.
+    \item A four-evaluator LLM-judging panel with majority-rule resolution, calibrated against expert reviewer agreement.
+    \item Empirical results across 496 runs (4 agents $\times$ 62 tasks $\times$ 2 prompts) showing $\le$2.4\% PASS rate on the strongest harness and a categorical 0\% PASS for Kubernetes feature work.
+    \item A failure-mode taxonomy and four mapped harness recommendations (scope gating, file-enumeration plans, invariant assertions from spec, cross-module wire-up linting).
 \end{enumerate}
 
-The remainder of this paper is organized as follows.
-Section~\ref{sec:industrial-context} describes the industrial context and motivation.
-Section~\ref{sec:study-design} presents the study design, including task selection, agent configurations, and evaluation framework.
-Section~\ref{sec:results} reports the main results.
-Section~\ref{sec:root-cause} analyzes root causes of failure.
-Section~\ref{sec:harness} examines harness engineering effectiveness and limitations.
-Section~\ref{sec:related-work} surveys related work, Section~\ref{sec:threats} discusses threats to validity, and Section~\ref{sec:conclusion} concludes.
+The remainder of the paper is structured as follows. Section~\ref{sec:industrial-context} lays out the deployment question and the four task families that anchor it. Section~\ref{sec:study-design} describes the 62-task benchmark, the four harnesses, the prompt and evaluation protocol, and the cheating-prevention guards. Section~\ref{sec:results} reports the headline numbers (8/496 PASS), broken down by agent, family, and prompt. Sections~\ref{sec:root-cause} and~\ref{sec:harness} dig into why agents fail and what harness layer would catch it. Section~\ref{sec:industrial-deployment} translates the results into deployment guidance for engineering teams considering coding agents for production work.

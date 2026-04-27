@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Threats to Validity}
 \label{sec:threats}
 
@@ -20,7 +21,7 @@ Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, 
 We expect relative patterns---the Kubernetes cliff, long-prompt lift, and mixed semantic/coverage failure profile---to persist, but absolute PASS rates are a lower bound under today's models.
 
 \textbf{LLM-vs-human-judge calibration.}
-We validated the LLM panel against human ratings on the 96 Huawei cells (12 tasks $\times$ 4 agents $\times$ 2 prompts).  Three-way verdict agreement was 66.7\% (Cohen's $\kappa = 0.38$, fair-to-moderate), and PASS-vs-non-PASS agreement was 92.7\% ($\kappa = 0.47$).  The LLM panel was more conservative than humans: 9 cells were rated \textsc{pass} by humans vs.\ 4 by the strict-majority panel; 3 of the 4 panel-\textsc{pass} runs were also human-\textsc{pass}, and no human-\textsc{fail} was overturned to \textsc{pass} by the panel.  The headline 1.6\% PASS rate is therefore an under-, not over-estimate of merge-readiness, and the deployment story (very few feature-complete agent PRs) holds under either rubric.
+We validated the LLM panel against human ratings on the 96 Huawei cells (12 tasks $\times$ 4 agents $\times$ 2 prompts).  Three-way verdict agreement was 66.7\% (Cohen's $\kappa = 0.38$, fair-to-moderate), and PASS-vs-non-PASS agreement was 92.7\% ($\kappa = 0.43$).  The LLM panel was more conservative than humans: 9 cells were rated \textsc{pass} by humans vs.\ 4 by the strict-majority panel; 3 of the 4 panel-\textsc{pass} runs were also human-\textsc{pass}, and no human-\textsc{fail} was overturned to \textsc{pass} by the panel.  The headline 1.6\% PASS rate is therefore an under-, not over-estimate of merge-readiness, and the deployment story (very few feature-complete agent PRs) holds under either rubric.
 
 \textbf{Evaluator-honesty risk.}
 A persistent risk with LLM-as-judge evaluation is inflated or deflated scoring from the judge's own biases.

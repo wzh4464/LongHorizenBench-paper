@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Harness Engineering: A Cross-Vendor Comparison}
 \label{sec:harness}
 
@@ -30,32 +31,32 @@ These layered differences explain a large fraction of the cross-agent variance w
 
 Within a single agent, the cleanest harness experiment we can run is the prompt-length manipulation reported in Table~\ref{tab:prompt}. The long prompt is itself an \emph{input-side harness}: instead of changing the model or runtime, we change the contract the user signs with the agent before the run starts.
 
-For Claude Code and Codex CLI the input-side harness is decisive: PASS rate climbs from 0.0\% (short) to 4.8\% (long). For Cursor it is essentially neutral; for OpenCode it lifts the floor from 0.0\% to 1.6\%. In other words, longer specifications only help when the agent already has the output- and process-side machinery to act on the extra information; otherwise the extra context is wasted.
+For Claude Code and Codex CLI the input-side harness is decisive: PASS rate climbs from 0.0\% (short) to 4.8\% (long). Cursor and OpenCode also improve from 0.0\% to 1.6\%, but the absolute effect remains a single PASS each. In other words, longer specifications help most when the agent already has the output- and process-side machinery to act on the extra information; otherwise the extra context improves scores without reliably producing production-equivalent PRs.
 
 \subsection{Where Today's Harnesses Fail}
 \label{sec:harness-failures}
 
-Even at the best operating point (Claude Code or Codex CLI with a long prompt) the agent passes only 4.8\% of tasks. The non-PASS verdicts cluster around three failure modes that are \emph{harness-addressable}:
+Even at the best operating point (Claude Code or Codex CLI with a long prompt) the agent passes only 4.8\% of tasks. Section~\ref{sec:failure-modes} shows that some failures are semantic, but the coverage-gap and borderline-partial buckets expose three recurring patterns that are directly \emph{harness-addressable}:
 
 \begin{itemize}
   \item \textbf{Scope collapse.} The agent edits 30--60\% of the ground-truth files, then declares the change complete. This is a process failure, not a reasoning failure: a process-side harness that compares the agent's edit set against a discovered call graph would catch it.
-  \item \textbf{No test artifact.} Across 485 non-PASS runs, 71\% never write or update a test, even when the ground-truth PR adds tests. A validation-side harness that requires \emph{some} test edit before merge would force the agent to produce a checkable artifact.
+  \item \textbf{No test artifact.} In the test-artifact audit, roughly 71\% of non-PASS runs never write or update a test, even when the ground-truth PR adds tests. A validation-side harness that requires \emph{some} test edit before merge would force the agent to produce a checkable artifact.
   \item \textbf{Inconsistent cross-file edits.} Multi-file features (Kubernetes feature-gate, MindSpeed parallelism, CANN operator registration) require coordinated edits in 5--15 files; today's harnesses mostly let the agent stop at the first plausible-looking patch. A pre-commit consistency check (signature parity, registry membership) would expose these.
 \end{itemize}
 
-Each of these failure modes is a harness gap, not a foundation-model deficiency: a sufficiently capable model can already produce the right edit when shown the right context.
+Each pattern is a harness gap even when other runs still reflect foundation-model or specification limits: the practical goal is to stop recoverable partial drafts before they consume reviewer time.
 
 %% ──────────────────────────────────────────────────────────────────
 \subsection{Concrete Recommendations}
 \label{sec:harness-recommendations}
 
-For practitioners deploying coding agents in industrial codebases today, our data supports four low-cost interventions that act as a partial harness:
+For practitioners deploying coding agents in industrial codebases today, our data supports a four-step checklist that acts as a partial harness:
 
 \begin{enumerate}
-  \item \textbf{Mandate a structured task brief}, not a chat message. Long prompts lift PASS from 0\% to 4.8\% on the strongest harnesses with no model change. The cost is one templated form per task.
-  \item \textbf{Gate merges on tests + a static scope check.} Coverage failures and unmodified-tests-pass should each block, since 71\% of our non-PASS runs would have been caught by an automatic ``did the agent touch the files the change request implies'' check.
-  \item \textbf{Use an evaluator ensemble before human review.} Pairwise judge agreement ranges from 42\% (Codex--GLM) to 74\% (Claude--Cursor); single-judge gating is too noisy, but a 3-of-4 majority resolves 92\% of disputes.
-  \item \textbf{Restrict scope to a single subsystem.} Across the 8 PASS we observe, none touches more than three Kubernetes / Huawei subsystems; multi-subsystem feature work should be split before being routed to an agent.
+  \item \textbf{Start from a long-form task brief.} Long prompts lift PASS from 0\% to 4.8\% on the strongest harnesses with no model change. The brief should state the motivation, design constraints, expected tests, and non-goals before the agent edits code.
+  \item \textbf{Require a scope contract before implementation.} The agent must enumerate candidate files, generated artifacts, tests, registries, and cross-module integration points; the run should fail early if the later diff touches only a small fragment of that declared surface.
+  \item \textbf{Gate the output on tests and coverage checks.} Coverage failures and unmodified-tests-pass should each block, since a large share of non-PASS runs would have been caught by asking whether the agent touched the files, tests, and generated artifacts implied by the change request.
+  \item \textbf{Use multi-evaluator acceptance before human review.} Pairwise judge agreement ranges from 42\% (Codex--GLM) to 74\% (Claude--Cursor); single-judge gating is too noisy, but a 3-of-4 panel gives a conservative pre-review filter.
 \end{enumerate}
 
 \paragraph{Limitation.}

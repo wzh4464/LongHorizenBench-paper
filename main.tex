@@ -1,6 +1,8 @@
 \documentclass[sigconf,review]{acmart}
 
 \usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{xcolor}
 \usepackage{listings}
@@ -10,6 +12,8 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
+\emergencystretch=1em
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcommand{\finding}[1]{\smallskip\noindent\textit{\textbf{Finding:} #1}\smallskip}
 
 \begin{document}

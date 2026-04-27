@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Industrial Deployment Lessons}
 \label{sec:industrial-deployment}
 
@@ -7,7 +8,7 @@ can be tried safely, where they should be blocked, and what guardrails
 must exist before deployment.
 
 \paragraph{Route only bounded feature work to agents.}
-The only tasks that ever pass are small, reviewable changes with limited
+The tasks that pass are bounded, reviewable changes with limited
 cross-component coordination. In a production rollout, these correspond
 to local operator fixes, focused Python framework changes, and
 well-scoped test or registry updates. Multi-module platform changes,

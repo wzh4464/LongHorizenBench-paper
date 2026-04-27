@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Root Cause Analysis}
 \label{sec:root-cause}
 
@@ -22,7 +23,7 @@ For a run, we average the four judges' $A$ (functional correctness), $B$ (comple
 \scriptsize
 \caption{Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt{eval\_scores\_v2\_long.csv}.}
 \label{tab:failure-signatures}
-\begin{tabular}{@{}llrr@{}}
+\begin{tabularx}{\columnwidth}{@{}lYrr@{}}
 \toprule
 \textbf{Signature} & \textbf{Rule} & \textbf{Runs} & \textbf{Share} \\
 \midrule
@@ -31,7 +32,7 @@ Coverage gap & $\bar{A} \ge 2, \bar{B} < 2$ & 128 & 26.2\% \\
 Design mismatch & $\bar{A},\bar{B} \ge 2, \bar{C} < 2$ & 49 & 10.0\% \\
 Borderline partial & all $\ge 2$, not PASS & 109 & 22.3\% \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Table~\ref{tab:failure-signatures} changes the interpretation of the failures in an important way.
@@ -50,7 +51,7 @@ Thus, harness engineering has a clear lower-bound target, but it is not a substi
 \scriptsize
 \caption{Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes.}
 \label{tab:failure-agent}
-\begin{tabular}{@{}lrrrr@{}}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrr@{}}
 \toprule
 \textbf{Agent} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
 \midrule
@@ -59,7 +60,7 @@ Codex    & 33 & 36 & 42 & 10 \\
 Cursor   & 50 & 34 & 30 & 9 \\
 OpenCode & 78 & 26 & 8  & 11 \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \end{table}
 
 Table~\ref{tab:failure-agent} explains why mean composite score and PASS count tell slightly different stories.
@@ -72,7 +73,7 @@ Claude and Cursor sit between these extremes, with meaningful coverage-gap count
 \scriptsize
 \caption{Failure signatures by task family, excluding PASS runs.}
 \label{tab:failure-family}
-\begin{tabular}{@{}lrrrr@{}}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrr@{}}
 \toprule
 \textbf{Family} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
 \midrule
@@ -81,7 +82,7 @@ MindSpeed  & 6   & 12  & 4  & 1  \\
 Kubernetes & 7   & 4   & 19 & 2  \\
 CapBench   & 177 & 101 & 75 & 43 \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \end{table}
 
 Task families fail differently.
@@ -102,4 +103,22 @@ The 109 borderline partial runs are mixed: some may be repaired by harnesses tha
 
 Conversely, the 202 semantic/correctness failures are a lower bound on model-capability or specification limits.
 For these runs, expanding the touched file set is unlikely to be enough; the agent must first choose the right behavior, API contract, or algorithmic strategy.
-This split supports a more practical deployment message: harnesses can reduce reviewer waste and recover a meaningful minority of failures, but production feature work still needs human ownership for high-complexity systems changes.
+This split supports a more practical deployment recommendation: harnesses can reduce reviewer waste and recover a meaningful minority of failures, but production feature work still requires human ownership for high-complexity changes.
+
+%% ------------------------------------------------------------------
+\subsection{Failure-Mode Case Studies}
+\label{sec:case-studies}
+
+The aggregate signatures in Table~\ref{tab:failure-signatures} compress every failure into a single bucket. To make the failure modes legible to an industrial reader, we walk through four CapBench tasks --- one per dominant pattern --- and identify, in each case, the harness intervention that would have caught the gap. All four were attempted by every agent in both prompt variants, and all four ended PARTIAL or FAIL under strict 3-of-4 majority. Quotations in the analysis are paraphrased from the four evaluator reports stored alongside each run.
+
+\paragraph{T01 (Apache Kafka KIP-595, KRaft) --- scope collapse.} The reference patch replaces ZooKeeper-based metadata management with an in-process Raft implementation, touching 127 handwritten files: protobuf schemas, the new \texttt{KafkaRaftClient} state machine, controller and broker glue, and a substantial test surface. The strongest agent run (Claude Opus, long prompt) covered 51/127 HW files (40\%), implemented the four wire RPC schemas, the basic 5-state \texttt{QuorumState} class, and a stub \texttt{KafkaRaftClient} with 34 of the GT's 91 methods. Missing pieces include \texttt{Fetch}-based log replication, high-watermark advancement, leader-election timeouts, the request-handler bridge into \texttt{KafkaApis}, and almost all of \texttt{KafkaRaftClientTest} (3/65 cases). The four evaluators independently returned PARTIAL with $A{=}2, B{=}2, C{=}2$. The pattern is \emph{scope collapse}: the agent identifies the entry points, partially implements two or three subsystems, then stops well below the change set's natural closure. \emph{Harness target:} a pre-commit step that diffs the agent's per-file plan against the imports/declarations in its first commit and fails if more than half the planned files have not been touched.
+
+\paragraph{T20 (CPython PEP 695, generic syntax) --- wrong implementation layer.} PEP 695 introduces \texttt{class C[T]} and \texttt{def f[T]()} forms. The reference patch lands in five C source files (\texttt{compile.c}, \texttt{symtable.c}, \texttt{Objects/typevarobject.c}, plus AST/grammar generators) and one Python module (\texttt{typing.py}). The strongest agent run (Codex CLI long-prompt) instead implemented PEP 695 entirely as an \texttt{ast\_optimize}-stage rewrite that desugars new-style generics back into the legacy \texttt{TypeVar}/\texttt{Generic[T]} forms before bytecode generation. The result parses, but \texttt{type T = int} produces a runtime alias instead of a lazy \texttt{TypeAliasType}, and \texttt{type\_params} attribute introspection returns the empty tuple. Three of four judges scored $A=2$ on this run; the desugaring is convincing-looking but cannot satisfy the spec at the runtime layer. \emph{Harness target:} pin candidate edit sites to the layer indicated by the spec's grammar and CPython subsystem map; reject diffs that touch only \texttt{Lib/} when the spec mandates compiler/runtime changes.
+
+\paragraph{T34 (Kubernetes kube-scheduler, KEP-5598 Opportunistic Batching) --- missing invariant.}
+The KEP introduces a per-cycle scheduling cache keyed by pod-spec signature so that pods sharing a signature can short-circuit feasibility checks. The reference patch couples three invariants: (i) the signature includes pod-affinity selectors; (ii) cached feasibility expires when the cluster snapshot changes; (iii) the cache is invalidated under a feature-gate flip. Codex's long-prompt run delivers a syntactically clean cache (26/35 HW files, $A=3$, $B=3$), but its feasibility key drops affinity selectors and never invalidates on snapshot change. The result passes single-pod tests yet, in any multi-tenant simulation, schedules pods onto nodes that violate inter-pod anti-affinity. The judges flagged this as \emph{invariant violation}: the API surface is shaped correctly, but the safety property the feature was added to enforce is silently broken. \emph{Harness target:} require the agent to extract the invariants from the design proposal text into checkable assertions before patching, and surface those assertions to a final-pass review step.
+
+\paragraph{T13 (Godot animation marker tracks) --- editor-side wire-up.}
+T13 adds named markers along an \texttt{Animation} resource, plus a section-playback API on \texttt{AnimationPlayer} and integration in the editor's marker-aware seek widget. The strongest run (Codex GPT-5.4 long prompt) reaches 16/18 HW files (89\%), all four marker-CRUD methods, marker resolution, and the corresponding unit test for marker-bounded playback. Yet four of the four judges return \textsc{partial}. The reason is uniform across reports: the agent skipped two cross-module wires --- registration of \texttt{AnimationMarkerEdit} as an editor plugin in \path{editor/editor_node.cpp} and marker-hit dispatch inside \path{AnimationBlendTree::_process_blend_node}. Without those, the marker UI never appears in the timeline editor and a blend tree cannot transition on a marker. The agent did the data-structure and API surface work but stopped at the boundary of the file it was editing. \emph{Harness lesson}: cross-cutting features that must register with two or more dispatch tables (editor plugin registry; runtime engine event loop) are systematically under-touched. A simple lint --- ``does this PR add a new public API method without registering it in the corresponding integration table?'' --- would catch this class.
+
+\finding{Four representative tasks span four distinct failure modes --- scope collapse, missing invariant, wrong layer, and incomplete cross-module wire-up --- showing that improving the harness requires not one fix but several targeted checks: file-list enumeration, invariant audits, layer-aware planning, and post-implementation reachability scans.}

@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Results: The Gap Between Hype and Reality}
 \label{sec:results}
 
@@ -12,12 +13,12 @@ Each experiment was independently scored by four LLM evaluators (Claude Opus~4.6
 
 Table~\ref{tab:config-pass} summarises per-agent PASS rates across all 124 runs (62 tasks × 2 prompts).
 
-\begin{table}[t]
+\begin{table*}[t]
 \caption{Per-agent PASS/PARTIAL/FAIL distribution across all 496 runs. Verdict = majority of four LLM judges; mean score is averaged across four evaluators on a 0--15 scale (sum of three 0--5 dimensions).}
 \label{tab:config-pass}
 \centering
 \small
-\begin{tabular}{lrrrrrr}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
 \textbf{Agent} & $N$ & \textbf{PASS} & \textbf{PART.} & \textbf{FAIL} & \textbf{PASS\%} & \textbf{Mean} \\
 \midrule
@@ -28,8 +29,8 @@ OpenCode (GLM-5.1)    & 124 & 1 & 26 & 97 & 0.8\% & 4.16 \\
 \midrule
 All agents           & 496 & 8 & 194 & 294 & 1.6\% & 5.14 \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular*}
+\end{table*}
 
 \input{figures/fig_pass_heatmap}
 
@@ -45,26 +46,26 @@ Figure~\ref{fig:pass-heatmap} further breaks down PASS by task family, confirmin
 \subsection{Task-Family Effect}
 \label{sec:results-family}
 
-Our benchmark spans four task families: CANN operator kernels (C1--C5), MindSpeed distributed training (M1--M3), Kubernetes-family (K1--K4), and CapBench OSS (T01--T50). The PASS distribution differs dramatically across families:
+Our benchmark spans four task families: CANN/\texttt{torch\_npu} accelerator stack tasks (C1--C5), MindSpeed distributed training (M1--M3), Kubernetes-family (K1--K4), and CapBench OSS (T01--T50). The PASS distribution differs dramatically across families:
 
-\begin{table}[t]
+\begin{table*}[t]
 \caption{PASS rate by task family (averaged across 4 agents, 2 prompts = 8 runs per task).}
 \label{tab:family}
 \centering
 \small
-\begin{tabular}{lrrrr}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.34\textwidth}Yrrr@{}}
 \toprule
 \textbf{Family} & \textbf{Repos} & \textbf{Tasks} & \textbf{Runs} & \textbf{PASS\%} \\
 \midrule
-C (Huawei CANN, C++/AscendC) & cann-ops, cann-ops-adv & 5 & 40 & 7.5\% \\
+C (Huawei CANN/\texttt{torch\_npu}) & cann-ops, cann-ops-adv, torch\_npu & 5 & 40 & 7.5\% \\
 M (MindSpeed, Python)         & MindSpeed               & 3 & 24 &  4.2\% \\
 K (Kubernetes, Go)            & kubernetes              & 4 & 32 &  0.0\% \\
 T (CapBench, mixed)           & 15 OSS projects         & 50 & 400 &  1.0\% \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabularx}
+\end{table*}
 
-Kubernetes tasks (K1--K4) are a categorical blind spot: \emph{zero} of 32 runs pass across all four agents and both prompt levels. CANN-family C++/AscendC tasks achieve the highest PASS rate (7.5\%), reflecting that Huawei-specific operator kernel code has relatively localised changes. CapBench OSS tasks average 1.0\% PASS, consistent with the overall 1.6\% but revealing that Kubernetes-class difficulty scales with project size.
+Kubernetes tasks (K1--K4) are a categorical blind spot: \emph{zero} of 32 runs pass across all four agents and both prompt levels. C-family accelerator-stack tasks achieve the highest PASS rate (7.5\%), reflecting that Huawei-specific operator and \texttt{torch\_npu} integration changes are often more localised than Kubernetes platform work. CapBench OSS tasks average 1.0\% PASS, consistent with the overall 1.6\% but revealing that Kubernetes-class difficulty scales with project size.
 
 \textbf{Finding 2 (Kubernetes Cliff).} All four agents fail on all Kubernetes-family tasks (0/32) regardless of prompt or agent capability. Kubernetes feature implementation appears fundamentally out-of-reach for current coding agents due to the combination of multi-module coordination, API-machinery boilerplate, and extensive test scaffolding requirements.
 
@@ -74,12 +75,12 @@ Kubernetes tasks (K1--K4) are a categorical blind spot: \emph{zero} of 32 runs p
 
 Of the 62 tasks, only 4 have any PASS across the 4 agents: C1, C4, M1, and T10. The rerun of disputed Cursor cases removes the previous C1-short, C4-short, and T34-long Cursor PASS outcomes. Table~\ref{tab:task-pass-distribution} summarises the per-task PASS distribution.
 
-\begin{table}[t]
+\begin{table*}[t]
 \caption{Tasks that any agent passed (majority-PASS across 4 judges) in at least one prompt variant.}
 \label{tab:task-pass-distribution}
 \centering
 \small
-\begin{tabular}{llr}
+\begin{tabularx}{\textwidth}{@{}lYr@{}}
 \toprule
 Task & Agents passing (and prompt) & Total PASS (of 8 runs) \\
 \midrule
@@ -90,8 +91,8 @@ T10 (CapBench) & Claude, Codex, Cursor, OpenCode (all long) & 4 \\
 \midrule
 \textbf{Total} & 8 / 496 & 1.6\% \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabularx}
+\end{table*}
 
 Every other task has 0 PASS across all 8 attempts (4 agents × 2 prompts). Notably, of the 50 CapBench OSS tasks, only T10 elicits any PASS at all; all Huawei-ecosystem tasks except C1, C4, and M1 score 0 PASS.
 
@@ -103,12 +104,12 @@ Every other task has 0 PASS across all 8 attempts (4 agents × 2 prompts). Notab
 
 Complexity tiers for the 12 industrial tasks are assigned by the curation metadata used in the evaluation CSV: Low (C1, M1), Medium (C2, C3, M2, M3), and High (C4, C5, K1--K4). CapBench tasks span broader ranges but lean toward High. Results:
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \small
 \caption{PASS rate by complexity tier, for the 12 Huawei industrial tasks.}
 \label{tab:complexity-hw}
-\begin{tabular}{lrrrrr}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccccc@{}}
 \toprule
  & Codex & Cursor & Claude & OpenCode & Avg \\
 \midrule
@@ -116,8 +117,8 @@ Low (2 tasks)    & 1/4 (25.0\%) & 0/4 (0\%) & 2/4 (50.0\%) & 0/4 (0\%) & 3/16 (1
 Medium (4 tasks) & 0/8 (0\%)    & 0/8 (0\%) & 0/8 (0\%)    & 0/8 (0\%) & 0/32 (0\%) \\
 High (6 tasks)   & 1/12 (8.3\%) & 0/12 (0\%) & 0/12 (0\%) & 0/12 (0\%) & 1/48 (2.1\%) \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular*}
+\end{table*}
 
 On the broader CapBench extension (50 tasks $\times$ 4 agents $\times$ 2 prompts = 400 runs), only 4 runs reach PASS: Claude, Codex, Cursor, and OpenCode on T10-long. The effect is even starker: the 50 CapBench tasks collectively yield 1.0\% PASS rate.
 
@@ -129,22 +130,22 @@ On the broader CapBench extension (50 tasks $\times$ 4 agents $\times$ 2 prompts
 
 Each of the 62 tasks was run with both a short ($\le 3$-sentence) and a long (detailed architectural spec) prompt. Table~\ref{tab:prompt} aggregates pass rates and mean scores by agent and prompt type.
 
-\begin{table}[t]
+\begin{table*}[t]
 \caption{Prompt effect. $\Delta$ = long $-$ short, percentage points.}
 \label{tab:prompt}
 \centering
 \small
-\begin{tabular}{lrrr@{}rrr}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
-\textbf{Agent} & \textbf{Short PASS\%} & \textbf{Long PASS\%} & \textbf{$\Delta$PASS} & \textbf{Short Mean} & \textbf{Long Mean} & \textbf{$\Delta$Mean} \\
+\textbf{Agent} & \textbf{Short PASS} & \textbf{Long PASS} & \textbf{$\Delta$PASS} & \textbf{Short mean} & \textbf{Long mean} & \textbf{$\Delta$mean} \\
 \midrule
 Claude   & 0.0\% & 4.8\% & +4.8 & 5.08 & 6.28 & +1.20 \\
 Codex    & 0.0\% & 4.8\% & +4.8 & 5.20 & 6.44 & +1.24 \\
 Cursor   & 0.0\% & 1.6\% & +1.6  & 4.00 & 5.77 & +1.77 \\
 OpenCode & 0.0\% & 1.6\% & +1.6 & 3.72 & 4.60 & +0.88 \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular*}
+\end{table*}
 
 For Claude and Codex, detailed prompts yield a +4.8-point PASS-rate improvement and a $\sim$+1.2-point mean-score boost. Cursor and OpenCode each gain only one long-prompt PASS, remaining near-zero in absolute terms.
 
@@ -190,7 +191,7 @@ Comparing long vs.\ short prompt variants (each task evaluated in both condition
 \paragraph{Task-size determines feasibility.}
 Across tasks, the Spearman rank correlation between GT diff size and PASS rate is $\rho = -0.40$ ($p < 0.01$). Binning by GT-diff size:
 \begin{center}
-\begin{tabular}{lr}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lr@{}}
 \toprule
 GT diff size (LOC) & Mean PASS rate \\
 \midrule
@@ -200,7 +201,7 @@ $500$--$2000$ & $1.0\%$ \\
 $2000$--$10000$ & $0.0\%$ \\
 $> 10000$     & $0.0\%$ \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \end{center}
 A logistic regression of PASS on $\log_{10}(\text{GT LOC})$ alone yields a negative slope: larger required changes sharply reduce the odds of PASS. This dominates all other covariates we measured and is consistent with the all-fail Kubernetes family.
 

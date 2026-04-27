@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Study Design}\label{sec:study-design}
 
 \input{figures/fig_pipeline}
@@ -11,14 +12,14 @@ design, evaluation framework, and experiment execution protocol.
 %% ------------------------------------------------------------------
 \subsection{Task Selection}\label{sec:tasks}
 
-Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kubernetes, CANN operator kernels, MindSpeed, torch\_npu) and 50 from \textit{CapBench}, an open-source extension assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor. Table~\ref{tab:tasks} summarises the Huawei/platform subset; the full CapBench task inventory is included in the replication package.
+Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kubernetes, the CANN/\texttt{torch\_npu} accelerator stack, and MindSpeed) and 50 from \textit{CapBench}, an open-source extension assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor. Table~\ref{tab:tasks} summarises the Huawei/platform subset; the full CapBench task inventory is included in the replication package.
 
-\begin{table}[t]
+\begin{table*}[t]
   \caption{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}
   \label{tab:tasks}
   \centering
   \small
-  \begin{tabular}{llllrr}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llllrr@{}}
     \toprule
     \textbf{ID} & \textbf{Repository} & \textbf{Complexity} & \textbf{Lang} & \textbf{GT Files} & \textbf{GT Lines} \\
     \midrule
@@ -37,15 +38,15 @@ Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kube
     K3 & kubernetes    & High   & Go           &  49 &  11{,}000 \\
     K4 & kubernetes    & High   & Go           &  98 &   6{,}507 \\
     \bottomrule
-  \end{tabular}
-\end{table}
+  \end{tabular*}
+\end{table*}
 
 \textbf{Selection criteria.}
 Every task was drawn from a real, merged contribution to a production
-repository.  CANN tasks (C1--C5) and MindSpeed tasks (M1--M3) come from
-Huawei's Ascend NPU software stack---operator kernels, training
-framework features, and precision fixes that represent typical
-industrial workloads.  Kubernetes tasks (K1--K4) come from the
+repository.  C-family accelerator tasks (C1--C5) and MindSpeed tasks (M1--M3) come from
+Huawei's Ascend NPU software stack---operator kernels, \texttt{torch\_npu}
+integration, training framework features, and precision fixes that
+represent typical industrial workloads.  Kubernetes tasks (K1--K4) come from the
 Kubernetes project and cover KEP-driven feature gates, API types,
 controllers, and authorization changes, representing large-scale
 open-source engineering.
@@ -72,7 +73,7 @@ larger diff.
 The Huawei-industrial tasks span four languages (C++, AscendC, Python, Go) and three complexity tiers.
 
 \paragraph{CapBench extension (50 tasks).}
-To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--50 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks use the same metadata rubric: Low tasks are local edits, Medium tasks are bounded multi-file changes, and High tasks require broader cross-component coordination. Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
+To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--127 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks use the same metadata rubric: Low tasks are local edits, Medium tasks are bounded multi-file changes, and High tasks require broader cross-component coordination. Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
 
 %% ------------------------------------------------------------------
 \subsection{Agent Configurations}\label{sec:configs}
@@ -131,10 +132,9 @@ independently navigate the codebase to locate relevant files and design
 their implementation.
 
 \textbf{Example (C1, buffer alias fix).}
-The short prompt reads: ``\emph{ScaledMaskedSoftmaxGradV2 has a tensor
-lifetime violation in ComputeSoftmaxGrad---a buffer is used after its
-queue resource is freed.  Replace the reference with an equivalent
-surviving buffer.}''  The long prompt adds three numbered design
+The short prompt reads: ``\emph{ScaledMaskedSoftmaxGradV2 has a
+tensor-lifetime bug: a buffer is used after its queue resource is freed.
+Replace the reference with an equivalent surviving buffer.}''  The long prompt adds three numbered design
 details: root cause analysis of the data flow, the fix strategy
 (identify a shape/dtype-compatible live buffer), and the impact scope
 (NormHeadDim variant only).
@@ -192,8 +192,8 @@ To mitigate evaluator bias, every experiment is independently scored by
 four LLM evaluators from different model families: Claude Opus~4.6,
 Codex GPT-5.4, Cursor Composer-2, and GLM-5.1.  We report the
 \emph{majority verdict} (strict majority where possible, with a conservative
-tie-break PARTIAL$<$FAIL$<$PASS that privileges the worse verdict when
-evaluators are split) and scores averaged across the four.  Unanimity on the
+tie-break that orders labels FAIL$<$PARTIAL$<$PASS and selects the lower label
+when evaluators are split) and scores averaged across the four.  Unanimity on the
 verdict label holds for 33.7\% of experiments; pairwise verdict agreement
 ranges from 42.5\% (Codex vs GLM, the two strictest evaluators) to 74.4\%
 (Claude vs Cursor).  When the four evaluators split evenly between PASS and

@@ -1,3 +1,4 @@
+% !TEX root = ../main.tex
 \section{Industrial Context and Evaluation Scope}
 \label{sec:context}
 \label{sec:industrial-context}
@@ -63,15 +64,15 @@ repositories so that results generalise beyond one organisation's coding
 style.
 
 \paragraph{Huawei and platform tasks (12 tasks).}
-The 12 industrial tasks span four product lines selected with our
+The 12 industrial tasks span three engineering areas selected with our
 engineering partners as representative consumers of an internal agent
 deployment:
 \begin{itemize}
-  \item \textbf{CANN operator kernels} (\textsc{C1}--\textsc{C5}):
-    performance-sensitive C++/AscendC kernels implementing new operators
-    or refactoring existing ones; typical changes touch kernel code,
-    host-side launch wrappers, operator registration tables, and unit
-    tests.
+  \item \textbf{CANN/\texttt{torch\_npu} accelerator stack} (\textsc{C1}--\textsc{C5}):
+    performance-sensitive C++/AscendC kernels and Python integration
+    changes implementing new operators or refactoring existing ones;
+    typical changes touch kernel code, host-side launch wrappers,
+    operator registration tables, integration code, and unit tests.
   \item \textbf{MindSpeed training framework} (\textsc{M1}--\textsc{M3}):
     Python changes to the distributed-training runtime; typical tasks
     modify scheduling, memory accounting, or loss-scaling logic and

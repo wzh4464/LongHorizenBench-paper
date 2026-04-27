@@ -2,6 +2,7 @@
 %   \input{figures/fig_pipeline}
 \begin{figure*}[t]
   \centering
+  \resizebox{\textwidth}{!}{%
   \begin{tikzpicture}[
       font=\small,
       >=Stealth,
@@ -58,6 +59,7 @@
         \tikz{\fill[green!8] (0,0) rectangle (2mm,2mm);} & aggregated verdict \\
       \end{tabular}};
   \end{tikzpicture}
+  }%
   \caption{Evaluation pipeline. 62 tasks $\times$ 2 prompt variants $\times$ 4 agents yield 496 runs; each run is scored by four LLM judges (including the same model families as the agents themselves), then combined by majority vote with a conservative tie-break favouring PARTIAL over PASS. The pipeline produces 1,984 evaluator judgments in total.}
 \label{fig:pipeline}
 \end{figure*}
