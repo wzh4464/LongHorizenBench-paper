@@ -11,7 +11,7 @@ out of the agent track.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{svg/deployment_gate_pipeline.pdf}
+\includegraphics[width=\columnwidth]{svg/deployment_gate_pipeline.png}
 \caption{Four-gate deployment pipeline. Each gate addresses a specific failure mode surfaced by the audit: task-class routing (0/32 Kubernetes SE-PASS), spec template (long prompts lift scores by +1.0--2.1), scope/test CI (25.5\% coverage-gap failures), and multi-judge panel (pairwise agreement as low as 42.5\%).}
 \label{fig:deployment-pipeline}
 \end{figure}
@@ -55,7 +55,7 @@ In short, agents are conservative drafters for bounded work today, not autonomou
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\columnwidth]{svg/failure_to_gate_mapping.pdf}
+  \includegraphics[width=0.9\columnwidth]{svg/failure_to_gate_mapping.png}
   \caption{Mapping from failure signatures (\S\ref{sec:root-cause}) to deployment gates. Coverage gaps (25.5\%) are directly filterable by Gate~3; borderline partials (18.9\%) are partially recoverable; the semantic-failure slice (44.7\%) requires model or specification improvements beyond current gating.}
   \label{fig:failure-gate-map}
 \end{figure}
