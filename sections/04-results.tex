@@ -47,7 +47,7 @@ K (Kubernetes, Go)            & kubernetes              & 4 & 32 &  0.0\% \\
 \midrule
 \emph{Calibration subtotal} & & 12 & 96 & 4.2\% \\
 \midrule
-T (CapBench, mixed)           & 15 OSS projects         & 50 & 400 &  1.0\% \\
+T (LongBench, mixed)           & 15 OSS projects         & 50 & 400 &  1.0\% \\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -85,7 +85,12 @@ All agents           & 496 & 8 & 194 & 294 & 1.6\% & 5.14 \\
 
 The SE-PASS spread (2.4\% vs.\ 0.8\%) arises entirely from the calibration subset; on the main corpus all agents tie at 1.0\%. Claude and Codex each reach 8.3\% calibration SE-PASS while Cursor and OpenCode remain at 0\%.
 
-\input{figures/fig_capability_cliff}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{svg/capability_cliff.pdf}
+\caption{Capability cliff. Each point is one task; the $y$-value is the mean composite score averaged across all 8 runs (4~agents $\times$ 2~prompts) and 4~evaluators. The dashed line marks the approximate SE-PASS threshold ($A{+}B{+}C \ge 11$). Only T10 (1~GT file, blue triangle) exceeds the threshold. Kubernetes tasks (rose squares) all fall well below despite moderate GT file counts, illustrating the cross-module coordination barrier.}
+\label{fig:capability-cliff}
+\end{figure}
 
 %% ------------------------------------------------------------------
 \subsection{Prompt Effect (Long vs Short)}
@@ -129,6 +134,6 @@ A common concern for LLM-as-judge benchmarks is that a judge favours its own mod
 \subsection{Per-Task SE-PASS Distribution}
 \label{sec:per-task}
 
-\textbf{Finding 5 (SE-PASS is concentrated in bounded tasks).} The 8 SE-PASS outcomes (1.6\%) cluster in four tasks: C1 (Claude/Codex long), C4 (Codex long), M1 (Claude long), and T10 (all four agents, long only). All are bounded-scope or trivially-scoped work. On the 49 non-trivially-scoped main-corpus tasks, 0 of 392 runs reach SE-PASS. The capability cliff is near-absolute: 18.8\% on Low calibration tasks, 0\% on Medium, and the CapBench 1.0\% is entirely T10.
+\textbf{Finding 5 (SE-PASS is concentrated in bounded tasks).} The 8 SE-PASS outcomes (1.6\%) cluster in four tasks: C1 (Claude/Codex long), C4 (Codex long), M1 (Claude long), and T10 (all four agents, long only). All are bounded-scope or trivially-scoped work. On the 49 non-trivially-scoped main-corpus tasks, 0 of 392 runs reach SE-PASS. The capability cliff is near-absolute: 18.8\% on Low calibration tasks, 0\% on Medium, and the LongBench 1.0\% is entirely T10.
 
 % Statistical robustness checks moved to artefact bundle.

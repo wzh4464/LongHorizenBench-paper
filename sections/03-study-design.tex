@@ -14,10 +14,10 @@ design, evaluation framework, and experiment execution protocol.
 
 Our benchmark comprises two complementary tiers.
 
-\textbf{Main evaluation corpus (CapBench, T01--T50).}
-The primary tier consists of 50 long-horizon feature-implementation tasks drawn from 15 widely used open-source projects (Kafka, CPython, Airflow, Kubernetes, Terraform, Spring, etc.) spanning six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1). Each task corresponds to a single merged pull request implementing one coherent feature or refactor; the median task touches 57 ground-truth files and 6{,}905 lines of diff. The full CapBench task inventory is included in the replication package.
+\textbf{Main evaluation corpus (LongBench, T01--T50).}
+The primary tier consists of 50 long-horizon feature-implementation tasks drawn from 15 widely used open-source projects (Kafka, CPython, Airflow, Kubernetes, Terraform, Spring, etc.) spanning six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1). Each task corresponds to a single merged pull request implementing one coherent feature or refactor; the median task touches 57 ground-truth files and 6{,}905 lines of diff. The full LongBench task inventory is included in the replication package.
 
-We use the term \emph{long-horizon} in the sense crystallized across recent coding-agent benchmarks~\cite{swebenchpro2025, sweevo, featbench2025}: a task is long-horizon when it requires the agent to (i)~interpret a high-level requirement into an architectural plan spanning multiple modules, (ii)~coordinate edits across many files while preserving cross-file invariants, and (iii)~sustain coherent intent over a prolonged action trajectory in which intermediate feedback is sparse and errors compound. Our CapBench tasks have a median of 57 ground-truth files changed and 6{,}905 lines of diff---an order of magnitude beyond SWE-Bench Pro (avg 4.1 files, 107~LOC) and two orders of magnitude beyond SWE-bench Verified (avg 1.7 files, 33~LOC).
+We use the term \emph{long-horizon} in the sense crystallized across recent coding-agent benchmarks~\cite{swebenchpro2025, sweevo, featbench2025}: a task is long-horizon when it requires the agent to (i)~interpret a high-level requirement into an architectural plan spanning multiple modules, (ii)~coordinate edits across many files while preserving cross-file invariants, and (iii)~sustain coherent intent over a prolonged action trajectory in which intermediate feedback is sparse and errors compound. Our LongBench tasks have a median of 57 ground-truth files changed and 6{,}905 lines of diff---an order of magnitude beyond SWE-Bench Pro (avg 4.1 files, 107~LOC) and two orders of magnitude beyond SWE-bench Verified (avg 1.7 files, 33~LOC).
 
 \textbf{Calibration subset (C1--C5, M1--M3, K1--K4).}
 The second tier consists of 12 industrial tasks from the Huawei/platform ecosystem---the CANN/\texttt{torch\_npu} accelerator stack, MindSpeed, and Kubernetes---summarised in Table~\ref{tab:tasks}. These tasks serve two roles: (i)~\emph{human-rater pilot calibration}: 96 runs (12~tasks $\times$ 4~agents $\times$ 2~prompts) were scored by three blinded senior reviewers with domain expertise in these codebases, producing 92.7\% SE-PASS-vs-non-SE-PASS agreement with the LLM panel (\S\ref{sec:eval-framework}); and (ii)~\emph{rubric discriminant validity}: simple bounded tasks (Low/Medium) achieve \textsc{se-pass} while cross-cutting Kubernetes work (High) does not, confirming the rubric separates difficulty levels as intended.
@@ -34,7 +34,7 @@ Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibrati
 \end{figure}
 
 \begin{table*}[t]
-  \caption{Calibration subset: 12 Huawei/platform tasks used for human-rater pilot calibration and rubric discriminant-validity checks. GT = ground truth (merged code). Complexity reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks (CapBench main corpus) are detailed in the replication package.}
+  \caption{Calibration subset: 12 Huawei/platform tasks used for human-rater pilot calibration and rubric discriminant-validity checks. GT = ground truth (merged code). Complexity reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks (LongBench main corpus) are detailed in the replication package.}
   \label{tab:tasks}
   \centering
   \small
@@ -64,7 +64,7 @@ Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibrati
 Tasks are classified into Low (localised edits, C1/M1), Medium (bounded multi-file changes in a narrow subsystem, C2/C3/M2/M3), and High (cross-component changes requiring generated/API surfaces and extensive testing, C4/C5/K1--K4). Thresholds reflect coordination requirements, not pure file count.
 The calibration subset spans four languages (C++, AscendC, Python, Go), all three complexity tiers, and Huawei's target deployment codebases: CANN/MindSpeed (Ascend NPU stack, agent-first drafting under active rollout) and Kubernetes (platform engineering, the most operationally urgent deployment question).
 
-\paragraph{CapBench selection criteria.}
+\paragraph{LongBench selection criteria.}
 We curated 50 tasks from 15 production-grade open-source projects under three criteria: (i)~the merged PR adds new behaviour rather than fixing a regression, (ii)~the change touches at least two source modules, and (iii)~each task ships with the upstream PR's test suite as the behavioural oracle.
 Selection was convenience-sampled from projects matching Huawei's technology stack, not stratified by difficulty. The distribution covers six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1) and a wide complexity range (1--340 GT files, 3--68{,}000 LOC diff). We make no claim that this represents the full Huawei feature backlog; the corpus stress-tests the boundary of long-horizon feature delivery.
 
@@ -76,7 +76,7 @@ Table~\ref{tab:configs}.  Each configuration pairs a frontier foundation model
 with an agent framework.
 
 \begin{table}[t]
-  \caption{Agent configurations evaluated across the full 62-task benchmark (50 CapBench main corpus + 12 calibration subset).
+  \caption{Agent configurations evaluated across the full 62-task benchmark (50 LongBench main corpus + 12 calibration subset).
     Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments.}
   \label{tab:configs}
   \centering

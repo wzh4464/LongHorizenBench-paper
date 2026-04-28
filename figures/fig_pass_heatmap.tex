@@ -15,7 +15,7 @@
     xtick={0,1,2,3},
     xticklabels={Claude, Codex, Cursor, OpenCode},
     ytick={0,1,2,3},
-    yticklabels={CapBench, Kubernetes, MindSpeed, CANN},
+    yticklabels={LongBench, Kubernetes, MindSpeed, CANN},
     tick style={draw=none},
     axis on top,
     enlargelimits=false,
@@ -55,6 +55,6 @@
     };
   \end{axis}
   \end{tikzpicture}
-  \caption{SE-PASS rate (\%) by agent and task family under the majority-of-4 verdict. Top three rows (CANN, MindSpeed, Kubernetes) are calibration tasks; bottom row (CapBench) is the 50-task main corpus. The Kubernetes calibration row (0\% across all agents) anchors the difficulty ceiling; CapBench's uniform 1\% reflects a single trivially-scoped task (T10).}
+  \caption{SE-PASS rate (\%) by agent and task family under the majority-of-4 verdict. Top three rows (CANN, MindSpeed, Kubernetes) are calibration tasks; bottom row (LongBench) is the 50-task main corpus. The Kubernetes calibration row (0\% across all agents) anchors the difficulty ceiling; LongBench's uniform 1\% reflects a single trivially-scoped task (T10).}
 \label{fig:pass-heatmap}
 \end{figure}

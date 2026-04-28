@@ -84,7 +84,7 @@ deployment:
 \end{itemize}
 
 \paragraph{Open-source control set (50 tasks).}
-The CapBench tasks (\textsc{T01}--\textsc{T50}) are merged PRs sampled
+The LongBench tasks (\textsc{T01}--\textsc{T50}) are merged PRs sampled
 from 15 widely-deployed open-source projects (Kafka, CPython, Airflow,
 Django, gRPC, Spring, Kubernetes OSS, and others). They provide an
 out-of-organization control set with similar multi-file feature shapes
@@ -96,7 +96,7 @@ but without Huawei-specific APIs.
 Raw PR archives are unsuitable as benchmark tasks because many PRs are
 trivial, non-reproducible, or depend on unstated team context. We
 therefore used the same four-stage curation funnel for both the Huawei
-and CapBench subsets:
+and LongBench subsets:
 
 \begin{enumerate}
   \item \textbf{Feature-work filter.} Retain PRs that implement a
@@ -117,7 +117,7 @@ and CapBench subsets:
 \end{enumerate}
 
 The final benchmark contains 62 tasks: 12 Huawei/platform tasks and 50
-CapBench tasks. We intentionally prefer a smaller, auditable benchmark
+LongBench tasks. We intentionally prefer a smaller, auditable benchmark
 over a large automatically harvested set because the study's purpose is
 deployment guidance, not training-data scale.
 

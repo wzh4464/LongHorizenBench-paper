@@ -14,7 +14,7 @@ Industry surveys~\cite{github2024survey} confirm that feature work---not localis
 
 \paragraph{An industrial audit.}
 We answer the deployment question directly by auditing four leading commercial coding agents on a two-tier benchmark.
-The \emph{main evaluation corpus} comprises 50 long-horizon feature tasks from CapBench, drawn from 15 production-grade open source projects (Kafka, CPython, Airflow, Kubernetes, OpenJDK, etc.) with a median of 57 ground-truth files and 6{,}905 lines of diff per task.
+The \emph{main evaluation corpus} comprises 50 long-horizon feature tasks from LongBench, drawn from 15 production-grade open source projects (Kafka, CPython, Airflow, Kubernetes, OpenJDK, etc.) with a median of 57 ground-truth files and 6{,}905 lines of diff per task.
 A 12-task \emph{calibration subset} from Huawei codebases (CANN/\texttt{torch\_npu}, MindSpeed, Kubernetes) validates the scoring rubric via a blinded human-rater pilot.
 Each task is paired with a \emph{long} prompt (a multi-paragraph design proposal that mirrors a real feature spec) and a \emph{short} prompt (a one-sentence ticket-style description), giving us $62\times2=124$ task instances per agent.
 We evaluate four agents---Claude Code (Opus 4.6), OpenAI Codex (GPT-5.4), Cursor Composer-2, and OpenCode/GLM-5.1---producing $124\times4=496$ end-to-end agent runs.

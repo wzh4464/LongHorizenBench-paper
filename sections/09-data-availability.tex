@@ -1,10 +1,10 @@
 % !TEX root = ../main.tex
 The replication package is published as a Zenodo deposit; the permanent DOI and a Git mirror for browsing will be included in the final version. The deposit contains all artefacts listed below.
 It includes:
-(1)~task descriptions for all 62 benchmark tasks (12 industrial plus 50 CapBench), with per-task metadata recording repository, parent commit, ground-truth commit, handwritten-file list, complexity tier, and natural-language prompt;
+(1)~task descriptions for all 62 benchmark tasks (12 industrial plus 50 LongBench), with per-task metadata recording repository, parent commit, ground-truth commit, handwritten-file list, complexity tier, and natural-language prompt;
 (2)~the full set of 124 agent prompts (62 tasks $\times$ 2 prompt variants);
 (3)~the rubric and evaluator prompt template used by all four LLM evaluators;
 (4)~per-run artifacts for all 496 experiments---final diffs, timing metadata, session logs, sanitization verification, and rerun provenance for the disputed Cursor cases;
 (5)~the scoring scripts, aggregation notebooks, and sanitization harness.
 We distribute \path{reports/eval_scores_v2_long.csv} as the canonical per-evaluator long-form CSV used to produce the headline tables, together with \path{reports/eval_scores_v2_wide.csv} for run-level cross-checks and \path{paper2/compute_stats.py} for recomputing the aggregate statistics.
-The artifact contains no proprietary Huawei source code; for restricted industrial tasks it provides sanitized metadata, prompts, scores, and patch summaries, while public upstream repositories referenced by CapBench tasks can be reconstructed from the recorded SHAs.
+The artifact contains no proprietary Huawei source code; for restricted industrial tasks it provides sanitized metadata, prompts, scores, and patch summaries, while public upstream repositories referenced by LongBench tasks can be reconstructed from the recorded SHAs.
