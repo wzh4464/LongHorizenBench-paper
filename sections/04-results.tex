@@ -38,7 +38,9 @@ Figure~\ref{fig:pass-heatmap} further breaks down PASS by task family, confirmin
 
 \finding{\textbf{Headline result.} Across 496 runs (62 tasks $\times$ 4 agents $\times$ 2 prompts), only 8 clear the full rubric (1.6\% PASS). The strongest configurations are Claude Opus~4.6 and Codex GPT-5.4 at 2.4\%; Cursor Composer-2 and OpenCode GLM-5.1 each pass only 0.8\%. No agent passes any Kubernetes-family task, and no agent exceeds 4.8\% PASS even on its best prompt variant.}
 
-\textbf{Finding 1 (Task shape dominates over agent product).} The spread between the strongest and weakest agent in our test (2.4\% vs.\ 0.8\%) is small compared to the spread induced by task family (4.8\% on long-prompt CapBench tasks vs.\ 0\% on every Kubernetes task). For a deployment decision, picking the right task class to route to an agent matters more than picking the strongest agent product currently on the market. We return to this observation in \S\ref{sec:industrial-deployment}.
+\textbf{Finding 1 (Task shape dominates over agent product).} The spread between the strongest and weakest agent in our test (2.4\% vs.\ 0.8\%) is small compared to the spread induced by task family (4.8\% on long-prompt operator/MindSpore tasks vs.\ 0\% on every Kubernetes task). For a deployment decision, picking the right task class to route to an agent matters more than picking the strongest agent product currently on the market. We return to this observation in \S\ref{sec:industrial-deployment}.
+
+\textbf{Finding 1b (Frontier agents will mine the repo history if you let them).} On our first K1 baseline run, Codex spontaneously executed \texttt{git log}/\texttt{git cherry-pick} on commits past the sanitised cutoff and recovered the reference patch verbatim. We treat this as a first-class methodology lesson: feature-PR benchmarks on real merged code must rewrite history (parent-commit only), strip remotes, and replace the \texttt{gh} CLI with a no-op shim, or PASS rates will silently include leakage. Every number in this paper is post-fix.
 
 %% ------------------------------------------------------------------
 \subsection{Task-Family Effect}
