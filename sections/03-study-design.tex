@@ -72,6 +72,16 @@ larger diff.
 
 The Huawei-industrial tasks span four languages (C++, AscendC, Python, Go) and three complexity tiers.
 
+\paragraph{CapBench profile.}
+The CapBench subset spans 15 OSS projects across languages: Python (18 tasks),
+Java (10), Go (8), JavaScript/TypeScript (7), C++ (5), Rust (2). Median diff
+is 142 LOC over 4 files; long-tail tasks reach 1.7k LOC and 28 files. Each task
+ships with the upstream PR's test suite as the behavioural oracle. We selected
+tasks under three criteria: (i) the merged PR added new behaviour rather than
+fixing a regression, (ii) the change touches at least two source modules, and
+(iii) tests are runnable from a clean checkout under \texttt{just test} or the
+project's documented command.
+
 \paragraph{CapBench extension (50 tasks).}
 To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--127 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks use the same metadata rubric: Low tasks are local edits, Medium tasks are bounded multi-file changes, and High tasks require broader cross-component coordination. Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
 
