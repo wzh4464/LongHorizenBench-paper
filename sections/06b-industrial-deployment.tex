@@ -53,7 +53,34 @@ PASS rate into something deployable is harness engineering: forcing
 scope discovery, test evidence, and multi-judge acceptance \emph{before}
 a human reviewer ever sees the change.
 
-\paragraph{What changed for Huawei's rollout after this audit.}
+\paragraph{Deployment decision flow.}
+The four interventions above compose into a single routing pipeline
+that every agent-eligible feature ticket must clear before reaching a
+human reviewer:
+\begin{enumerate}\itemsep0pt
+  \item \emph{Task-class gate.} Lookup against an allow-list (today:
+    bounded operator/MindSpore-style refactors); Kubernetes-class and
+    cross-module API changes route to human authoring directly.
+  \item \emph{Spec-template gate.} The long-form template is mandatory
+    for agent invocation; tickets without motivation, behavior, scope,
+    and tests are returned to the requester.
+  \item \emph{Pre-review CI gate.} The agent's PR must (a) match the
+    declared file scope within $\pm$1, (b) include or update the
+    declared tests, and (c) pass language-server diagnostics. Failures
+    return to the agent for self-repair (bounded retry).
+  \item \emph{Multi-judge acceptance.} The four-LLM panel from this
+    paper runs as a pre-merge check; only $\geq 3/4$ PASS is forwarded
+    to human review.
+\end{enumerate}
+The pipeline turns the 1.6\% un-conditional PASS rate into a useful
+operating point: agents draft, gates filter, and human reviewers see
+only candidates that already pass coverage, structure, and judge
+checks. Conditional on reaching the reviewer, the post-gate PASS rate
+is, by construction, much higher than 1.6\%; the audit's empirical
+contribution is precisely to identify which gates remove the
+non-PASS draft mass observed in §\ref{sec:results}.
+
+\paragraph{What changed for Huawei's rollout.}
 The audit produced four operational decisions inside Huawei's coding-agent
 rollout. \emph{(i) Allow-list by task family.} Operator-tier CANN/MindSpeed
 work is approved for agent-first drafting; Kubernetes-class control-plane
