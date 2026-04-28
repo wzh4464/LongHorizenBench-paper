@@ -223,6 +223,10 @@ rationales are released in the artifact bundle.
 
 %% ------------------------------------------------------------------
 \subsection{Experiment Execution}\label{sec:execution}
+Each (task, agent, prompt) cell runs once in a fresh sandbox built per task. The repository is rebased to the parent commit of the merged PR, with upstream remotes removed and \texttt{gh}/\texttt{git fetch} shimmed off, so the agent cannot recover ground truth from history. We discovered the importance of the second precaution after an early Codex run on K4 reached the merged patch via \texttt{git log}; we now treat anti-leakage as a benchmark requirement rather than an afterthought.
+
+\iffalse
+\subsection{Experiment Execution (legacy long form)}\label{sec:execution-legacy}
 
 \textbf{Sanitization protocol.}
 To prevent agents from extracting ground-truth code from repository
@@ -265,6 +269,7 @@ original verdicts only for such integrity/provenance cases; routine
 non-PASS outputs were not selectively rerun.  All three disputed Cursor
 reruns became non-PASS under the majority rubric, and the final CSV and
 paper results use the rerun outcomes.
+\fi
 \fi
 
 % Experiment scale: 496 runs (62 tasks x 4 agents x 2 prompts) is described in the results section.
