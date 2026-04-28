@@ -93,7 +93,7 @@ The paper uses a strict-equivalence scoring rubric:
 Remote `overleaf` points to project `69f0e248816824d263311d8a`. Auth token is in `.env` (`OVERLEAF_TOKEN`).
 
 ```bash
-git push overleaf main:master                          # push to Overleaf
+git push overleaf main:master                          # push local → Overleaf
 git fetch overleaf && git merge overleaf/master        # pull from Overleaf
 git push origin main && git push overleaf main:master  # push to both remotes
 ```
