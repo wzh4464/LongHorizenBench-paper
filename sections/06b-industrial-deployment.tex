@@ -80,7 +80,22 @@ is, by construction, much higher than 1.6\%; the audit's empirical
 contribution is precisely to identify which gates remove the
 non-PASS draft mass observed in §\ref{sec:results}.
 
-\paragraph{What changed for Huawei's rollout.}
+\begin{table}[t]
+\centering\small
+\caption{Internal deployment routing matrix derived from the audit. Only Tier-A tasks are agent-first; the rest stay human-led until further harness-level evidence accumulates.}
+\label{tab:routing}
+\begin{tabularx}{\columnwidth}{@{}lXc@{}}
+\toprule
+\textbf{Tier} & \textbf{Task class} & \textbf{Routing} \\
+\midrule
+A & Bounded refactors, single-file feature additions, test/lint scaffolding & Agent-first, gated review \\
+B & Multi-file feature additions, controller-only logic & Agent-drafted, mandatory human author \\
+C & Cross-component platform changes, Kubernetes-class controllers, protocol/migration work & Human-only \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{What changed for Huawei's rollout after this audit.}
 The audit produced four operational decisions inside Huawei's coding-agent
 rollout. \emph{(i) Allow-list by task family.} Operator-tier CANN/MindSpeed
 work is approved for agent-first drafting; Kubernetes-class control-plane
