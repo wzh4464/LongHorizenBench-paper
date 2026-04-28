@@ -12,10 +12,29 @@ design, evaluation framework, and experiment execution protocol.
 %% ------------------------------------------------------------------
 \subsection{Task Selection}\label{sec:tasks}
 
-Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kubernetes, the CANN/\texttt{torch\_npu} accelerator stack, and MindSpeed) and 50 from \textit{CapBench}, an open-source extension assembled from 15 widely used community projects (Kafka, CPython, Airflow, Terraform, Spring, etc.). Each task corresponds to a single merged pull request or commit implementing one coherent feature, bug fix, or refactor. Table~\ref{tab:tasks} summarises the Huawei/platform subset; the full CapBench task inventory is included in the replication package.
+Our benchmark comprises two complementary tiers.
+
+\textbf{Main evaluation corpus (CapBench, T01--T50).}
+The primary tier consists of 50 long-horizon feature-implementation tasks drawn from 15 widely used open-source projects (Kafka, CPython, Airflow, Kubernetes, Terraform, Spring, etc.) spanning six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1). Each task corresponds to a single merged pull request implementing one coherent feature or refactor; the median task touches 57 ground-truth files and 6{,}905 lines of diff. The full CapBench task inventory is included in the replication package.
+
+We use the term \emph{long-horizon} in the sense crystallized across recent coding-agent benchmarks~\cite{swebenchpro2025, sweevo, featbench2025}: a task is long-horizon when it requires the agent to (i)~interpret a high-level requirement into an architectural plan spanning multiple modules, (ii)~coordinate edits across many files while preserving cross-file invariants, and (iii)~sustain coherent intent over a prolonged action trajectory in which intermediate feedback is sparse and errors compound. Our CapBench tasks have a median of 57 ground-truth files changed and 6{,}905 lines of diff---an order of magnitude beyond SWE-Bench Pro (avg 4.1 files, 107~LOC) and two orders of magnitude beyond SWE-bench Verified (avg 1.7 files, 33~LOC).
+
+\textbf{Calibration subset (C1--C5, M1--M3, K1--K4).}
+The second tier consists of 12 industrial tasks from the Huawei/platform ecosystem---the CANN/\texttt{torch\_npu} accelerator stack, MindSpeed, and Kubernetes---summarised in Table~\ref{tab:tasks}. These tasks serve two roles: (i)~\emph{human-rater pilot calibration}: 96 runs (12~tasks $\times$ 4~agents $\times$ 2~prompts) were scored by three blinded senior reviewers with domain expertise in these codebases, producing 92.7\% SE-PASS-vs-non-SE-PASS agreement with the LLM panel (\S\ref{sec:eval-framework}); and (ii)~\emph{rubric discriminant validity}: simple bounded tasks (Low/Medium) achieve \textsc{se-pass} while cross-cutting Kubernetes work (High) does not, confirming the rubric separates difficulty levels as intended.
+
+\textbf{Combined benchmark.}
+Combining both tiers gives \textbf{62 tasks $\times$ 4 agents $\times$ 2 prompt variants = 496 runs}.
+Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibration set validates the evaluation pipeline, while the primary experiment measures the capability boundary and derives the deployment gates.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{svg/study_architecture_overview.pdf}
+  \caption{Two-track study architecture. The calibration set (12 industrial tasks, 96 runs) validates the LLM-judge panel against human raters; the primary experiment (50 long-horizon tasks, 400 runs) measures the agent capability boundary and derives the four deployment gates.}
+  \label{fig:study-arch}
+\end{figure}
 
 \begin{table*}[t]
-  \caption{Huawei/platform task registry (12 of the 62 tasks used in this study). GT = ground truth (merged code). Complexity is the three-tier metadata used in the evaluation CSV and reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks come from the CapBench open-source suite.}
+  \caption{Calibration subset: 12 Huawei/platform tasks used for human-rater pilot calibration and rubric discriminant-validity checks. GT = ground truth (merged code). Complexity reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks (CapBench main corpus) are detailed in the replication package.}
   \label{tab:tasks}
   \centering
   \small
@@ -41,12 +60,12 @@ Our benchmark has 62 tasks in total: 12 from the Huawei/platform ecosystem (Kube
   \end{tabular*}
 \end{table*}
 
-\textbf{Selection criteria.}
-Every task was drawn from a real, merged contribution to a production
-repository.  C-family accelerator tasks (C1--C5) and MindSpeed tasks (M1--M3) come from
+\textbf{Calibration-subset detail.}
+Every task in both tiers was drawn from a real, merged contribution to a production
+repository. Within the calibration subset, C-family accelerator tasks (C1--C5) and MindSpeed tasks (M1--M3) come from
 Huawei's Ascend NPU software stack---operator kernels, \texttt{torch\_npu}
 integration, training framework features, and precision fixes that
-represent typical industrial workloads.  Kubernetes tasks (K1--K4) come from the
+represent typical industrial workloads. Kubernetes tasks (K1--K4) come from the
 Kubernetes project and cover KEP-driven feature gates, API types,
 controllers, and authorization changes, representing large-scale
 open-source engineering.
@@ -70,20 +89,10 @@ larger diff.
     multi-module orchestration, or extensive testing.
 \end{itemize}
 
-The Huawei-industrial tasks span four languages (C++, AscendC, Python, Go) and three complexity tiers.
+The calibration-subset tasks span four languages (C++, AscendC, Python, Go) and all three complexity tiers.
 
-\paragraph{CapBench profile.}
-The CapBench subset spans 15 OSS projects across languages: Python (18 tasks),
-Java (10), Go (8), JavaScript/TypeScript (7), C++ (5), Rust (2). Median diff
-is 142 LOC over 4 files; long-tail tasks reach 1.7k LOC and 28 files. Each task
-ships with the upstream PR's test suite as the behavioural oracle. We selected
-tasks under three criteria: (i) the merged PR added new behaviour rather than
-fixing a regression, (ii) the change touches at least two source modules, and
-(iii) tests are runnable from a clean checkout under \texttt{just test} or the
-project's documented command.
-
-\paragraph{CapBench extension (50 tasks).}
-To broaden beyond the Huawei ecosystem, we added 50 tasks from CapBench, our open-source complementary suite curated from 15 widely-used projects: Kubernetes, Kafka, Spring Boot, CPython, Django, Airflow, TensorFlow, Apache Flink, LangChain, Kubernetes Operators, Redis, and others. Tasks are drawn from merged PRs that implement a real feature or fix, span 1--127 handwritten files, and cover six languages (Go, Python, Java, Rust, TypeScript, C++). CapBench tasks use the same metadata rubric: Low tasks are local edits, Medium tasks are bounded multi-file changes, and High tasks require broader cross-component coordination. Combining the Huawei and CapBench subsets gives \textbf{62 tasks, 4 agents, 2 prompt variants = 496 runs}.
+\paragraph{CapBench selection criteria.}
+Each CapBench task was selected under three criteria: (i)~the merged PR adds new behaviour rather than fixing a regression, (ii)~the change touches at least two source modules, and (iii)~each task ships with the upstream PR's test suite as the behavioural oracle.
 
 %% ------------------------------------------------------------------
 \subsection{Agent Configurations}\label{sec:configs}
@@ -93,7 +102,7 @@ Table~\ref{tab:configs}.  Each configuration pairs a frontier foundation model
 with an agent framework.
 
 \begin{table}[t]
-  \caption{Agent configurations evaluated across the full 62-task benchmark (12 Huawei-industrial + 50 CapBench).
+  \caption{Agent configurations evaluated across the full 62-task benchmark (50 CapBench main corpus + 12 calibration subset).
     Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments.}
   \label{tab:configs}
   \centering
@@ -178,10 +187,12 @@ on a 0--5 scale:
 \textbf{Verdict rules.}
 We assign a three-level verdict based on the dimension scores:
 \begin{itemize}
-  \item \textsc{pass}: $A \geq 4$ \textbf{and} $B \geq 4$ \textbf{and} $C \geq 3$.
+  \item \textsc{se-pass} (strict-equivalence PASS): $A \geq 4$ \textbf{and} $B \geq 4$ \textbf{and} $C \geq 3$.
   \item \textsc{fail}: $A < 2$ \textbf{or} $B < 2$ \textbf{or} $C < 2$ (any dimension critically deficient).
   \item \textsc{partial}: all other cases.
 \end{itemize}
+
+We deliberately adopt a strict-equivalence criterion rather than a relaxed ``functionally correct'' criterion, because our deployment question is whether an agent draft can \emph{replace} a human-authored PR, not merely whether it contains a correct local fix. SE-PASS therefore requires not only functional correctness but also alignment with the reference implementation in file organisation, API surface, and test structure. This means our SE-PASS rate is a conservative lower bound on merge-readiness: valid alternative implementations that a reviewer might accept are counted as non-SE-PASS under this rubric.
 
 \textbf{File coverage metric.}
 We additionally compute file-level overlap between the agent's generated
@@ -195,39 +206,40 @@ Our evaluation measures \emph{production-level equivalence} to the merged implem
 An agent solution that correctly addresses the requirement but uses a materially different file organization, naming convention, or architecture than the accepted PR will score lower on Behavioral Equivalence~(C) and file coverage.
 This design choice reflects our industrial interest: we assess whether agent output could replace a human-authored PR draft, not merely whether it contains a plausible local fix.
 As a consequence, our \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally impossible.''
-Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: many non-PASS cases stem from engineering completeness gaps rather than total semantic misunderstanding.
+Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: many non-SE-PASS cases stem from engineering completeness gaps rather than total semantic misunderstanding.
 
 \textbf{Multi-evaluator cross-validation.}
 To mitigate evaluator bias, every experiment is independently scored by
 four LLM evaluators from different model families: Claude Opus~4.6,
 Codex GPT-5.4, Cursor Composer-2, and GLM-5.1.  We report the
 \emph{majority verdict} (strict majority where possible, with a conservative
-tie-break that orders labels FAIL$<$PARTIAL$<$PASS and selects the lower label
+tie-break that orders labels FAIL$<$PARTIAL$<$SE-PASS and selects the lower label
 when evaluators are split) and scores averaged across the four.  Unanimity on the
 verdict label holds for 33.7\% of experiments; pairwise verdict agreement
 ranges from 42.5\% (Codex vs GLM, the two strictest evaluators) to 74.4\%
-(Claude vs Cursor).  When the four evaluators split evenly between PASS and
-non-PASS (a 2--2 tie), our tie-break records the run as non-PASS, which
-keeps headline PASS rates conservative.
+(Claude vs Cursor).  When the four evaluators split evenly between SE-PASS and
+non-SE-PASS (a 2--2 tie), our tie-break records the run as non-SE-PASS, which
+keeps headline SE-PASS rates conservative.
 
 \textbf{Human pilot calibration.}
 To check that the LLM panel is not idiosyncratically biased relative to
-domain-expert review, we conducted a blind human-rater pilot on all 96
-Huawei runs (12 tasks $\times$ 4 agents $\times$ 2 prompts).  Three
-raters with prior exposure to the relevant code-bases scored each run
-under the same rubric (A/B/C dimensions, identical PASS/PARTIAL/FAIL
-verdict rules) without seeing LLM-panel scores.  On these 96 cells the
-human verdicts came back as \textbf{9~PASS / 55~PARTIAL / 32~FAIL}, vs
-the LLM-panel \textbf{4~PASS / 57~PARTIAL / 35~FAIL} under our 3-of-4
+domain-expert review, we conducted a blind human-rater pilot on the 96
+calibration-subset runs (12 calibration tasks $\times$ 4 agents $\times$
+2 prompts) because the senior reviewers had domain expertise in these
+Huawei codebases.  Three raters scored each run under the same rubric
+(A/B/C dimensions, identical SE-PASS/PARTIAL/FAIL verdict rules) without
+seeing LLM-panel scores.  On these 96 cells the
+human verdicts came back as \textbf{9~SE-PASS / 55~PARTIAL / 32~FAIL}, vs
+the LLM-panel \textbf{4~SE-PASS / 57~PARTIAL / 35~FAIL} under our 3-of-4
 majority rule; raw three-way verdict agreement is 66.7\% (Cohen's
-$\kappa = 0.38$), and PASS-vs-non-PASS agreement is 92.7\% ($\kappa = 0.43$).
-The LLM panel is the stricter of the two: 6 of the 9 human-PASS cells
+$\kappa = 0.38$), and SE-PASS-vs-non-PASS agreement is 92.7\% ($\kappa = 0.43$).
+The LLM panel is the stricter of the two: 6 of the 9 human-SE-PASS cells
 were demoted by the panel (4 to PARTIAL, 2 to FAIL), and the panel never
-overturned a human-FAIL into a PASS. The qualitative pattern is identical:
-both methods see well under 10\% PASS on the Huawei subset (humans
+overturned a human-FAIL into an SE-PASS. The qualitative pattern is identical:
+both methods see well under 10\% SE-PASS on the calibration subset (humans
 9.4\%, panel 4.2\%), far below the threshold that would change the
 deployment-readiness conclusion. We treat this as evidence that the
-1.6\% headline PASS rate over the full 496-run benchmark is a
+1.0\% headline SE-PASS rate on the main corpus (1.6\% across all 496 runs) is a
 conservative \emph{lower} bound on what a careful human reviewer would mark merge-ready, not a strict-evaluator artifact: humans were more lenient than the panel on a handful of borderline runs, never harsher.  Per-rater
 rationales are released in the artifact bundle.
 

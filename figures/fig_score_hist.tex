@@ -29,6 +29,6 @@
 \legend{Claude Opus 4.6, Codex GPT-5.4, Cursor Composer-2, OpenCode GLM-5.1}
 \end{axis}
 \end{tikzpicture}
-\caption{Per-run score distribution across four agents ($n{=}124$ runs each). Each bucket uses the mean per-dimension score, i.e., $(A+B+C)/3$ averaged across the four judges on a 0--5 scale; Table~\ref{tab:config-pass} reports the corresponding summed 0--15 composite mean. Most runs fall in the 2--3 bucket across all agents, reflecting partial-pass behavior; full-rubric PASS requires scores well above 4.}
+\caption{Per-run score distribution across four agents ($n{=}124$ runs each, combining 100 main-corpus and 24 calibration runs). Each bucket uses the mean per-dimension score, i.e., $(A+B+C)/3$ averaged across the four judges on a 0--5 scale; Table~\ref{tab:config-pass} reports the corresponding summed 0--15 composite mean. Most runs cluster in the 1--3 range, reflecting partial-pass behavior; full-rubric SE-PASS requires scores well above 4.}
 \label{fig:score-histogram}
 \end{figure}

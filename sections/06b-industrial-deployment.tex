@@ -4,42 +4,15 @@
 
 We summarise the rollout pipeline that emerged from this audit as a
 five-step gating sequence applied to every incoming feature ticket
-(Figure~\ref{fig:routing-flow}). Routing decisions, prompt curation,
+(Figure~\ref{fig:deployment-pipeline}). Routing decisions, prompt curation,
 agent invocation, and judging are now mechanised; humans remain in the
 loop only at the final review stage and for tickets explicitly routed
 out of the agent track.
 
 \begin{figure}[t]
 \centering
-\begin{tikzpicture}[
-  node distance=4mm,
-  every node/.style={font=\footnotesize},
-  box/.style={draw, rounded corners, align=center, minimum width=24mm, minimum height=8mm, inner sep=2pt},
-  decision/.style={draw, diamond, aspect=2, align=center, inner sep=1pt, minimum width=20mm},
-  arrow/.style={-{Latex[length=4pt]}}
-]
-\node[box] (ticket) {New feature ticket};
-\node[decision, below=of ticket] (tier) {Task tier?};
-\node[box, below left=4mm and 6mm of tier, fill=red!8] (human) {Human-only path};
-\node[box, below=of tier] (spec) {Long-form spec\\ template};
-\node[box, below=of spec] (agent) {Agent draft};
-\node[decision, below=of agent] (gate) {Scope+test\\ gates pass?};
-\node[box, below right=4mm and 6mm of gate, fill=red!8] (back) {Return to agent\\ for self-repair};
-\node[box, below=of gate] (panel) {4-judge\\ acceptance panel};
-\node[decision, below=of panel] (verdict) {3-of-4 PASS?};
-\node[box, below right=4mm and 6mm of verdict, fill=red!8] (drop) {Reject and log};
-\node[box, below=of verdict, fill=green!10] (review) {Human reviewer};
-\draw[arrow] (ticket) -- (tier);
-\draw[arrow] (tier) -| node[above,pos=0.25] {\scriptsize Kubernetes/cross-module} (-2.5,-2.0) |- (human);
-\draw[->] (tier) |- (human.west);
-\draw[->] (tier.south) -- node[right] {\scriptsize bounded} (spec.north);
-\draw[->] (spec.south) -- (agent.north);
-\draw[->] (agent.south) -- (gate.north);
-\draw[->] (gate.east) -- node[above] {\scriptsize fail} ++(2,0) |- (agent.east);
-\draw[->] (gate.south) -- node[right] {\scriptsize pass} (panel.north);
-\draw[->] (panel.south) -- (review.north);
-\end{tikzpicture}
-\caption{Deployment pipeline: routing gate, spec template, agent draft, scope/test gate, multi-judge panel, human review.}
+\includegraphics[width=\columnwidth]{svg/deployment_gate_pipeline.pdf}
+\caption{Four-gate deployment pipeline. Each gate addresses a specific failure mode surfaced by the audit: task-class routing (0/32 Kubernetes SE-PASS), spec template (long prompts lift scores by +1.0--2.1), scope/test CI (25.5\% coverage-gap failures), and multi-judge panel (pairwise agreement as low as 42.5\%).}
 \label{fig:deployment-pipeline}
 \end{figure}
 
@@ -52,13 +25,15 @@ especially Kubernetes-family work, should remain human-owned until an
 explicit process harness demonstrates a different result.
 
 \paragraph{Treat task specification as an engineering artifact.}
-Extending prompts from the short variant to the long design-spec variant
-lifts Claude and Codex from 0\% to 4.8\% PASS, and OpenCode from 0\%
-to 1.6\%; Cursor likewise reaches only 1.6\% under long prompts
-(Table~\ref{tab:prompt}). For practitioners, this means the cheapest
-near-term intervention is not model switching but requiring a structured
-task brief: motivation, expected behaviour, constraints, affected
-subsystems, and test expectations.
+On the main corpus, long prompts lift mean composite scores by
+$+1.0$ to $+2.1$ across all four agents (Table~\ref{tab:prompt}),
+though the SE-PASS gain is confined to the trivially scoped T10.
+On the calibration subset, Claude and Codex rise from 0\% to 8.3\%
+SE-PASS with long prompts.
+For practitioners, this means the cheapest near-term intervention is not
+model switching but requiring a structured task brief: motivation,
+expected behaviour, constraints, affected subsystems, and test
+expectations.
 
 \paragraph{Require scope and test gates before review.}
 A common and directly addressable failure pattern is not that agents
@@ -80,14 +55,22 @@ judge gates will drift simply by swapping the judge model.
 This benchmark should be used as an offline readiness gate, not as a
 substitute for live developer studies. A team can first run the same
 task families through candidate agents, then admit only task classes
-whose PASS and PARTIAL rates justify reviewer time, and finally measure
+whose SE-PASS and PARTIAL rates justify reviewer time, and finally measure
 acceptance rate and review burden in a controlled pilot.
 
 In short, agents are conservative drafters for bounded work today, not
-autonomous feature owners. The investment that converts the 1.6\% raw
-PASS rate into something deployable is harness engineering: forcing
-scope discovery, test evidence, and multi-judge acceptance \emph{before}
-a human reviewer ever sees the change.
+autonomous feature owners. The investment that converts the 1.0\%
+main-corpus SE-PASS rate (0.0\% excluding trivially scoped tasks) into
+something deployable is harness engineering: forcing scope discovery,
+test evidence, and multi-judge acceptance \emph{before} a human reviewer
+ever sees the change.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{svg/failure_to_gate_mapping.pdf}
+  \caption{Mapping from failure signatures (\S\ref{sec:root-cause}) to deployment gates. Coverage gaps and borderline partials (44.4\% combined) are directly filterable; the semantic-failure slice (44.7\%) requires model or specification improvements beyond current gating.}
+  \label{fig:failure-gate-map}
+\end{figure}
 
 \paragraph{Deployment decision flow.}
 The four interventions above compose into a single routing pipeline
@@ -105,31 +88,14 @@ human reviewer:
     declared tests, and (c) pass language-server diagnostics. Failures
     return to the agent for self-repair (bounded retry).
   \item \emph{Multi-judge acceptance.} The four-LLM panel from this
-    paper runs as a pre-merge check; only $\geq 3/4$ PASS is forwarded
+    paper runs as a pre-merge check; only $\geq 3/4$ SE-PASS is forwarded
     to human review.
 \end{enumerate}
-The pipeline turns the 1.6\% un-conditional PASS rate into a useful
-operating point: agents draft, gates filter, and human reviewers see
-only candidates that already pass coverage, structure, and judge
-checks. Conditional on reaching the reviewer, the post-gate PASS rate
-is, by construction, much higher than 1.6\%; the audit's empirical
-contribution is precisely to identify which gates remove the
-non-PASS draft mass observed in §\ref{sec:results}.
-
-\begin{table}[t]
-\centering\small
-\caption{Internal deployment routing matrix derived from the audit. Only Tier-A tasks are agent-first; the rest stay human-led until further harness-level evidence accumulates.}
-\label{tab:routing}
-\begin{tabularx}{\columnwidth}{@{}lXc@{}}
-\toprule
-\textbf{Tier} & \textbf{Task class} & \textbf{Routing} \\
-\midrule
-A & Bounded refactors, single-file feature additions, test/lint scaffolding & Agent-first, gated review \\
-B & Multi-file feature additions, controller-only logic & Agent-drafted, mandatory human author \\
-C & Cross-component platform changes, Kubernetes-class controllers, protocol/migration work & Human-only \\
-\bottomrule
-\end{tabularx}
-\end{table}
+The pipeline turns the 1.0\% unconditional main-corpus SE-PASS rate into
+a useful operating point: agents draft, gates filter, and human reviewers
+see only candidates that already pass coverage, structure, and judge
+checks. The audit's empirical contribution is precisely to identify which
+gates remove the non-SE-PASS draft mass observed in §\ref{sec:results}.
 
 \paragraph{What changed for Huawei's rollout after this audit.}
 The audit produced four operational decisions inside Huawei's coding-agent
@@ -139,7 +105,7 @@ work is held back pending harness gates. \emph{(ii) Mandatory long-form
 specification.} Every agent-eligible ticket now ships with the same
 \emph{motivation/design-detail/test-expectation} structure used for the
 \textsf{long} prompts in this study, because it is the only condition
-under which we measured non-trivial PASS. \emph{(iii) Pre-review CI gate.}
+under which we measured non-trivial SE-PASS. \emph{(iii) Pre-review CI gate.}
 The two recurring failure modes (incomplete file plan and missing test
 evidence) are rejected before a draft reaches a human reviewer.
 (iv) \emph{Multi-judge acceptance.} A 3-of-4 LLM-judge panel, calibrated

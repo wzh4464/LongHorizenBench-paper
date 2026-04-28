@@ -8,7 +8,7 @@
     colorbar,
     colorbar style={
       width=3mm,
-      title={\footnotesize \% PASS},
+      title={\footnotesize \% SE-PASS},
       yticklabel style={font=\scriptsize},
     },
     point meta min=0, point meta max=20,
@@ -55,6 +55,6 @@
     };
   \end{axis}
   \end{tikzpicture}
-  \caption{Pass rate (\%) by agent and task family under the majority-of-4 verdict. Rows top-to-bottom: \emph{CANN}, \emph{MindSpeed}, \emph{Kubernetes}, \emph{CapBench}. Kubernetes (K1--K4) is a \emph{uniform zero-pass} cliff across all agents.}
+  \caption{SE-PASS rate (\%) by agent and task family under the majority-of-4 verdict. Top three rows (CANN, MindSpeed, Kubernetes) are calibration tasks; bottom row (CapBench) is the 50-task main corpus. The Kubernetes calibration row (0\% across all agents) anchors the difficulty ceiling; CapBench's uniform 1\% reflects a single trivially-scoped task (T10).}
 \label{fig:pass-heatmap}
 \end{figure}

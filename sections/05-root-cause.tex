@@ -2,45 +2,46 @@
 \section{Root Cause Analysis}
 \label{sec:root-cause}
 
-Of the 496 experiments, only 8 achieved PASS (1.6\%); 488 were non-PASS (194 PARTIAL, 294 FAIL).
-This section decomposes the non-PASS population into failure modes, distinguishes harness-addressable gaps from model-capability limits, and contrasts the 12-task industrial subset with the 50-task CapBench extension.
+Of the 400 main-corpus runs (T01--T50, four agents $\times$ two prompts $\times$ 50 tasks), only 4 achieved SE-PASS (1.0\%), all on T10-long; 396 were non-SE-PASS.
+We focus the root-cause analysis on these 396 main-corpus failures, which represent the long-horizon feature tasks from which our deployment-policy conclusions derive.
+(The 12 calibration tasks contribute an additional 92 non-SE-PASS runs with a qualitatively similar profile; see below.)
 
 %% ------------------------------------------------------------------
 \subsection{CSV-Derived Failure Signatures}
 \label{sec:failure-modes}
 
-We classify each non-PASS run using the same four-evaluator record used for the headline tables.
+We classify each non-SE-PASS run using the same four-evaluator record used for the headline tables.
 For a run, we average the four judges' $A$ (functional correctness), $B$ (completeness/coverage), and $C$ (behavioral equivalence) scores, then assign the first matching signature:
 \begin{itemize}
   \item \textbf{Semantic/correctness failure}: $\bar{A} < 2$.
   \item \textbf{Coverage gap}: $\bar{A} \ge 2$ and $\bar{B} < 2$.
   \item \textbf{Behavioral/design mismatch}: $\bar{A} \ge 2$, $\bar{B} \ge 2$, and $\bar{C} < 2$.
-  \item \textbf{Borderline partial}: no dimension is critically deficient, but the run does not reach the PASS thresholds.
+  \item \textbf{Borderline partial}: no dimension is critically deficient, but the run does not reach the SE-PASS thresholds.
 \end{itemize}
 
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Failure signatures over the 488 non-PASS runs, computed from the averaged A/B/C evaluator scores in \texttt{eval\_scores\_v2\_long.csv}.}
+\caption{Failure signatures over the 396 non-SE-PASS main-corpus runs (T01--T50), computed from the averaged A/B/C evaluator scores.}
 \label{tab:failure-signatures}
 \begin{tabularx}{\columnwidth}{@{}lYrr@{}}
 \toprule
 \textbf{Signature} & \textbf{Rule} & \textbf{Runs} & \textbf{Share} \\
 \midrule
-Semantic failure & $\bar{A} < 2$ & 202 & 41.4\% \\
-Coverage gap & $\bar{A} \ge 2, \bar{B} < 2$ & 128 & 26.2\% \\
-Design mismatch & $\bar{A},\bar{B} \ge 2, \bar{C} < 2$ & 49 & 10.0\% \\
-Borderline partial & all $\ge 2$, not PASS & 109 & 22.3\% \\
+Semantic failure & $\bar{A} < 2$ & 177 & 44.7\% \\
+Coverage gap & $\bar{A} \ge 2, \bar{B} < 2$ & 101 & 25.5\% \\
+Design mismatch & $\bar{A},\bar{B} \ge 2, \bar{C} < 2$ & 43 & 10.9\% \\
+Borderline partial & all $\ge 2$, not SE-PASS & 75 & 18.9\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 Table~\ref{tab:failure-signatures} changes the interpretation of the failures in an important way.
 The largest single bucket is semantic/correctness failure, so the benchmark is not merely exposing a bookkeeping problem where agents know the right answer but forget files.
-At the same time, coverage gaps account for 26.2\% of all non-PASS runs, and another 22.3\% are borderline partials with no critically deficient dimension.
+At the same time, coverage gaps account for 25.5\% of all non-SE-PASS runs, and another 18.9\% are borderline partials with no critically deficient dimension.
 Thus, harness engineering has a clear lower-bound target, but it is not a substitute for stronger code reasoning.
 
-\textbf{Finding 5:} Non-PASS outcomes split into two large families rather than one dominant cause: 41.4\% are semantic/correctness failures, while 26.2\% are coverage gaps with some demonstrated understanding. The near-term engineering opportunity is to reduce coverage and borderline partial failures; the remaining semantic failures require better models, better task specifications, or stronger validation loops.
+\textbf{Finding 5:} Among the 396 main-corpus failures, 44.7\% are semantic/correctness failures, while 25.5\% are coverage gaps with some demonstrated understanding. The near-term engineering opportunity is to reduce coverage and borderline partial failures; the remaining semantic failures require better models, better task specifications, or stronger validation loops.
 
 %% ------------------------------------------------------------------
 \subsection{Agent and Family Signatures}
@@ -49,59 +50,55 @@ Thus, harness engineering has a clear lower-bound target, but it is not a substi
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Failure signatures by agent, excluding PASS runs. Counts are run-level majority outcomes.}
+\caption{Failure signatures by agent on the main corpus (T01--T50), excluding SE-PASS runs ($n{=}99$ non-SE-PASS per agent).}
 \label{tab:failure-agent}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrr@{}}
 \toprule
 \textbf{Agent} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
 \midrule
-Claude   & 41 & 32 & 29 & 19 \\
-Codex    & 33 & 36 & 42 & 10 \\
-Cursor   & 50 & 34 & 30 & 9 \\
-OpenCode & 78 & 26 & 8  & 11 \\
+Claude   & 34 & 25 & 21 & 19 \\
+Codex    & 29 & 31 & 30 & 9 \\
+Cursor   & 45 & 27 & 21 & 6 \\
+OpenCode & 69 & 18 & 3  & 9 \\
 \bottomrule
 \end{tabular*}
 \end{table}
 
-Table~\ref{tab:failure-agent} explains why mean composite score and PASS count tell slightly different stories.
+Table~\ref{tab:failure-agent} explains why mean composite score and SE-PASS count tell slightly different stories.
 Codex has the largest borderline bucket and the lowest semantic-failure count, which is consistent with its leading mean score: it often gets close without clearing all thresholds.
-OpenCode has the largest semantic-failure bucket, explaining its lower mean score even though it shares the same one-PASS count as Cursor.
+OpenCode has the largest semantic-failure bucket, explaining its lower mean score even though it shares the same one-SE-PASS count as Cursor.
 Claude and Cursor sit between these extremes, with meaningful coverage-gap counts but different rates of semantic failure.
 
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Failure signatures by task family, excluding PASS runs.}
+\caption{Failure signatures by corpus segment, excluding SE-PASS runs.}
 \label{tab:failure-family}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrr@{}}
 \toprule
-\textbf{Family} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
+\textbf{Segment} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
 \midrule
-CANN       & 12  & 11  & 11 & 3  \\
-MindSpeed  & 6   & 12  & 4  & 1  \\
-Kubernetes & 7   & 4   & 19 & 2  \\
-CapBench   & 177 & 101 & 75 & 43 \\
+Main corpus (T01--T50) & 177 & 101 & 75 & 43 \\
+Calibration (C/K/M)    & 25  & 27  & 34 & 6  \\
 \bottomrule
 \end{tabular*}
 \end{table}
 
-Task families fail differently.
-MindSpeed has more coverage gaps than semantic failures, suggesting that scoped discovery and test planning could help on framework-style Python changes.
-Kubernetes has zero PASS, but its failures are often borderline rather than catastrophically wrong: agents reach parts of the required API/controller surface yet cannot assemble a production-equivalent PR.
-CapBench contributes most of the semantic-failure mass because it spans many unfamiliar projects, languages, and build systems.
-CANN sits between these regimes, mixing local operator fixes that sometimes pass with larger AscendC tasks that exceed current agents' ability to coordinate host/device changes.
+The two segments fail differently.
+In the main corpus, semantic failure dominates (44.7\%), reflecting the diversity of unfamiliar projects, languages, and build systems across the 50 CapBench tasks.
+The calibration set (C/K/M, 92 runs) has a higher share of borderline partials (37\%) and coverage gaps (29\%), consistent with agents getting closer on tasks from repositories they encounter more often in training data.
 
-\finding{The root-cause profile is heterogeneous. Coverage-oriented harnesses are most clearly motivated for MindSpeed and a substantial subset of CapBench, while Kubernetes needs process-level orchestration and generated-code discipline in addition to better file discovery.}
+\finding{The root-cause profile differs between segments. The main corpus is dominated by semantic failures that require stronger model reasoning, while the calibration tasks show proportionally more coverage and borderline failures amenable to harness-level interventions.}
 
 %% ------------------------------------------------------------------
 \subsection{Engineering-Addressable vs.\ Model-Capability Gaps}
 \label{sec:root-cause-addressable}
 
 We define a conservative lower bound on \emph{engineering-addressable} failures as the coverage-gap bucket: runs where $\bar{A} \ge 2$ but $\bar{B} < 2$.
-These 128 runs (26.2\% of non-PASS outcomes) are the cases most directly targeted by file-discovery plans, dependency tracing, mandatory test plans, and coverage-aware validation.
-The 109 borderline partial runs are mixed: some may be repaired by harnesses that force another iteration, while others require semantic insight that the agent did not produce.
+These 101 runs (25.5\% of main-corpus non-SE-PASS outcomes) are the cases most directly targeted by file-discovery plans, dependency tracing, mandatory test plans, and coverage-aware validation.
+The 75 borderline partial runs are mixed: some may be repaired by harnesses that force another iteration, while others require semantic insight that the agent did not produce.
 
-Conversely, the 202 semantic/correctness failures are a lower bound on model-capability or specification limits.
+Conversely, the 177 semantic/correctness failures are a lower bound on model-capability or specification limits.
 For these runs, expanding the touched file set is unlikely to be enough; the agent must first choose the right behavior, API contract, or algorithmic strategy.
 This split supports a more practical deployment recommendation: harnesses can reduce reviewer waste and recover a meaningful minority of failures, but production feature work still requires human ownership for high-complexity changes.
 
@@ -109,7 +106,7 @@ This split supports a more practical deployment recommendation: harnesses can re
 \subsection{Failure-Mode Case Studies}
 \label{sec:case-studies}
 
-The aggregate signatures in Table~\ref{tab:failure-signatures} compress every failure into a single bucket. To make the failure modes legible we walk through two representative CapBench tasks---T01 (scope collapse on a large refactor) and T13 (cross-module wire-up gap)---and identify the harness intervention that would catch each. Two additional cases (T20 wrong-layer implementation; T34 missing-invariant) are summarized in the artifact bundle.
+The aggregate signatures in Table~\ref{tab:failure-signatures} compress every failure into a single bucket. To make the failure modes legible we walk through two representative tasks from the main evaluation corpus---T01 (scope collapse on a large refactor) and T13 (cross-module wire-up gap)---and identify the harness intervention that would catch each. Two additional cases (T20 wrong-layer implementation; T34 missing-invariant) are summarized in the artifact bundle.
 
 \paragraph{T01 (Apache Kafka KIP-595, KRaft) --- scope collapse.} The reference patch replaces ZooKeeper-based metadata management with an in-process Raft implementation, touching 127 handwritten files: protobuf schemas, the new \texttt{KafkaRaftClient} state machine, controller and broker glue, and a substantial test surface. The strongest agent run (Claude Opus, long prompt) covered 51/127 HW files (40\%), implemented the four wire RPC schemas, the basic 5-state \texttt{QuorumState} class, and a stub \texttt{KafkaRaftClient} with 34 of the GT's 91 methods. Missing pieces include \texttt{Fetch}-based log replication, high-watermark advancement, leader-election timeouts, the request-handler bridge into \texttt{KafkaApis}, and almost all of \texttt{KafkaRaftClientTest} (3/65 cases). The four evaluators independently returned PARTIAL with $A{=}2, B{=}2, C{=}2$. The pattern is \emph{scope collapse}: the agent identifies the entry points, partially implements two or three subsystems, then stops well below the change set's natural closure. \emph{Harness target:} a pre-commit step that diffs the agent's per-file plan against the imports/declarations in its first commit and fails if more than half the planned files have not been touched.
 

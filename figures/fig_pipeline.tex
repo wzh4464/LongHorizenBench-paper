@@ -1,65 +1,8 @@
 % End-to-end evaluation pipeline. Include in the paper with
 %   \input{figures/fig_pipeline}
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \resizebox{\textwidth}{!}{%
-  \begin{tikzpicture}[
-      font=\small,
-      >=Stealth,
-      every node/.style={align=center},
-      box/.style={draw, rounded corners=1.5pt, inner sep=3pt, minimum height=7mm},
-      agent/.style={box, fill=blue!12, minimum width=24mm},
-      judge/.style={box, fill=orange!15, minimum width=22mm},
-      label/.style={font=\footnotesize\itshape, text=black!70}
-    ]
-    \node[box, fill=gray!10, minimum width=28mm] (tasks)
-      {62 tasks\\(12 Huawei + 50 CapBench)};
-
-    \node[box, fill=gray!10, right=12mm of tasks, minimum width=22mm] (prompts)
-      {Prompt variant\\(short / long)};
-
-    % Agents
-    \node[agent, right=14mm of prompts, yshift=12mm] (a1) {Claude Opus 4.6};
-    \node[agent, below=1mm of a1] (a2) {Codex GPT-5.4};
-    \node[agent, below=1mm of a2] (a3) {Cursor Composer-2};
-    \node[agent, below=1mm of a3] (a4) {OpenCode GLM-5.1};
-
-    % Judges
-    \node[judge, right=18mm of a1] (j1) {Claude-as-judge};
-    \node[judge, below=1mm of j1] (j2) {Codex-as-judge};
-    \node[judge, below=1mm of j2] (j3) {Cursor-as-judge};
-    \node[judge, below=1mm of j3] (j4) {OpenCode-as-judge};
-
-    \node[box, fill=green!10, right=14mm of j2, yshift=-4mm, minimum width=26mm]
-      (vote) {Majority vote\\(conservative tie-break)};
-
-    \node[right=14mm of vote] (verdict) {\textbf{PASS / PARTIAL / FAIL}};
-
-    % flow arrows
-    \draw[->] (tasks) -- (prompts);
-    \draw[->] (prompts) -- (a1);
-    \draw[->] (prompts) -- (a2);
-    \draw[->] (prompts) -- (a3);
-    \draw[->] (prompts) -- (a4);
-
-    \foreach \a in {a1,a2,a3,a4}
-      \foreach \j in {j1,j2,j3,j4}
-        \draw[->, gray!45] (\a) -- (\j);
-
-    \foreach \j in {j1,j2,j3,j4}
-      \draw[->] (\j) -- (vote);
-
-    \draw[->, thick] (vote) -- (verdict);
-
-    % Legend
-    \node[draw, fill=white, inner sep=2pt, right=2mm of j3, yshift=-12mm, font=\scriptsize] (leg) {%
-      \begin{tabular}{@{}l@{\;}l@{}}
-        \tikz{\fill[blue!12] (0,0) rectangle (2mm,2mm);} & coding agent \\
-        \tikz{\fill[orange!15] (0,0) rectangle (2mm,2mm);} & LLM-as-judge \\
-        \tikz{\fill[green!8] (0,0) rectangle (2mm,2mm);} & aggregated verdict \\
-      \end{tabular}};
-  \end{tikzpicture}
-  }%
-  \caption{Evaluation pipeline. 62 tasks $\times$ 2 prompt variants $\times$ 4 agents yield 496 runs; each run is scored by four LLM judges (including the same model families as the agents themselves), then combined by majority vote with a conservative tie-break favouring PARTIAL over PASS. The pipeline produces 1,984 evaluator judgments in total.}
-\label{fig:pipeline}
-\end{figure*}
+  \includegraphics[width=\columnwidth]{svg/evaluation_pipeline.pdf}
+  \caption{Main-corpus evaluation pipeline. 50 CapBench tasks $\times$ 2 prompt variants $\times$ 4 agents yield 400 runs; each run is scored by four LLM judges on three axes (correctness, completeness, equivalence), then combined by 3-of-4 majority vote with a conservative tie-break favouring PARTIAL over SE-PASS. The 12-task calibration subset follows the same protocol (96 runs, 384 judgments).}
+  \label{fig:pipeline}
+\end{figure}
