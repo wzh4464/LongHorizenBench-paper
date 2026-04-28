@@ -6,4 +6,9 @@ Across 496 runs of 4 commercial coding agents on 62 real feature-implementation 
 
 What we \emph{do} take away is more useful than a yes/no. The deployment-relevant gap is harness-engineering, not model scale: long prompts, scope checks, and a multi-judge gate close most of the addressable failure share, while semantic and cross-module errors remain. The audit therefore translates into a concrete rollout policy for our team---route bounded operator-tier tasks through agents under spec/scope/test gates, keep cross-cutting platform work under human authorship, and continue running the same four-judge panel on every agent draft before it reaches a reviewer. The CFP-friendly version is shorter still: \emph{the contribution is the routing rule and the gates, not a new score on a new benchmark.}
 
-\paragraph{Future work.} Two threads are open. First, the engineering-addressable subset (coverage gaps, missing-test failures, design mismatches) is large enough to motivate harness ablations: which gates actually move the needle on real feature PRs? Second, the CapBench OSS arm makes it cheap for other teams to repeat this audit on their own agents, prompts, and review criteria; the artefact ships with that re-run path documented end-to-end.
+\paragraph{Future work.}
+The audit leaves three concrete follow-ups, each addressing one of the threats catalogued in \S\ref{sec:threats}.
+(i) \emph{Reproducibility:} re-execute each PASS-yielding cell $k=5$ times to convert the headline 1.6\% point estimate into a confidence interval, especially on Kubernetes-class tasks where a single re-run could move the count.
+(ii) \emph{Construct validity:} run a randomised human re-rating on the 194 PARTIAL outputs to quantify the gap between strict-equivalence PASS and a relaxed-but-mergeable verdict.
+(iii) \emph{Calibration extension:} repeat the 96-cell human-rater pilot on a CapBench stratified sample so the panel-vs-human alignment can be reported across all 50 OSS tasks rather than only the Huawei subset.
+Each closes a known gap that limits how strongly the deployment-policy claims in \S\ref{sec:industrial-deployment} generalise outside Huawei's repositories.
