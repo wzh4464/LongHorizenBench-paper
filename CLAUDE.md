@@ -88,6 +88,16 @@ The paper uses a strict-equivalence scoring rubric:
 - PARTIAL = everything else
 - Majority-of-4 voting with conservative tie-break across 4 LLM evaluators
 
+## Overleaf Sync
+
+Remote `overleaf` points to project `69f0e248816824d263311d8a`. Auth token is in `.env` (`OVERLEAF_TOKEN`).
+
+```bash
+git push overleaf main:master                          # push to Overleaf
+git fetch overleaf && git merge overleaf/master        # pull from Overleaf
+git push origin main && git push overleaf main:master  # push to both remotes
+```
+
 ## Parent Repository
 
 The benchmark infrastructure lives in `../` (parent repo). Key paths referenced by this manuscript:
