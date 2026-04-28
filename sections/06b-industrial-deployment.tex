@@ -2,10 +2,46 @@
 \section{Industrial Deployment Lessons}
 \label{sec:industrial-deployment}
 
-Beyond aggregate PASS rates, the benchmark is most useful as a routing
-and governance tool: it tells an engineering organisation where agents
-can be tried safely, where they should be blocked, and what guardrails
-must exist before deployment.
+We summarise the rollout pipeline that emerged from this audit as a
+five-step gating sequence applied to every incoming feature ticket
+(Figure~\ref{fig:routing-flow}). Routing decisions, prompt curation,
+agent invocation, and judging are now mechanised; humans remain in the
+loop only at the final review stage and for tickets explicitly routed
+out of the agent track.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=4mm,
+  every node/.style={font=\footnotesize},
+  box/.style={draw, rounded corners, align=center, minimum width=24mm, minimum height=8mm, inner sep=2pt},
+  decision/.style={draw, diamond, aspect=2, align=center, inner sep=1pt, minimum width=20mm},
+  arrow/.style={-{Latex[length=4pt]}}
+]
+\node[box] (ticket) {New feature ticket};
+\node[decision, below=of ticket] (tier) {Task tier?};
+\node[box, below left=4mm and 6mm of tier, fill=red!8] (human) {Human-only path};
+\node[box, below=of tier] (spec) {Long-form spec\\ template};
+\node[box, below=of spec] (agent) {Agent draft};
+\node[decision, below=of agent] (gate) {Scope+test\\ gates pass?};
+\node[box, below right=4mm and 6mm of gate, fill=red!8] (back) {Return to agent\\ for self-repair};
+\node[box, below=of gate] (panel) {4-judge\\ acceptance panel};
+\node[decision, below=of panel] (verdict) {3-of-4 PASS?};
+\node[box, below right=4mm and 6mm of verdict, fill=red!8] (drop) {Reject and log};
+\node[box, below=of verdict, fill=green!10] (review) {Human reviewer};
+\draw[arrow] (ticket) -- (tier);
+\draw[arrow] (tier) -| node[above,pos=0.25] {\scriptsize Kubernetes/cross-module} (-2.5,-2.0) |- (human);
+\draw[->] (tier) |- (human.west);
+\draw[->] (tier.south) -- node[right] {\scriptsize bounded} (spec.north);
+\draw[->] (spec.south) -- (agent.north);
+\draw[->] (agent.south) -- (gate.north);
+\draw[->] (gate.east) -- node[above] {\scriptsize fail} ++(2,0) |- (agent.east);
+\draw[->] (gate.south) -- node[right] {\scriptsize pass} (panel.north);
+\draw[->] (panel.south) -- (review.north);
+\end{tikzpicture}
+\caption{Deployment pipeline: routing gate, spec template, agent draft, scope/test gate, multi-judge panel, human review.}
+\label{fig:deployment-pipeline}
+\end{figure}
 
 \paragraph{Route only bounded feature work to agents.}
 The tasks that pass are bounded, reviewable changes with limited
