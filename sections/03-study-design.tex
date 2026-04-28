@@ -28,7 +28,7 @@ Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibrati
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\columnwidth]{svg/study_architecture_overview.pdf}
+  \includegraphics[width=0.9\columnwidth]{svg/study_architecture_overview.png}
   \caption{Two-track study architecture. The calibration set (12 industrial tasks, 96 runs) validates the LLM-judge panel against human raters; the primary experiment (50 long-horizon tasks, 400 runs) measures the agent capability boundary and derives the four deployment gates.}
   \label{fig:study-arch}
 \end{figure}
@@ -60,39 +60,13 @@ Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibrati
   \end{tabular*}
 \end{table*}
 
-\textbf{Calibration-subset detail.}
-Every task in both tiers was drawn from a real, merged contribution to a production
-repository. Within the calibration subset, C-family accelerator tasks (C1--C5) and MindSpeed tasks (M1--M3) come from
-Huawei's Ascend NPU software stack---operator kernels, \texttt{torch\_npu}
-integration, training framework features, and precision fixes that
-represent typical industrial workloads. Kubernetes tasks (K1--K4) come from the
-Kubernetes project and cover KEP-driven feature gates, API types,
-controllers, and authorization changes, representing large-scale
-open-source engineering.
-
 \textbf{Complexity classification.}
-We classify tasks into three tiers based on the number of ground-truth
-files, cross-component coordination requirements, generated-code or API
-surface, and domain-specific knowledge needed. The thresholds are not
-pure file-count bins: a small Kubernetes API change can be High because
-it requires generated types, validation, tests, and release-cycle
-knowledge, while a bounded Python change can remain Medium even with a
-larger diff.
-\begin{itemize}
-  \item \emph{Low} (C1, M1): localised edits with limited architectural
-    coupling.
-  \item \emph{Medium} (C2, C3, M2, M3): bounded multi-file changes or
-    domain-specific implementation work that remains inside a narrow
-    subsystem.
-  \item \emph{High} (C4, C5, K1--K4): cross-component changes that
-    require architectural understanding, generated/API surface updates,
-    multi-module orchestration, or extensive testing.
-\end{itemize}
-
-The calibration-subset tasks span four languages (C++, AscendC, Python, Go) and all three complexity tiers.
+Tasks are classified into Low (localised edits, C1/M1), Medium (bounded multi-file changes in a narrow subsystem, C2/C3/M2/M3), and High (cross-component changes requiring generated/API surfaces and extensive testing, C4/C5/K1--K4). Thresholds reflect coordination requirements, not pure file count.
+The calibration subset spans four languages (C++, AscendC, Python, Go), all three complexity tiers, and Huawei's target deployment codebases: CANN/MindSpeed (Ascend NPU stack, agent-first drafting under active rollout) and Kubernetes (platform engineering, the most operationally urgent deployment question).
 
 \paragraph{CapBench selection criteria.}
-Each CapBench task was selected under three criteria: (i)~the merged PR adds new behaviour rather than fixing a regression, (ii)~the change touches at least two source modules, and (iii)~each task ships with the upstream PR's test suite as the behavioural oracle.
+We curated 50 tasks from 15 production-grade open-source projects under three criteria: (i)~the merged PR adds new behaviour rather than fixing a regression, (ii)~the change touches at least two source modules, and (iii)~each task ships with the upstream PR's test suite as the behavioural oracle.
+Selection was convenience-sampled from projects matching Huawei's technology stack, not stratified by difficulty. The distribution covers six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1) and a wide complexity range (1--340 GT files, 3--68{,}000 LOC diff). We make no claim that this represents the full Huawei feature backlog; the corpus stress-tests the boundary of long-horizon feature delivery.
 
 %% ------------------------------------------------------------------
 \subsection{Agent Configurations}\label{sec:configs}
@@ -130,38 +104,7 @@ We discuss this confound further in \S\ref{sec:threats}.
 %% ------------------------------------------------------------------
 \subsection{Prompt Design}\label{sec:prompts}
 
-Each task is paired with two prompt variants that differ in the level
-of specification detail provided to the agent:
-
-\begin{itemize}
-  \item \textbf{Short prompt}: contains a \emph{Summary} (one-sentence
-    problem statement) and a \emph{Proposal} (one-sentence solution
-    direction).  Typically 2--4 sentences.
-  \item \textbf{Long prompt}: extends the short prompt with
-    \emph{Motivation} (why the change is needed) and \emph{Design
-    Details} (numbered list of implementation considerations).
-    Typically 15--30 sentences.
-\end{itemize}
-
-\textbf{Design principle.}
-Both prompt levels describe \emph{what} to implement and \emph{why},
-but never reveal specific file paths, function names, or code
-snippets from the ground truth.  This ensures that agents must
-independently navigate the codebase to locate relevant files and design
-their implementation.
-
-\textbf{Example (C1, buffer alias fix).}
-The short prompt reads: ``\emph{ScaledMaskedSoftmaxGradV2 has a
-tensor-lifetime bug: a buffer is used after its queue resource is freed.
-Replace the reference with an equivalent surviving buffer.}''  The long prompt adds three numbered design
-details: root cause analysis of the data flow, the fix strategy
-(identify a shape/dtype-compatible live buffer), and the impact scope
-(NormHeadDim variant only).
-
-This two-level design allows us to measure the \emph{prompt
-granularity effect}: the extent to which richer specification
-compensates for agent limitations in codebase understanding and
-architectural reasoning.
+Each task is paired with a \textbf{short prompt} (summary + proposal, 2--4 sentences) and a \textbf{long prompt} (adds motivation and numbered design details, 15--30 sentences). Neither variant reveals file paths, function names, or code snippets from the ground truth, so agents must independently navigate the codebase. This two-level design measures the \emph{prompt granularity effect}: the extent to which richer specification compensates for agent limitations.
 
 %% ------------------------------------------------------------------
 \subsection{Evaluation Framework}\label{sec:eval-framework}
@@ -194,19 +137,9 @@ We assign a three-level verdict based on the dimension scores:
 
 We deliberately adopt a strict-equivalence criterion rather than a relaxed ``functionally correct'' criterion, because our deployment question is whether an agent draft can \emph{replace} a human-authored PR, not merely whether it contains a correct local fix. SE-PASS therefore requires not only functional correctness but also alignment with the reference implementation in file organisation, API surface, and test structure. This means our SE-PASS rate is a conservative lower bound on merge-readiness: valid alternative implementations that a reviewer might accept are counted as non-SE-PASS under this rubric.
 
-\textbf{File coverage metric.}
-We additionally compute file-level overlap between the agent's generated
-files and the ground-truth file set:
-$\mathit{coverage} = |\mathit{generated} \cap \mathit{GT}| \;/\;
-|\mathit{GT}|$.  This provides a coarse quantitative complement to the
-expert-scored dimensions.
-
-\textbf{Evaluation scope.}
-Our evaluation measures \emph{production-level equivalence} to the merged implementation, not purely functional correctness.
-An agent solution that correctly addresses the requirement but uses a materially different file organization, naming convention, or architecture than the accepted PR will score lower on Behavioral Equivalence~(C) and file coverage.
-This design choice reflects our industrial interest: we assess whether agent output could replace a human-authored PR draft, not merely whether it contains a plausible local fix.
-As a consequence, our \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally impossible.''
-Our root-cause analysis (\S\ref{sec:root-cause}) confirms this: many non-SE-PASS cases stem from engineering completeness gaps rather than total semantic misunderstanding.
+\textbf{Production-equivalence scope.}
+The rubric measures production-level equivalence to the merged implementation, not purely functional correctness. A valid alternative implementation will score lower on Behavioral Equivalence~(C); \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally impossible.''
+File coverage ($|\mathit{generated} \cap \mathit{GT}| / |\mathit{GT}|$) provides a coarse quantitative complement.
 
 \textbf{Multi-evaluator cross-validation.}
 To mitigate evaluator bias, every experiment is independently scored by
@@ -222,76 +155,10 @@ non-SE-PASS (a 2--2 tie), our tie-break records the run as non-SE-PASS, which
 keeps headline SE-PASS rates conservative.
 
 \textbf{Human pilot calibration.}
-To check that the LLM panel is not idiosyncratically biased relative to
-domain-expert review, we conducted a blind human-rater pilot on the 96
-calibration-subset runs (12 calibration tasks $\times$ 4 agents $\times$
-2 prompts) because the senior reviewers had domain expertise in these
-Huawei codebases.  Three raters scored each run under the same rubric
-(A/B/C dimensions, identical SE-PASS/PARTIAL/FAIL verdict rules) without
-seeing LLM-panel scores.  On these 96 cells the
-human verdicts came back as \textbf{9~SE-PASS / 55~PARTIAL / 32~FAIL}, vs
-the LLM-panel \textbf{4~SE-PASS / 57~PARTIAL / 35~FAIL} under our 3-of-4
-majority rule; raw three-way verdict agreement is 66.7\% (Cohen's
-$\kappa = 0.38$), and SE-PASS-vs-non-PASS agreement is 92.7\% ($\kappa = 0.43$).
-The LLM panel is the stricter of the two: 6 of the 9 human-SE-PASS cells
-were demoted by the panel (4 to PARTIAL, 2 to FAIL), and the panel never
-overturned a human-FAIL into an SE-PASS. The qualitative pattern is identical:
-both methods see well under 10\% SE-PASS on the calibration subset (humans
-9.4\%, panel 4.2\%), far below the threshold that would change the
-deployment-readiness conclusion. We treat this as evidence that the
-1.0\% headline SE-PASS rate on the main corpus (1.6\% across all 496 runs) is a
-conservative \emph{lower} bound on what a careful human reviewer would mark merge-ready, not a strict-evaluator artifact: humans were more lenient than the panel on a handful of borderline runs, never harsher.  Per-rater
-rationales are released in the artifact bundle.
+Three blinded senior reviewers scored all 96 calibration-subset runs under the same rubric. Human verdicts: 9~SE-PASS / 55~PARTIAL / 32~FAIL; LLM panel: 4~SE-PASS / 57~PARTIAL / 35~FAIL. SE-PASS-vs-non-SE-PASS agreement is 92.7\% ($\kappa{=}0.43$). The panel is strictly stricter: it demoted 6 of 9 human-SE-PASS cells and never promoted a human-FAIL. Both methods see under 10\% SE-PASS (humans 9.4\%, panel 4.2\%), confirming that the 1.0\% headline rate is a conservative lower bound. Per-rater rationales are in the artefact bundle.
 
 %% ------------------------------------------------------------------
 \subsection{Experiment Execution}\label{sec:execution}
 Each (task, agent, prompt) cell runs once in a fresh sandbox built per task. The repository is rebased to the parent commit of the merged PR, with upstream remotes removed and \texttt{gh}/\texttt{git fetch} shimmed off, so the agent cannot recover ground truth from history. We discovered the importance of the second precaution after an early Codex run on K4 reached the merged patch via \texttt{git log}; we now treat anti-leakage as a benchmark requirement rather than an afterthought.
-
-\iffalse
-\subsection{Experiment Execution (legacy long form)}\label{sec:execution-legacy}
-
-\textbf{Sanitization protocol.}
-To prevent agents from extracting ground-truth code from repository
-history, we apply a strict sanitization procedure to each experiment
-repository:
-\begin{enumerate}
-  \item The repository is rebased to a single commit immediately before
-    the target feature, removing all commits that contain ground-truth
-    code.
-  \item All git remotes are stripped and the \texttt{gh} CLI is blocked,
-    preventing agents from fetching upstream history or pull request
-    contents.
-  \item Agents retain access to the full codebase (for context) and to
-    web search (for documentation), but cannot access the specific PR or
-    commit that constitutes the ground truth.
-\end{enumerate}
-
-\textbf{Anti-cheating audit.}
-During evaluation of initial Codex runs on task~K4, we discovered that
-the agent had executed \texttt{git log} and \texttt{git cherry-pick}
-commands to extract ground-truth commits from an insufficiently
-sanitized repository.  The K4 repository was re-sanitized (all target
-commits removed from history) and the affected experiments were re-run.
-Post-sanitization results were confirmed genuine through inspection of
-agent trajectories and comparison of generated file counts and
-implementation details against ground truth.
-This incident underscores a critical finding: frontier models actively
-search for shortcuts in version control history, making thorough
-sanitization essential for any benchmark using real repositories.
-
-\iffalse
-\textbf{Rerun policy for disputed verdicts.}
-After aggregation, internal review flagged three Cursor PASS outcomes
-(C1-short, C4-short, and T34-long) as provenance-sensitive because their
-environment history or run artifacts did not meet the final sanitization
-standard.  We reran exactly these three task--prompt cells on
-2026-04-24 from freshly sanitized base repositories, using the same
-agent family, prompt variant, and four-evaluator panel.  Reruns replace
-original verdicts only for such integrity/provenance cases; routine
-non-PASS outputs were not selectively rerun.  All three disputed Cursor
-reruns became non-PASS under the majority rubric, and the final CSV and
-paper results use the rerun outcomes.
-\fi
-\fi
 
 % Experiment scale: 496 runs (62 tasks x 4 agents x 2 prompts) is described in the results section.

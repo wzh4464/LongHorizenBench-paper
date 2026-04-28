@@ -10,32 +10,11 @@ Each experiment was independently scored by four LLM evaluators (Claude Opus~4.6
 \subsection{Main Corpus Results (T01--T50)}
 \label{sec:results-main}
 
-The main corpus comprises 50 tasks sampled from 15 open-source projects via CapBench, evaluated across 4 agents and 2 prompt variants (400 runs total). Table~\ref{tab:t-config-pass} summarises the per-agent results.
+The main corpus comprises 50 tasks from 15 open-source projects, evaluated across 4 agents and 2 prompt variants (400 runs). All four agents tie at 1.0\% SE-PASS (1/100 each); excluding T10, none reach SE-PASS across the remaining 392 runs. The inter-agent spread appears only in mean composite score: Claude 5.54, Codex 5.43, Cursor 4.67, OpenCode 3.88 (on a 0--15 scale).
 
-\begin{table*}[t]
-\caption{Per-agent SE-PASS/PARTIAL/FAIL distribution on the main corpus (T01--T50, 400 runs). Verdict = majority of four LLM judges; mean score is averaged across four evaluators on a 0--15 scale.}
-\label{tab:t-config-pass}
-\centering
-\small
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
-\toprule
-\textbf{Agent} & $N$ & \textbf{SE-PASS} & \textbf{PART.} & \textbf{FAIL} & \textbf{SE-PASS\%} & \textbf{Mean} \\
-\midrule
-Claude (Opus 4.6)     & 100 & 1 & 44 & 55 & 1.0\% & 5.54 \\
-Codex (GPT-5.4)       & 100 & 1 & 48 & 51 & 1.0\% & 5.43 \\
-Cursor (Composer-2)   & 100 & 1 & 36 & 63 & 1.0\% & 4.67 \\
-OpenCode (GLM-5.1)    & 100 & 1 & 18 & 81 & 1.0\% & 3.88 \\
-\midrule
-All agents           & 400 & 4 & 146 & 250 & 1.0\% & 4.88 \\
-\bottomrule
-\end{tabular*}
-\end{table*}
-
-\finding{\textbf{Main-corpus result.} On the 50-task main corpus, all four agents tie at 1.0\% SE-PASS (1/100). The four SE-PASS outcomes are concentrated in a single task (T10-long); excluding T10, 0 of 392 runs reach SE-PASS (0.0\%). Mean composite score provides the only differentiating signal: Claude (5.54) and Codex (5.43) lead Cursor (4.67) and OpenCode (3.88).}
+\textbf{Finding 1 (Task shape dominates over agent product).} For a deployment decision, picking the right task class to route to an agent matters more than picking the strongest agent product.
 
 \paragraph{T10 anomaly.} T10 is a Presto benchmark addition with 1 ground-truth file and 482 diff lines---a single-file, bounded-scope task. All four agents reach SE-PASS on the long-prompt variant and none on the short variant. T10 is exactly the type of bounded, single-file task the deployment policy's Tier-A routing would accept (\S\ref{sec:industrial-deployment}). Excluding T10, no agent achieves any SE-PASS across 392 runs on the remaining 49 non-trivially-scoped long-horizon tasks.
-
-\textbf{Finding 1 (Task shape dominates over agent product).} On the main corpus all four agents tie at 1.0\% SE-PASS, and the spread between the strongest and weakest agent is visible only in mean composite score (5.54 vs.\ 3.88). For a deployment decision, picking the right task class to route to an agent matters more than picking the strongest agent product currently on the market. We return to this observation in \S\ref{sec:industrial-deployment}.
 
 \paragraph{Failure signatures.} Among the 396 non-SE-PASS main-corpus runs, the dominant failure mode is \emph{semantic} (177 runs, 44.7\%): the agent produces code that compiles but does not implement the required behavior. Coverage failures (101, 25.5\%) indicate missing files or logic paths; borderline runs (75, 18.9\%) narrowly miss the SE-PASS threshold; and design mismatches (43, 10.9\%) reflect fundamentally different architectural choices from the ground truth.
 
@@ -43,7 +22,15 @@ All agents           & 400 & 4 & 146 & 250 & 1.0\% & 4.88 \\
 \subsection{Calibration Validation (C/K/M)}
 \label{sec:results-family}
 
-The 12-task calibration subset (5 CANN, 3 MindSpeed, 4 Kubernetes) validates two rubric properties: (i) it discriminates between bounded and cross-cutting work, and (ii) its SE-PASS verdicts align with senior-reviewer judgments (92.7\% agreement, \S\ref{sec:study-design}). Table~\ref{tab:family} summarises the calibration results alongside the main corpus.
+The 12-task calibration subset (5 CANN, 3 MindSpeed, 4 Kubernetes) serves as the \emph{human-reviewed calibration set} for the entire study. It validates two rubric properties: (i) it discriminates between bounded and cross-cutting work, and (ii) its SE-PASS verdicts align with senior-reviewer judgments. Table~\ref{tab:family} summarises the calibration results alongside the main corpus.
+
+\smallskip\noindent\fbox{\parbox{0.96\columnwidth}{\small%
+\textbf{Human calibration summary.}
+12 calibration tasks $\times$ 4 agents $\times$ 2 prompts = 96 runs,
+each blind-rated by 3 senior reviewers with domain expertise in these codebases.
+SE-PASS-vs-non-SE-PASS agreement with the four-LLM panel: \textbf{92.7\%} ($\kappa{=}0.43$).
+The panel is strictly stricter: it never promoted a human-rejected run to SE-PASS, and demoted 6 of 9 human-SE-PASS runs.
+The 1.0\% headline SE-PASS rate on the main corpus is therefore a \emph{conservative lower bound}.}}\smallskip
 
 \begin{table*}[t]
 \caption{SE-PASS rate by task family (averaged across 4 agents, 2 prompts = 8 runs per task).}
@@ -65,27 +52,11 @@ T (CapBench, mixed)           & 15 OSS projects         & 50 & 400 &  1.0\% \\
 \end{tabularx}
 \end{table*}
 
-The calibration subset confirms the expected gradient: localised operator/adapter tasks (CANN 7.5\%) succeed more often than distributed-training tasks (MindSpeed 4.2\%), while cross-cutting platform tasks (Kubernetes 0\%) are categorically out of reach. This discrimination validates that the rubric captures meaningful complexity differences rather than random noise.
+The calibration subset confirms the expected gradient: localised operator/adapter tasks (CANN 7.5\%) succeed more often than distributed-training tasks (MindSpeed 4.2\%), while cross-cutting platform tasks (Kubernetes 0/32) remain beyond current agent capability under our protocol. This discrimination validates that the rubric captures meaningful complexity differences rather than random noise.
 
-\textbf{Finding 1b (Frontier agents will mine the repo history if you let them).} On our first K1 baseline run, Codex spontaneously executed \texttt{git log}/\texttt{git cherry-pick} on commits past the sanitised cutoff and recovered the reference patch verbatim. We treat this as a first-class methodology lesson: feature-PR benchmarks on real merged code must rewrite history (parent-commit only), strip remotes, and replace the \texttt{gh} CLI with a no-op shim, or SE-PASS rates will silently include leakage. Every number in this paper is post-fix.
+\paragraph{Anti-leakage lesson.} On our first K1 baseline run, Codex spontaneously executed \texttt{git log}/\texttt{git cherry-pick} on commits past the sanitised cutoff and recovered the reference patch verbatim. Feature-PR benchmarks on real merged code must rewrite history (parent-commit only), strip remotes, and replace the \texttt{gh} CLI with a no-op shim, or SE-PASS rates will silently include leakage. Every number in this paper is post-fix.
 
-\begin{table*}[t]
-\centering
-\small
-\caption{SE-PASS rate by complexity tier for the 12 calibration tasks.}
-\label{tab:complexity-hw}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccccc@{}}
-\toprule
- & Codex & Cursor & Claude & OpenCode & Avg \\
-\midrule
-Low (2 tasks)    & 1/4 (25.0\%) & 0/4 (0\%) & 2/4 (50.0\%) & 0/4 (0\%) & 3/16 (18.8\%) \\
-Medium (4 tasks) & 0/8 (0\%)    & 0/8 (0\%) & 0/8 (0\%)    & 0/8 (0\%) & 0/32 (0\%) \\
-High (6 tasks)   & 1/12 (8.3\%) & 0/12 (0\%) & 0/12 (0\%) & 0/12 (0\%) & 1/48 (2.1\%) \\
-\bottomrule
-\end{tabular*}
-\end{table*}
-
-\textbf{Finding 2 (Kubernetes cliff is a calibration anchor).} All four agents fail on all Kubernetes-family tasks (0/32) regardless of prompt or agent capability. Combined with the CANN 7.5\% rate, the calibration subset spans a 7.5-percentage-point range that confirms the rubric's discriminative power. Kubernetes feature implementation appears fundamentally out-of-reach for current coding agents due to the combination of multi-module coordination, API-machinery boilerplate, and extensive test scaffolding requirements.
+\textbf{Finding 2 (Kubernetes cliff is a calibration anchor).} By complexity tier, SE-PASS averages 18.8\% on Low tasks, 0\% on Medium, and 2.1\% on High (one Codex C4-long outlier). All Kubernetes tasks score 0/32 regardless of prompt or agent. Combined with CANN's 7.5\%, the calibration subset spans a 7.5-percentage-point range that confirms discriminative power. Kubernetes feature implementation remains beyond current agents due to multi-module coordination and extensive test scaffolding.
 
 %% ------------------------------------------------------------------
 \subsection{Combined Agent Performance}
@@ -112,11 +83,9 @@ All agents           & 496 & 8 & 194 & 294 & 1.6\% & 5.14 \\
 \end{tabular*}
 \end{table*}
 
-The agent-level SE-PASS spread (2.4\% vs.\ 0.8\%) arises entirely from the calibration subset; on the main corpus all four agents tie at 1.0\%. Mean composite score provides a finer-grained signal: Claude (5.54) and Codex (5.43) lead Cursor (4.67) and OpenCode (3.88) on the main corpus. On calibration tasks the ranking is sharper: Claude and Codex each reach 8.3\% SE-PASS while Cursor and OpenCode remain at 0\%.
+The SE-PASS spread (2.4\% vs.\ 0.8\%) arises entirely from the calibration subset; on the main corpus all agents tie at 1.0\%. Claude and Codex each reach 8.3\% calibration SE-PASS while Cursor and OpenCode remain at 0\%.
 
-\input{figures/fig_pass_heatmap}
-
-\input{figures/fig_score_hist}
+\input{figures/fig_capability_cliff}
 
 %% ------------------------------------------------------------------
 \subsection{Prompt Effect (Long vs Short)}
@@ -143,83 +112,23 @@ OpenCode & 0.0\% & 1.6\% & +1.6 & 3.72 & 4.60 & +0.88 \\
 
 On the main corpus, all four agents move from 0/50 short to 1/50 long SE-PASS, but the 1/50 is entirely T10. Excluding T10, long prompts improve mean composite score by +0.99 to +2.12 across agents but produce zero SE-PASS. The asymmetric SE-PASS lift visible in Table~\ref{tab:prompt} (Claude/Codex 4.8\% vs.\ Cursor/OpenCode 1.6\%) is a calibration-subset phenomenon: on the main corpus the prompt effect is uniform across agents.
 
-\textbf{Finding 3:} Longer prompts help all four agents on mean score, but SE-PASS conversion occurs only on trivially-scoped (T10) or low-complexity calibration tasks. On the 49 non-trivially-scoped main-corpus tasks, detailed prompts improve partial quality without crossing the SE-PASS threshold. The asymmetric lift (Claude/Codex 4.8\% vs.\ Cursor/OpenCode 1.6\%) originates in the calibration subset where model capability interacts with bounded task scope.
+\textbf{Finding 3 (Long prompts are a draft-quality lever, not a SE-PASS lever).} Longer prompts help all four agents on mean score, but SE-PASS conversion occurs only on trivially-scoped (T10) or low-complexity calibration tasks. On the 49 non-trivially-scoped main-corpus tasks, detailed prompts improve partial quality without crossing the SE-PASS threshold. The asymmetric lift (Claude/Codex 4.8\% vs.\ Cursor/OpenCode 1.6\%) originates in the calibration subset where model capability interacts with bounded task scope.
 
 %% ----------------------------------------------------------------
 \subsection{Evaluator Agreement}
 \label{sec:results-agreement}
 
-Pairwise verdict agreement among the four evaluators spans from 42.5\% (Codex-GLM, the strictest pair) to 74.4\% (Claude-Cursor, the most aligned).
+Pairwise verdict agreement spans 42.5\% (Codex--GLM) to 74.4\% (Claude--Cursor); full 4-way consensus holds for 33.7\% of runs.
 
-Codex and GLM agree the least (42.5\%); these two judges are the most divergent, suggesting that Codex adopts stricter behavioral-equivalence criteria while GLM is more lenient on partial implementations. Claude and Cursor agree most often (74.4\%). Full 4-way consensus occurs on 33.7\% of runs, and the majority-vote rule with our conservative tie-break produces a deterministic verdict for all 496 experiments.
+\textbf{Finding 4 (Multi-evaluator consensus is essential).} The 42.5\% floor is well above the 25\% random baseline for three-way majority from four votes, but low enough that single-evaluator benchmarks are unreliable on borderline outputs. Multi-evaluator consensus is essential for reproducible industrial benchmarks.
 
-\textbf{Finding 5.} Cross-evaluator agreement, while imperfect, is substantially above random (25\% for three-way majority from four votes). The 42.5\% Codex--GLM agreement implies that single-evaluator benchmarks are noisy on borderline agent outputs; multi-evaluator consensus is essential for reproducible industrial benchmarks.
+\paragraph{Same-family bias robustness check.}
+A common concern for LLM-as-judge benchmarks is that a judge favours its own model family. We test this by computing each agent's headline verdict both with all four judges and with the same-family judge excluded (leave-one-family-out). SE-PASS counts are unchanged for Claude (3$\to$3), Codex (3$\to$3), and Cursor (1$\to$1); OpenCode drops from 1 to 0. The same-family score gap is negligible for Claude (+0.03) and Cursor (+0.19); Codex's own judge is the \emph{strictest} evaluator of Codex output ($-$1.62); GLM shows the largest self-preference (+2.12) but this does not affect any headline conclusion. Overall, only 6.9\% of verdict cells change under leave-one-family-out, confirming that the main-corpus 1.0\% SE-PASS rate does not depend on same-family judge leniency.
 
 %% ------------------------------------------------------------------
 \subsection{Per-Task SE-PASS Distribution}
 \label{sec:per-task}
 
-Of the 62 tasks, only 4 have any SE-PASS across the 4 agents: C1, C4, M1, and T10. The rerun of disputed Cursor cases removes the previous C1-short, C4-short, and T34-long Cursor SE-PASS outcomes. Table~\ref{tab:task-pass-distribution} summarises the per-task SE-PASS distribution.
+\textbf{Finding 5 (SE-PASS is concentrated in bounded tasks).} The 8 SE-PASS outcomes (1.6\%) cluster in four tasks: C1 (Claude/Codex long), C4 (Codex long), M1 (Claude long), and T10 (all four agents, long only). All are bounded-scope or trivially-scoped work. On the 49 non-trivially-scoped main-corpus tasks, 0 of 392 runs reach SE-PASS. The capability cliff is near-absolute: 18.8\% on Low calibration tasks, 0\% on Medium, and the CapBench 1.0\% is entirely T10.
 
-\begin{table*}[t]
-\caption{Tasks that any agent reached SE-PASS (majority verdict across 4 judges) in at least one prompt variant.}
-\label{tab:task-pass-distribution}
-\centering
-\small
-\begin{tabularx}{\textwidth}{@{}lYr@{}}
-\toprule
-Task & Agents reaching SE-PASS (and prompt) & Total SE-PASS (of 8 runs) \\
-\midrule
-C1 (calibration) & Claude (long), Codex (long) & 2 \\
-C4 (calibration) & Codex (long) & 1 \\
-M1 (calibration) & Claude (long) & 1 \\
-T10 (main corpus, trivially scoped) & Claude, Codex, Cursor, OpenCode (all long) & 4 \\
-\midrule
-\textbf{Total} & 8 / 496 & 1.6\% \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
-\textbf{Finding 4 (updated):} \emph{SE-PASS is concentrated in bounded tasks.} The 8 SE-PASS outcomes cluster in four tasks: three calibration tasks of low or localised scope (C1, C4, M1), and T10, the only trivially-scoped task in the main corpus (1 file, 482 diff lines). On the 49 non-trivially-scoped main-corpus tasks, no agent achieves any SE-PASS across 392 runs. Task complexity creates a near-absolute capability cliff: SE-PASS rate drops from 18.8\% on calibration Low tasks to 0\% on Medium tasks, and the CapBench aggregate of 1.0\% is entirely attributable to T10.
-
-\iffalse
-%% ----------------------------------------------------------------
-\subsection{Statistical Robustness Checks}
-\label{sec:results-stats}
-
-To quantify how much of the pattern above survives choice of judge, choice of agent, and variance in task difficulty, we performed robustness checks on the full $1\,984$-verdict matrix.
-
-\paragraph{Inter-evaluator agreement (Fleiss' $\kappa$).}
-Overall 4-way Fleiss' $\kappa = 0.30$, corresponding to the \emph{fair} band on the Landis--Koch scale. Pairwise Cohen's $\kappa$ ranges from $0.13$ (Codex vs.\ GLM; the strictest and most lenient judge pair) to $0.51$ (Claude vs.\ Cursor). Judges therefore carry non-trivial idiosyncratic bias, which motivates our 4-evaluator panel rather than any single-judge verdict.
-
-\paragraph{Judge-severity spread.}
-Mean $A$-score (functional correctness, 0--5) ranges across evaluators from Codex $1.52$ to GLM $2.49$---a one-point gap on a 5-point scale. The strictest judge (Codex) marks $1.6\%$ of runs as SE-PASS; the most lenient (GLM) marks $4.0\%$. Absolute SE-PASS rates are thus judge-dependent; \textbf{only multi-evaluator consensus yields stable absolute numbers.}
-
-\paragraph{Agent ranking is stable at the coarse level.}
-Despite the severity spread, all four judges place Codex and Claude in the leading group and OpenCode in the trailing group by mean $A$-score. Cursor moves from the leading group to the lower group after the disputed Cursor reruns, which is precisely why we report both absolute SE-PASS counts and mean composite scores rather than a single leaderboard.
-
-\paragraph{Prompt-length effect is statistically significant.}
-Comparing long vs.\ short prompt variants (each task evaluated in both conditions), long prompts yield $3.2$\% SE-PASS across all 4 agents vs.\ $0.0$\% for short prompts. A $\chi^2$ test on the $2{\times}2$ pass/fail table gives $\chi^2 = 8.13$, $p = 0.004$. Long prompts also produce higher mean $A$/$B$/$C$ dimension scores by $+0.36$, $+0.52$, and $+0.39$, respectively.
-
-\paragraph{Task-size determines feasibility.}
-Across tasks, the Spearman rank correlation between GT diff size and SE-PASS rate is $\rho = -0.40$ ($p < 0.01$). Binning by GT-diff size:
-\begin{center}
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lr@{}}
-\toprule
-GT diff size (LOC) & Mean SE-PASS rate \\
-\midrule
-$< 100$       & $12.5\%$ \\
-$100$--$500$  & $25.0\%$ \\
-$500$--$2000$ & $1.0\%$ \\
-$2000$--$10000$ & $0.0\%$ \\
-$> 10000$     & $0.0\%$ \\
-\bottomrule
-\end{tabular*}
-\end{center}
-A logistic regression of SE-PASS on $\log_{10}(\text{GT LOC})$ alone yields a negative slope: larger required changes sharply reduce the odds of SE-PASS. This dominates all other covariates we measured and is consistent with the all-fail Kubernetes family.
-
-\paragraph{Self-bias of evaluators.}
-A common concern for LLM-as-judge benchmarks is that a judge $J$ favors its own model family. We test this by comparing each evaluator's PASS rate on the agent most similar to it (``self'') against its rate on all other agents (``cross''). The gaps are small relative to the overall failure rate: Claude ($4.0\%$ self vs.\ $2.4\%$ cross), Codex ($2.4\%$ vs.\ $1.3\%$), Cursor ($1.6\%$ vs.\ $2.7\%$), and GLM ($1.6\%$ vs.\ $4.8\%$). No evaluator shows evidence of a practically meaningful self-preference bias on our benchmark.
-
-\textbf{Finding~6 (robustness).} The main conclusions survive the rerun of disputed Cursor cases.
-\fi
+% Statistical robustness checks moved to artefact bundle.

@@ -1,9 +1,9 @@
 % !TEX root = ../main.tex
-\section{Industrial Deployment Lessons}
+\section{Deployment Policy Derived from the Audit}
 \label{sec:industrial-deployment}
 
-We summarise the rollout pipeline that emerged from this audit as a
-five-step gating sequence applied to every incoming feature ticket
+We summarise the deployment policy that emerged from this audit as a
+four-gate pipeline applied to every incoming feature ticket
 (Figure~\ref{fig:deployment-pipeline}). Routing decisions, prompt curation,
 agent invocation, and judging are now mechanised; humans remain in the
 loop only at the final review stage and for tickets explicitly routed
@@ -51,63 +51,15 @@ gate that builds on LLM-as-judge must therefore use at least two
 independent evaluator families and a conservative tie-break. Single
 judge gates will drift simply by swapping the judge model.
 
-\paragraph{Separate offline evaluation from online rollout.}
-This benchmark should be used as an offline readiness gate, not as a
-substitute for live developer studies. A team can first run the same
-task families through candidate agents, then admit only task classes
-whose SE-PASS and PARTIAL rates justify reviewer time, and finally measure
-acceptance rate and review burden in a controlled pilot.
-
-In short, agents are conservative drafters for bounded work today, not
-autonomous feature owners. The investment that converts the 1.0\%
-main-corpus SE-PASS rate (0.0\% excluding trivially scoped tasks) into
-something deployable is harness engineering: forcing scope discovery,
-test evidence, and multi-judge acceptance \emph{before} a human reviewer
-ever sees the change.
+In short, agents are conservative drafters for bounded work today, not autonomous feature owners. The investment that converts the 1.0\% main-corpus SE-PASS rate into something deployable is harness engineering: forcing scope discovery, test evidence, and multi-judge acceptance \emph{before} a human reviewer ever sees the change.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{svg/failure_to_gate_mapping.pdf}
-  \caption{Mapping from failure signatures (\S\ref{sec:root-cause}) to deployment gates. Coverage gaps and borderline partials (44.4\% combined) are directly filterable; the semantic-failure slice (44.7\%) requires model or specification improvements beyond current gating.}
+  \caption{Mapping from failure signatures (\S\ref{sec:root-cause}) to deployment gates. Coverage gaps (25.5\%) are directly filterable by Gate~3; borderline partials (18.9\%) are partially recoverable; the semantic-failure slice (44.7\%) requires model or specification improvements beyond current gating.}
   \label{fig:failure-gate-map}
 \end{figure}
 
-\paragraph{Deployment decision flow.}
-The four interventions above compose into a single routing pipeline
-that every agent-eligible feature ticket must clear before reaching a
-human reviewer:
-\begin{enumerate}\itemsep0pt
-  \item \emph{Task-class gate.} Lookup against an allow-list (today:
-    bounded operator/MindSpore-style refactors); Kubernetes-class and
-    cross-module API changes route to human authoring directly.
-  \item \emph{Spec-template gate.} The long-form template is mandatory
-    for agent invocation; tickets without motivation, behavior, scope,
-    and tests are returned to the requester.
-  \item \emph{Pre-review CI gate.} The agent's PR must (a) match the
-    declared file scope within $\pm$1, (b) include or update the
-    declared tests, and (c) pass language-server diagnostics. Failures
-    return to the agent for self-repair (bounded retry).
-  \item \emph{Multi-judge acceptance.} The four-LLM panel from this
-    paper runs as a pre-merge check; only $\geq 3/4$ SE-PASS is forwarded
-    to human review.
-\end{enumerate}
-The pipeline turns the 1.0\% unconditional main-corpus SE-PASS rate into
-a useful operating point: agents draft, gates filter, and human reviewers
-see only candidates that already pass coverage, structure, and judge
-checks. The audit's empirical contribution is precisely to identify which
-gates remove the non-SE-PASS draft mass observed in §\ref{sec:results}.
-
-\paragraph{What changed for Huawei's rollout after this audit.}
-The audit produced four operational decisions inside Huawei's coding-agent
-rollout. \emph{(i) Allow-list by task family.} Operator-tier CANN/MindSpeed
-work is approved for agent-first drafting; Kubernetes-class control-plane
-work is held back pending harness gates. \emph{(ii) Mandatory long-form
-specification.} Every agent-eligible ticket now ships with the same
-\emph{motivation/design-detail/test-expectation} structure used for the
-\textsf{long} prompts in this study, because it is the only condition
-under which we measured non-trivial SE-PASS. \emph{(iii) Pre-review CI gate.}
-The two recurring failure modes (incomplete file plan and missing test
-evidence) are rejected before a draft reaches a human reviewer.
-(iv) \emph{Multi-judge acceptance.} A 3-of-4 LLM-judge panel, calibrated
-against the same human-rater set used in this paper, is run on every
-agent PR before merge.
+\paragraph{Huawei adoption.}
+The four interventions compose into a single routing pipeline (Figure~\ref{fig:deployment-pipeline}). The audit's contribution is precisely to identify which gates remove the non-SE-PASS draft mass observed in \S\ref{sec:results}.
+All four gates are now operational: CANN/MindSpeed operator work is approved for agent-first drafting (Gate~1), every agent-eligible ticket requires the long-form template (Gate~2), drafts failing scope/test checks are returned to the agent (Gate~3), and the calibrated 3-of-4 LLM panel runs on every agent PR (Gate~4). Kubernetes-class work remains human-authored.
