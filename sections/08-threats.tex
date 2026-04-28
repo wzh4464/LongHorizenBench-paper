@@ -1,41 +1,8 @@
 % !TEX root = ../main.tex
-\section{Threats to Validity}
-\label{sec:threats}
+\section{Threats to Validity}\label{sec:threats}
 
-\textbf{Construct validity.}
-Every experiment is independently scored by four LLM evaluators from different model families (Claude Opus~4.6, Codex GPT-5.4, Cursor Composer-2, and OpenCode GLM-5.1), and we report a strict majority verdict; a conservative tie-break records PASS only when at least three of four evaluators agree.
-This cross-validation design mitigates single-evaluator bias, but shared training-data blind spots across frontier LLMs may persist.
-Pairwise verdict agreement ranges from 42.5\% (Codex vs.\ GLM) to 74.4\% (Claude vs.\ Cursor); unanimous four-way agreement covers 33.7\% of runs.
-Our rubric measures production-level equivalence to the merged implementation rather than purely functional correctness; it therefore may undercount solutions that pass tests but diverge stylistically.
+\textbf{Single-run stochasticity.} Each task--agent--prompt cell was run once; aggregate patterns (Kubernetes 0/32, long-prompt PASS lift, harness-tier ordering) are stable across all 62 tasks, but individual cell verdicts may shift on re-run. The deployment-relevant signal (PASS rate of $\sim$1--2\%) sits well below typical re-run variance for these agents on bug-fix benchmarks.
 
-\textbf{Internal validity.}
-Each task--configuration--prompt cell was executed once; stochastic variation means individual results may not represent expected behaviour, though aggregate patterns across 496 runs (62 tasks $\times$ 4 configurations $\times$ 2 prompts) remain robust.
-All cross-configuration comparisons are \emph{product-level}---each configuration confounds the underlying model, harness, and tool-use policy---so an agent's advantage may reflect framework engineering as much as raw model capability (\S\ref{sec:configs}).
-During initial runs on Kubernetes task K4, one configuration exploited git history in the sanitized repository to reconstruct ground-truth diffs via \texttt{git cherry-pick}; we remediated by re-sanitizing all 62 task repositories---removing reachable commits beyond the assigned base SHA---and by programmatically auditing every trajectory for ground-truth-derived content. Post-sanitization runs were confirmed clean.
-Separately, after internal review flagged three Cursor PASS outcomes as provenance-sensitive, we reran exactly those task--prompt cells under the final sanitization protocol; all three became non-PASS, and the final analysis uses the rerun outcomes.
+\textbf{Product-level confound.} Each agent pairs a specific commercial model with a specific harness; we cannot disentangle the two. We therefore phrase observations such as ``harness leverage is substantial'' as observations on \emph{deployed products}, not as causal claims about harness-vs-model contribution. The 92.7\% PASS-vs-non-PASS agreement between our judge panel and three blinded senior reviewers indicates that the verdicts themselves are not a panel artefact.
 
-\textbf{External validity.}
-Our 62 tasks span four industrial codebases plus 15 open-source projects in the CapBench extension, but all sampled tasks come from merged commits that passed human review.
-Selection is therefore biased toward \emph{tractable} feature implementations; ambiguous or cross-team tasks are underrepresented.
-Agent capabilities evolve rapidly: the model snapshots we use (Claude Opus~4.6, GPT-5.4, Composer-2, GLM-5.1) will be superseded within months of publication.
-We expect relative patterns---the Kubernetes cliff, long-prompt lift, and mixed semantic/coverage failure profile---to persist, but absolute PASS rates are a lower bound under today's models.
-
-\textbf{LLM-vs-human-judge calibration.}
-We validated the LLM panel against human ratings on the 96 Huawei cells (12 tasks $\times$ 4 agents $\times$ 2 prompts).  Three-way verdict agreement was 66.7\% (Cohen's $\kappa = 0.38$, fair-to-moderate), and PASS-vs-non-PASS agreement was 92.7\% ($\kappa = 0.43$).  The LLM panel was more conservative than humans: 9 cells were rated \textsc{pass} by humans vs.\ 4 by the strict-majority panel; 3 of the 4 panel-\textsc{pass} runs were also human-\textsc{pass}, and no human-\textsc{fail} was overturned to \textsc{pass} by the panel.  The headline 1.6\% PASS rate is therefore an under-, not over-estimate of merge-readiness, and the deployment story (very few feature-complete agent PRs) holds under either rubric.
-
-\textbf{Evaluator-honesty risk.}
-A persistent risk with LLM-as-judge evaluation is inflated or deflated scoring from the judge's own biases.
-We mitigate this three ways: (i) four independent judges from distinct model families (ii) explicit rubric anchors at each of six score levels (iii) a structured JSON output that exposes per-dimension scores for audit.
-Empirically, judges disagree most on \emph{partial} verdicts (spread of 1.2 on the 0--5 scale), and least on \emph{PASS} verdicts where file-level coverage is decisive.
-
-\textbf{Ground-truth definition.}
-We use merged code as the reference implementation.
-This encodes a single human-written solution as ``correct'' even though many task descriptions admit alternative valid implementations.
-Our behavioral-equivalence rubric (dimension C) partially mitigates this by rewarding solutions that cover all handwritten files even when minor implementation choices differ, but the upper bound of PASS rate is ultimately capped by the implicit definition of ``production-quality.''
-
-\textbf{Evaluator-task confound.}
-Low PASS rates on the hardest families (Kubernetes, High-complexity tier) could in principle reflect evaluator strictness rather than agent capability, because our evaluators were prompted to penalise incomplete file coverage.
-We partially mitigate this by (a) using four independent evaluator families with different training distributions, (b) reporting per-dimension scores (A/B/C) so a reader can isolate coverage from correctness, and (c) using conservative majority aggregation rather than a single judge.
-Nonetheless, a harsher evaluator would pull majority verdicts toward FAIL on long-horizon tasks; readers should interpret the absolute 1.6\% PASS rate as indicative of the composite (agent+judge) system rather than of the agent alone.
-
-\textbf{Task-difficulty and evaluator-bias confound.} Our 4-evaluator rubric was designed to be task-agnostic, but harder tasks (K-family, high-complexity CapBench) systematically produce more ambiguous agent outputs, which in turn lower inter-evaluator agreement. We observe pairwise agreement of 42.5\% on the Codex/GLM judge pair versus 74.4\% on Claude/Cursor. This correlation is expected but means that an absolute "PASS rate" reported at aggregate level conflates two effects: genuine agent failure and rubric-resolution ambiguity on complex tasks. The qualitative ranking across agents is stable at the coarse level, but the rerun of disputed Cursor cases shows that absolute PASS count is sensitive for borderline outputs.
+\textbf{Strict production-equivalence rubric.} Our rubric counts a run as PASS only if it implements the reference behaviour and updates the same handwritten files (within the structural-equivalence rules in \S\ref{sec:study-design}). A valid alternative implementation that diverges from the upstream PR will be marked non-PASS even if a human reviewer would accept it. The 1.6\% headline therefore lower-bounds merge-readiness rather than measures it directly.

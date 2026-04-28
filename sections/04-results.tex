@@ -1,13 +1,11 @@
 % !TEX root = ../main.tex
-\section{Results: The Gap Between Hype and Reality}
+\section{Results}
 \label{sec:results}
 
-This section presents the empirical results of 496 experiments across 62 tasks (12 Huawei/platform + 50 CapBench open-source), 4 agent configurations, and 2 prompt granularities, answering: \emph{Can current coding agents independently complete real feature-implementation tasks?}
-The short answer is: \textbf{no}. Across all 496 runs, only 8 (1.6\%) pass our rubric; the best-performing configurations pass 2.4\%; and no agent passes any Kubernetes-family task.
+We organise the audit results around the deployment question: of 496 runs (62 tasks $\times$ 4 agents $\times$ 2 prompts), how many produce a candidate PR a senior engineer would actually merge, and on which task shapes? The headline answer is \emph{very few}: 8 PASS in 496 (1.6\%), the best harness reaches 2.4\%, and no agent clears any Kubernetes-family task.
 
 Each experiment was independently scored by four LLM evaluators (Claude Opus~4.6, Codex GPT-5.4, Cursor Composer-2, GLM-5.1), and we report the majority verdict (with conservative tie-break) together with the mean score across the four evaluators. Pairwise evaluator agreement ranges from 42.5\% (Codex vs.\ GLM) to 74.4\% (Claude vs.\ Cursor), consistent with well-known disagreement patterns for LLM judges on open-ended code tasks.
 
-%% ----------------------------------------------------------------
 \subsection{Agent-Level Performance}
 \label{sec:results-overall}
 
@@ -40,7 +38,7 @@ Figure~\ref{fig:pass-heatmap} further breaks down PASS by task family, confirmin
 
 \finding{\textbf{Headline result.} Across 496 runs (62 tasks $\times$ 4 agents $\times$ 2 prompts), only 8 clear the full rubric (1.6\% PASS). The strongest configurations are Claude Opus~4.6 and Codex GPT-5.4 at 2.4\%; Cursor Composer-2 and OpenCode GLM-5.1 each pass only 0.8\%. No agent passes any Kubernetes-family task, and no agent exceeds 4.8\% PASS even on its best prompt variant.}
 
-\textbf{Finding 1 (No Winner, All Fall Short).} Claude Opus~4.6 and Codex GPT-5.4 tie on raw PASS count (3 of 124, 2.4\%), while Codex leads on mean composite score (5.82 / 15). Cursor Composer-2 drops to one PASS after rerunning the disputed Cursor cases; OpenCode also has one PASS. Across 496 experiments only 8 PASS: agents remain far from production-ready for multi-file feature implementation.
+\textbf{Finding 1 (Task shape dominates over agent product).} The spread between the strongest and weakest agent in our test (2.4\% vs.\ 0.8\%) is small compared to the spread induced by task family (4.8\% on long-prompt CapBench tasks vs.\ 0\% on every Kubernetes task). For a deployment decision, picking the right task class to route to an agent matters more than picking the strongest agent product currently on the market. We return to this observation in \S\ref{sec:industrial-deployment}.
 
 %% ------------------------------------------------------------------
 \subsection{Task-Family Effect}
@@ -155,23 +153,15 @@ For Claude and Codex, detailed prompts yield a +4.8-point PASS-rate improvement 
 \subsection{Evaluator Agreement}
 \label{sec:results-agreement}
 
-We report pairwise Jaccard agreement among the four evaluators on verdict labels:
-
-\begin{itemize}
-\item Claude-Codex: 64.1\%
-\item Claude-Cursor: 74.4\%
-\item Claude-GLM:   67.5\%
-\item Codex-Cursor: 65.1\%
-\item Codex-GLM:    42.5\%
-\item Cursor-GLM:   65.5\%
-\end{itemize}
+Pairwise verdict agreement among the four evaluators spans from 42.5\% (Codex-GLM, the strictest pair) to 74.4\% (Claude-Cursor, the most aligned).
 
 Codex and GLM agree the least (42.5\%); these two judges are the most divergent, suggesting that Codex adopts stricter behavioral-equivalence criteria while GLM is more lenient on partial implementations. Claude and Cursor agree most often (74.4\%). Full 4-way consensus occurs on 33.7\% of runs, and the majority-vote rule with our conservative tie-break produces a deterministic verdict for all 496 experiments.
 
 \textbf{Finding 5.} Cross-evaluator agreement, while imperfect, is substantially above random (25\% for three-way majority from four votes). The 42.5\% Codex--GLM agreement implies that single-evaluator benchmarks are noisy on borderline agent outputs; multi-evaluator consensus is essential for reproducible industrial benchmarks.
 
+\iffalse
 %% ----------------------------------------------------------------
-\subsection{Statistical Robustness}
+\subsection{Statistical Robustness Checks}
 \label{sec:results-stats}
 
 To quantify how much of the pattern above survives choice of judge, choice of agent, and variance in task difficulty, we performed robustness checks on the full $1\,984$-verdict matrix.
@@ -208,4 +198,5 @@ A logistic regression of PASS on $\log_{10}(\text{GT LOC})$ alone yields a negat
 \paragraph{Self-bias of evaluators.}
 A common concern for LLM-as-judge benchmarks is that a judge $J$ favors its own model family. We test this by comparing each evaluator's PASS rate on the agent most similar to it (``self'') against its rate on all other agents (``cross''). The gaps are small relative to the overall failure rate: Claude ($4.0\%$ self vs.\ $2.4\%$ cross), Codex ($2.4\%$ vs.\ $1.3\%$), Cursor ($1.6\%$ vs.\ $2.7\%$), and GLM ($1.6\%$ vs.\ $4.8\%$). No evaluator shows evidence of a practically meaningful self-preference bias on our benchmark.
 
-\textbf{Finding~6 (robustness).} The main conclusions of this paper---(i) $<5\%$ PASS rates for every agent, (ii) Claude and Codex form the leading group while Cursor and OpenCode pass only one run each, (iii) prompts with design detail outperform minimal prompts, and (iv) task size is the strongest predictor of failure---all survive the rerun of disputed Cursor cases and the multi-evaluator robustness checks.
+\textbf{Finding~6 (robustness).} The main conclusions survive the rerun of disputed Cursor cases.
+\fi

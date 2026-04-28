@@ -12,6 +12,7 @@ We use ``harness'' in the same sense as Xia et al.\ (Agentless)~\cite{agentless}
 Across 62~tasks and 2~prompt levels, the four harnesses produce strikingly different operating points (Table~\ref{tab:config-pass}). On the \emph{long}-prompt setting Claude Code and Codex CLI reach 4.8\% PASS, while Cursor Agent and OpenCode stall near 1.6\%. The 3$\times$ spread, with the same underlying tasks and similar-class models, is itself the central harness-engineering observation: a fully equipped 2025-vintage agent harness raises the production-feature pass rate by single-digit points on top of the underlying model, and the rest is left on the table.
 
 %% ------------------------------------------------------------------
+\iffalse
 \subsection{Three Harness Layers}
 \label{sec:harness-layers}
 
@@ -33,6 +34,8 @@ Within a single agent, the cleanest harness experiment we can run is the prompt-
 
 For Claude Code and Codex CLI the input-side harness is decisive: PASS rate climbs from 0.0\% (short) to 4.8\% (long). Cursor and OpenCode also improve from 0.0\% to 1.6\%, but the absolute effect remains a single PASS each. In other words, longer specifications help most when the agent already has the output- and process-side machinery to act on the extra information; otherwise the extra context improves scores without reliably producing production-equivalent PRs.
 
+\fi
+\iffalse
 \subsection{Where Today's Harnesses Fail}
 \label{sec:harness-failures}
 
@@ -47,6 +50,7 @@ Even at the best operating point (Claude Code or Codex CLI with a long prompt) t
 Each pattern is a harness gap even when other runs still reflect foundation-model or specification limits: the practical goal is to stop recoverable partial drafts before they consume reviewer time.
 
 %% ──────────────────────────────────────────────────────────────────
+\iffalse  % Concrete Recommendations subsection moved to §6b to avoid duplication
 \subsection{Concrete Recommendations}
 \label{sec:harness-recommendations}
 
@@ -61,3 +65,5 @@ For practitioners deploying coding agents in industrial codebases today, our dat
 
 \paragraph{Limitation.}
 Our results characterise four \emph{deployed} agent harnesses (Claude Code, Cursor, Codex CLI, OpenCode). We did not run controlled ablations of individual harness components (e.g., the same model with vs.\ without scope-check); that experiment is the natural follow-up.
+\fi
+\fi

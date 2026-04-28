@@ -47,7 +47,23 @@ task families through candidate agents, then admit only task classes
 whose PASS and PARTIAL rates justify reviewer time, and finally measure
 acceptance rate and review burden in a controlled pilot.
 
-In short, the current recommendation is conservative: use agents as
-drafting aids for bounded work, keep multi-module feature ownership with
-humans, and invest in harnesses that force discovery, testing, and
-multi-model review before an agent draft reaches a human reviewer.
+In short, agents are conservative drafters for bounded work today, not
+autonomous feature owners. The investment that converts the 1.6\% raw
+PASS rate into something deployable is harness engineering: forcing
+scope discovery, test evidence, and multi-judge acceptance \emph{before}
+a human reviewer ever sees the change.
+
+\paragraph{What changed for Huawei's rollout after this audit.}
+The audit produced four operational decisions inside Huawei's coding-agent
+rollout. \emph{(i) Allow-list by task family.} Operator-tier CANN/MindSpeed
+work is approved for agent-first drafting; Kubernetes-class control-plane
+work is held back pending harness gates. \emph{(ii) Mandatory long-form
+specification.} Every agent-eligible ticket now ships with the same
+\emph{motivation/design-detail/test-expectation} structure used for the
+\textsf{long} prompts in this study, because it is the only condition
+under which we measured non-trivial PASS. \emph{(iii) Pre-review CI gate.}
+The two recurring failure modes (incomplete file plan and missing test
+evidence) are rejected before a draft reaches a human reviewer.
+(iv) \emph{Multi-judge acceptance.} A 3-of-4 LLM-judge panel, calibrated
+against the same human-rater set used in this paper, is run on every
+agent PR before merge.

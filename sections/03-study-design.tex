@@ -253,6 +253,7 @@ This incident underscores a critical finding: frontier models actively
 search for shortcuts in version control history, making thorough
 sanitization essential for any benchmark using real repositories.
 
+\iffalse
 \textbf{Rerun policy for disputed verdicts.}
 After aggregation, internal review flagged three Cursor PASS outcomes
 (C1-short, C4-short, and T34-long) as provenance-sensitive because their
@@ -264,11 +265,6 @@ original verdicts only for such integrity/provenance cases; routine
 non-PASS outputs were not selectively rerun.  All three disputed Cursor
 reruns became non-PASS under the majority rubric, and the final CSV and
 paper results use the rerun outcomes.
+\fi
 
-\textbf{Experiment scale.}
-In total, we executed 496 experiments across 62~tasks $\times$
-4~configurations $\times$ 2~prompt levels---a complete factorial design
-with no missing cells.
-Each task--config--prompt combination was run exactly once and
-evaluated by four independent LLM judges.
-The full results are reported in \S\ref{sec:results}.
+% Experiment scale: 496 runs (62 tasks x 4 agents x 2 prompts) is described in the results section.

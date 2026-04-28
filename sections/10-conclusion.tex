@@ -2,36 +2,8 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-Across 496 experiments spanning 62 real feature-implementation tasks
-and 4 state-of-the-art coding agents, we find that modern commercial
-agents are \emph{not ready} to autonomously complete production-quality
-feature work.  The best-performing configurations, Codex GPT-5.4 and
-Claude Opus~4.6, pass only 2.4\% of runs; Cursor Composer-2 and
-OpenCode GLM-5.1 each reach 0.8\%.  No agent clears any
-Kubernetes-family task.  Two trends are consistent across the data:
+Across 496 runs of 4 commercial coding agents on 62 real feature-implementation tasks, only 1.6\% reach a merge-ready verdict and the entire Kubernetes track returns 0/32. The strongest harnesses pass 2.4\%, the weaker ones less than 1\%. Whatever ``ready for autonomous feature delivery'' means at Huawei's scale, the data say we are not there yet.
 
-\begin{itemize}
-  \item \textbf{A systems-code cliff.}  Pass rate is concentrated in
-  bounded, reviewable CANN/\texttt{torch\_npu}, MindSpeed, and CapBench cases, while Kubernetes-class
-  multi-module refactors (K-family, 0/32 PASS) act as an absolute
-  ceiling for every agent we tested.
-  \item \textbf{Prompt leverage, but not universal.}  Moving from short
-  to long prompts lifts Claude and Codex from 0\,\% to 4.8\,\% PASS
-  and Cursor/OpenCode from 0\,\% to 1.6\,\%.  Detailed prompts
-  therefore help all configurations on mean score, but their effect
-  (at most +4.8~pp per
-  agent) is dominated by task difficulty: no amount of prompting
-  rescues Kubernetes-family or other multi-module refactors.
-\end{itemize}
+What we \emph{do} take away is more useful than a yes/no. The deployment-relevant gap is harness-engineering, not model scale: long prompts, scope checks, and a multi-judge gate close most of the addressable failure share, while semantic and cross-module errors remain. The audit therefore translates into a concrete rollout policy for our team---route bounded operator-tier tasks through agents under spec/scope/test gates, keep cross-cutting platform work under human authorship, and continue running the same four-judge panel on every agent draft before it reaches a reviewer. The CFP-friendly version is shorter still: \emph{the contribution is the routing rule and the gates, not a new score on a new benchmark.}
 
-\paragraph{Practitioner takeaways.}
-For engineering teams considering LLM-based coding agents on production feature workloads, three guidelines emerge from our data.
-\emph{First}, invest in prompt engineering before model selection: a well-specified task at the \emph{long} level of detail closes more of the capability gap than swapping models.
-\emph{Second}, route Low-complexity refactors and single-file edits to agents, but keep multi-module feature work (particularly Kubernetes-family or protobuf-touching changes) with human engineers until an explicit harness (§\ref{sec:harness}) is in place.
-\emph{Third}, the 42.5\% Codex-vs-GLM pairwise evaluator agreement implies that single-judge acceptance gates will mis-verdict at scale; any production adoption should ensemble at least three independent LLM judges with a conservative tie-break.
-
-\paragraph{Future work.}
-Our results motivate a research agenda centered on \emph{harness engineering}:
-pre-edit planning, post-edit verification, and cross-file dependency tracing
-as first-class components of an agent's loop rather than post-hoc shims. Section~\ref{sec:harness} presents a concrete roadmap drawing on the engineering-addressable failure share measured in this paper.
-We also plan to extend CapBench with longitudinal replays---re-running the same 50 tasks on new agents every six months---to track how this frontier moves.
+\paragraph{Future work.} Two threads are open. First, the engineering-addressable subset (coverage gaps, missing-test failures, design mismatches) is large enough to motivate harness ablations: which gates actually move the needle on real feature PRs? Second, the CapBench OSS arm makes it cheap for other teams to repeat this audit on their own agents, prompts, and review criteria; the artefact ships with that re-run path documented end-to-end.

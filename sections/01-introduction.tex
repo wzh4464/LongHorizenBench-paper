@@ -22,32 +22,26 @@ The benchmark combines 12 \emph{Huawei industrial tasks} drawn from the codebase
 Each task is paired with a \emph{long} prompt (a multi-paragraph design proposal that mirrors a real feature spec) and a \emph{short} prompt (a one-sentence ticket-style description), giving us $62\times2=124$ task instances per agent.
 We evaluate four agents---Claude Code (Opus 4.6), OpenAI Codex (GPT-5.4), Cursor Composer-2, and OpenCode/GLM-5.1---producing $124\times4=496$ end-to-end agent runs.
 Each run is independently scored on three production-relevant axes (functional correctness, completeness/coverage, and behavioral equivalence to the reference implementation) by an automated four-evaluator panel; the verdict is decided by 3-of-4 majority.
-We treat the four agents not as four versions of the same model but as four \emph{harnesses}: each ships its own planning loop, tool integration, code-search retrieval, and verification logic, and these harness choices turn out to dominate the results.
+We treat the four agents not as four versions of the same model but as four \emph{harnesses}: each ships its own planning loop, tool integration, code-search retrieval, and verification logic, and our results suggest these harness choices account for a large share of the variation we observe across vendors (Section~\ref{sec:industrial-deployment}).
 
 This setup gives us a clean answer to the question Huawei's deployment teams asked: \emph{can today's coding agents take over feature delivery for our internal codebases?}
 
-\paragraph{Headline findings.}
+\paragraph{Why the verdict can be trusted.}
+Two design choices preempt the obvious objections to LLM-judged benchmarks. \emph{(i)~Human-rater calibration.} We blind-rated the 96 Huawei-internal runs with three senior reviewers and confirmed 92.7\% PASS/non-PASS agreement with the four-LLM judge panel; the panel is the stricter of the two, never crowning a human-rejected run as PASS. \emph{(ii)~Anti-leakage sanitization.} An early Codex run on a Kubernetes task surfaced its ground-truth diff via \texttt{git log}; we treated this as a first-class threat, rebased every benchmark repo to a parent commit with target commits unreachable, blocked network access to upstream remotes, and re-ran the affected configurations. The numbers we report are after this re-run. Both procedures are detailed in \S\ref{sec:study-design}.
 
-The result is a clear boundary, not a flat yes or no:
+\paragraph{Headline findings.} Three findings shape the deployment recommendation:
 
 \begin{itemize}
 \item \textbf{Aggregate verdict: 8 of 496 runs pass strict majority review (1.6\%).} Treating the four evaluators as a panel and requiring 3-of-4 PASS, only 8 runs reach production-equivalent quality. The remaining 488 runs are split across PARTIAL (194 runs, 39\%) and FAIL (294 runs, 59\%).
-\item \textbf{Harness gap dominates the model gap.} The two strongest harnesses (Claude Code and Codex CLI) tie at 2.4\% PASS each; the two weaker harnesses (Cursor Agent and OpenCode CLI) sit at 0.8\% PASS each---a 3$\times$ gap. The underlying base models (Claude Opus 4.6 and GPT-5 with reasoning) are state of the art; the harness layer (planning loop, retrieval policy, verification step, edit boundaries) explains most of the variance we observe.
+\item \textbf{Harness choices appear to influence outcomes as much as model choice.} The two stronger harnesses (Claude Code and Codex CLI) reach 2.4\% PASS each, while Cursor Agent and OpenCode CLI reach 0.8\% PASS each---a 3$\times$ spread on identical tasks and prompts. Because every agent couples a specific harness to a specific frontier model, we cannot isolate harness from model; the comparison is product-level. We treat this as evidence that planning loop, retrieval, file resolution, and edit verification carry weight comparable to model choice in this regime, not as a clean harness-vs-model ablation.
 \item \textbf{Long-prompt advantage is asymmetric.} On long prompts (with full design context), the strong harnesses lift PASS rate from 0\% to 4.8\%; the weaker harnesses improve only to 1.6\%. Better specification helps strong harnesses ship; for weak harnesses, more context improves scores but rarely converts outputs into production-equivalent PRs.
 \item \textbf{Kubernetes-class tasks are still out of reach.} All 4 harnesses produce 0/8 PASS on the four K-tasks (Kubernetes scheduler / kubelet feature work). Cross-cutting feature work in mature Go infrastructure remains the hardest deployment frontier we measured.
 \item \textbf{Failures are heterogeneous, but many are harness-addressable.} The 488 non-PASS runs split into semantic/correctness failures (41.4\%), coverage gaps (26.2\%), behavioral/design mismatches (10.0\%), and borderline partials (22.3\%). The important deployment signal is not that every failure is mere incompleteness, but that a large recoverable slice involves stopping early, omitting tests or generated artifacts, or failing to wire cross-module changes.
 \end{itemize}
 
-This negative result for autonomous feature delivery is also a positive result for harness engineering:
-\textbf{a meaningful share of the failures is systematically addressable even though semantic limits remain.}
-Coverage gaps plus borderline partials account for 48.5\% of the non-PASS population, giving harnesses a concrete target: force scope discovery, test evidence, invariant checks, and cross-module closure before a draft reaches human review.
 
-\paragraph{Contributions.} This paper presents:
-\begin{enumerate}
-    \item An industrial benchmark of 62 feature implementation tasks (12 Huawei + 50 CapBench, an OSS extension we release alongside) with reference implementations and structured grading rubrics.
-    \item A four-evaluator LLM-judging panel with majority-rule resolution, calibrated against expert reviewer agreement.
-    \item Empirical results across 496 runs (4 agents $\times$ 62 tasks $\times$ 2 prompts) showing $\le$2.4\% PASS rate on the strongest harness and a categorical 0\% PASS for Kubernetes feature work.
-    \item A failure-mode taxonomy and four mapped harness recommendations (scope gating, file-enumeration plans, invariant assertions from spec, cross-module wire-up linting).
-\end{enumerate}
+\paragraph{Contributions.} This paper makes three industrial-deployment contributions.
+\emph{(1) Industrial audit protocol.} An audit protocol for feature-PR readiness that combines a 62-task benchmark (12 Huawei production tasks plus 50 OSS CapBench tasks), a four-LLM judge panel with strict majority verdicts, a repository sanitisation procedure that survived an attempted ground-truth exfiltration, and a 96-run blind human calibration ($\kappa=0.43$, 92.7\% agreement on PASS/non-PASS).
+\emph{(ii) Empirical capability boundary.} Across 496 runs we find that today's commercial coding agents reach merge-ready quality on at most 2.4\% of tasks; the entire Kubernetes track is 0/32; long-form specifications double the strongest harnesses' PASS rate but do not move the weaker ones; and the failure mass is dominated by semantic errors (41.4\%) rather than incomplete coverage---a result that contradicts the common assumption that better retrieval would close the deployment gap.
+\emph{(iii) Deployment policy.} The audit drives a concrete rollout decision used by Huawei's deployment review: ship agents only on bounded operator-tier work behind multi-judge harness gates (scope/test/judge), keep cross-module platform work in human hands, and treat the long-form specification template plus the calibrated panel as required infrastructure rather than research artifacts.
 
-The remainder of the paper is structured as follows. Section~\ref{sec:industrial-context} lays out the deployment question and the four task families that anchor it. Section~\ref{sec:study-design} describes the 62-task benchmark, the four harnesses, the prompt and evaluation protocol, and the cheating-prevention guards. Section~\ref{sec:results} reports the headline numbers (8/496 PASS), broken down by agent, family, and prompt. Sections~\ref{sec:root-cause} and~\ref{sec:harness} dig into why agents fail and what harness layer would catch it. Section~\ref{sec:industrial-deployment} translates the results into deployment guidance for engineering teams considering coding agents for production work.
