@@ -1,0 +1,65 @@
+% !TEX root = ../main.tex
+\section{Deployment Policy Derived from the Audit}
+\label{sec:industrial-deployment}
+
+We summarise the deployment policy that emerged from this audit as a
+four-gate pipeline applied to every incoming feature ticket
+(Figure~\ref{fig:deployment-pipeline}). Routing decisions, prompt curation,
+agent invocation, and judging are now mechanised; humans remain in the
+loop only at the final review stage and for tickets explicitly routed
+out of the agent track.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{svg/deployment_gate_pipeline.png}
+\caption{Four-gate deployment pipeline. Each gate addresses a specific failure mode surfaced by the audit: task-class routing (0/32 Kubernetes SE-PASS), spec template (long prompts lift scores by +1.0--2.1), scope/test CI (25.5\% coverage-gap failures), and multi-judge panel (pairwise agreement as low as 42.5\%).}
+\label{fig:deployment-pipeline}
+\end{figure}
+
+\paragraph{Route only bounded feature work to agents.}
+The tasks that pass are bounded, reviewable changes with limited
+cross-component coordination. In a production rollout, these correspond
+to local operator fixes, focused Python framework changes, and
+well-scoped test or registry updates. Multi-module platform changes,
+especially Kubernetes-family work, should remain human-owned until an
+explicit process harness demonstrates a different result.
+
+\paragraph{Treat task specification as an engineering artifact.}
+On the main corpus, long prompts lift mean composite scores by
+$+1.0$ to $+2.1$ across all four agents (Table~\ref{tab:prompt}),
+though the SE-PASS gain is confined to the trivially scoped T10.
+On the calibration subset, Claude and Codex rise from 0\% to 8.3\%
+SE-PASS with long prompts.
+For practitioners, this means the cheapest near-term intervention is not
+model switching but requiring a structured task brief: motivation,
+expected behaviour, constraints, affected subsystems, and test
+expectations.
+
+\paragraph{Require scope and test gates before review.}
+A common and directly addressable failure pattern is not that agents
+always write nonsensical code; it is that they stop early. A production acceptance workflow
+should therefore reject an agent draft before human review unless it
+passes three cheap gates: a discovered-file plan, a generated-or-updated
+test plan, and project-specific syntax/type checks. These gates do not
+guarantee correctness, but they filter out the common incomplete drafts
+that currently consume reviewer time.
+
+\paragraph{Use evaluator panels, not a single judge.}
+Raw pairwise agreement spans 42.5\% (Codex vs.\ GLM) to 74.4\%
+(Claude vs.\ Cursor), and Fleiss' $\kappa$ is only 0.30. Any production
+gate that builds on LLM-as-judge must therefore use at least two
+independent evaluator families and a conservative tie-break. Single
+judge gates will drift simply by swapping the judge model.
+
+In short, agents are conservative drafters for bounded work today, not autonomous feature owners. The investment that converts the 1.0\% main-corpus SE-PASS rate into something deployable is harness engineering: forcing scope discovery, test evidence, and multi-judge acceptance \emph{before} a human reviewer ever sees the change.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{svg/failure_to_gate_mapping.png}
+  \caption{Mapping from failure signatures (\S\ref{sec:root-cause}) to deployment gates. Coverage gaps (25.5\%) are directly filterable by Gate~3; borderline partials (18.9\%) are partially recoverable; the semantic-failure slice (44.7\%) requires model or specification improvements beyond current gating.}
+  \label{fig:failure-gate-map}
+\end{figure}
+
+\paragraph{Huawei adoption.}
+The four interventions compose into a single routing pipeline (Figure~\ref{fig:deployment-pipeline}). The audit's contribution is precisely to identify which gates remove the non-SE-PASS draft mass observed in \S\ref{sec:results}.
+All four gates are now operational: CANN/MindSpeed operator work is approved for agent-first drafting (Gate~1), every agent-eligible ticket requires the long-form template (Gate~2), drafts failing scope/test checks are returned to the agent (Gate~3), and the calibrated 3-of-4 LLM panel runs on every agent PR (Gate~4). Kubernetes-class work remains human-authored.

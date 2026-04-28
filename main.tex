@@ -1,14 +1,101 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\documentclass[sigconf,review]{acmart}
 
-\title{LongHorizon}
-\author{funnyulalande }
-\date{April 2026}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,fit,backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\emergencystretch=1em
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\finding}[1]{\smallskip\noindent\textit{\textbf{Finding:} #1}\smallskip}
+
+\acmConference[ASE '26 Industry Showcase]{41st IEEE/ACM International Conference on Automated Software Engineering}{October 2026}{Munich, Germany}
+\acmYear{2026}
+\copyrightyear{2026}
+\setcopyright{none}
 
 \begin{document}
 
+\title{Can Coding Agents Produce Merge-Ready Feature Pull Requests?\\
+An Industrial Audit of 62 Real Tasks}
+
+\author{Zihan Wu\textsuperscript{$*$}}
+\affiliation{\institution{Department of Electrical Engineering, City University of Hong Kong}
+\city{Hong Kong}
+\country{China}}
+
+\author{Jie Xu}
+\affiliation{\institution{Department of Electrical Engineering, City University of Hong Kong}
+\city{Hong Kong}
+\country{China}}
+
+\author{Yun Peng\textsuperscript{$*$,$\dagger$}}
+\affiliation{\institution{Department of Computer Science and Engineering, The Chinese University of Hong Kong}
+\city{Hong Kong}
+\country{China}}
+\email{ypeng@cse.cuhk.edu.hk}
+
+\author{Chun Yong Chong}
+\affiliation{\institution{School of Information Technology, Monash University Malaysia}
+\city{Subang Jaya}
+\country{Malaysia}}
+
+\author{Xin Zhou}
+\affiliation{\institution{Singapore Management University}
+\city{Singapore}
+\country{Singapore}}
+
+\author{Zeyang Zhuang}
+\affiliation{\institution{The Chinese University of Hong Kong}
+\city{Hong Kong}
+\country{China}}
+
+\author{Rui Shu}
+\affiliation{\institution{Independent Researcher}
+\city{Singapore}
+\country{Singapore}}
+
+\author{Kui Liu}
+\affiliation{\institution{Huawei Technologies Co., Ltd.}
+\city{Shenzhen}
+\country{China}}
+
+\author{Yuan Wang}
+\affiliation{\institution{Huawei Technologies Co., Ltd.}
+\city{Shenzhen}
+\country{China}}
+
+\renewcommand{\shortauthors}{Wu, Peng, et al.}
+\thanks{\textsuperscript{$*$}Equal contribution. \textsuperscript{$\dagger$}Corresponding author: ypeng@cse.cuhk.edu.hk}
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
 \maketitle
 
-\section{Introduction}
+\input{sections/01-introduction}
+% \input{sections/02-industrial-context}  % merged into §1 per ASE Industry Showcase length budget
+\input{sections/03-study-design}
+\input{sections/04-results}
+\input{sections/05-root-cause}
+% \input{sections/06-harness}  % consolidated into §6b deployment guidance
+\input{sections/06b-industrial-deployment}
+\input{sections/07-related-work}
+\input{sections/08-threats}
+\input{sections/10-conclusion}
+
+\section*{Data Availability}
+\input{sections/09-data-availability}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
 
 \end{document}

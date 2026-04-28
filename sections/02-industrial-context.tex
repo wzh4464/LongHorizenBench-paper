@@ -1,0 +1,146 @@
+% !TEX root = ../main.tex
+\section{Industrial Context and Evaluation Scope}
+\label{sec:context}
+\label{sec:industrial-context}
+
+\subsection{The Deployment Decision We Had to Make}
+\label{sec:deployment-decision}
+
+The motivation for this study is an adoption decision rather than a
+leaderboard exercise.  Huawei engineering teams working on accelerator
+operators, distributed training, and Kubernetes-based platform software
+are evaluating whether commercial coding agents can safely take on
+\emph{feature-level} work, not just code completion or local bug fixes.
+The practical question is concrete: can an agent produce a first-draft
+pull request close enough to a senior engineer's implementation that a
+reviewer could land it with minor edits?
+
+This deployment question decomposes into four research questions:
+
+\begin{enumerate}
+  \item \textbf{RQ1: Capability boundary.} Can current agents complete
+  production-equivalent feature PRs without human intervention?
+  \item \textbf{RQ2: Task-shape effect.} Does performance degrade
+  gradually as feature size grows, or is there a cliff for cross-module
+  work?
+  \item \textbf{RQ3: Harness leverage.} How much can richer task
+  specifications help without changing the underlying model or agent
+  framework?
+  \item \textbf{RQ4: Deployment policy.} Which task classes should be
+  routed to agents today, and which should remain human-owned?
+\end{enumerate}
+These questions shape the benchmark design, prompt variants, and
+deployment guidance reported in the rest of the paper.
+
+\subsection{Why Generic Benchmarks Were Insufficient}
+\label{sec:why-not-swe-bench}
+
+Before building our own evaluation, we considered existing coding-agent
+benchmarks. SWE-Bench~\cite{jimenez2024swebench} and its
+variants~\cite{chowdhury2024swebenchverified,swebenchpro2025} evaluate
+real repository patches, but the dominant workflow is bug fixing with
+an executable oracle.  Feature implementation in our setting has a
+different acceptance condition: the agent must discover every file that
+belongs to the feature, add tests where appropriate, and follow the
+project's architectural conventions. We therefore needed an evaluation
+that:
+\begin{itemize}
+  \item mirrored the \emph{structure} of the work our engineers actually do
+    (multi-file features, test additions, cross-subsystem refactors),
+  \item drew tasks from \emph{our} codebases so that language, API, and
+    architecture matched deployment reality, and
+  \item used a verdict rule robust to single-evaluator bias.
+\end{itemize}
+
+Existing public benchmarks cover parts of this space, but none provided
+all three properties simultaneously for our deployment decision.
+
+\subsection{Codebase and Task Scope}
+\label{sec:codebase-scope}
+
+The benchmark pairs 12 tasks mined from Huawei-maintained production
+repositories with 50 tasks sampled from widely-used open-source
+repositories so that results generalise beyond one organisation's coding
+style.
+
+\paragraph{Huawei and platform tasks (12 tasks).}
+The 12 industrial tasks span three engineering areas selected with our
+engineering partners as representative consumers of an internal agent
+deployment:
+\begin{itemize}
+  \item \textbf{CANN/\texttt{torch\_npu} accelerator stack} (\textsc{C1}--\textsc{C5}):
+    performance-sensitive C++/AscendC kernels and Python integration
+    changes implementing new operators or refactoring existing ones;
+    typical changes touch kernel code, host-side launch wrappers,
+    operator registration tables, integration code, and unit tests.
+  \item \textbf{MindSpeed training framework} (\textsc{M1}--\textsc{M3}):
+    Python changes to the distributed-training runtime; typical tasks
+    modify scheduling, memory accounting, or loss-scaling logic and
+    require passing the MindSpeed integration suite.
+  \item \textbf{Kubernetes platform} (\textsc{K1}--\textsc{K4}): feature
+    work on the upstream open-source Kubernetes codebase (Go), including
+    API server extensions, controller changes, and generator-driven
+    conversion code spanning 10s of files per PR.
+\end{itemize}
+
+\paragraph{Open-source control set (50 tasks).}
+The LongBench tasks (\textsc{T01}--\textsc{T50}) are merged PRs sampled
+from 15 widely-deployed open-source projects (Kafka, CPython, Airflow,
+Django, gRPC, Spring, Kubernetes OSS, and others). They provide an
+out-of-organization control set with similar multi-file feature shapes
+but without Huawei-specific APIs.
+
+\subsection{Task Curation Funnel}
+\label{sec:task-funnel}
+
+Raw PR archives are unsuitable as benchmark tasks because many PRs are
+trivial, non-reproducible, or depend on unstated team context. We
+therefore used the same four-stage curation funnel for both the Huawei
+and LongBench subsets:
+
+\begin{enumerate}
+  \item \textbf{Feature-work filter.} Retain PRs that implement a
+  behaviour change, feature extension, or cross-file refactor; drop
+  typo fixes, dependency bumps, formatting-only changes, and
+  documentation-only changes.
+  \item \textbf{Reproducibility filter.} Retain tasks whose base
+  repository can be checked out and sanitised without requiring
+  unreleasable ground-truth history, hidden remotes, or production
+  credentials.
+  \item \textbf{Reviewability filter.} Retain tasks whose expected
+  outcome can be compared against a merged implementation with concrete
+  files, tests, or behaviour, rather than an open-ended design
+  discussion.
+  \item \textbf{Diversity filter.} Stratify by repository family,
+  language, file count, and diff size to avoid a benchmark dominated by
+  one project or one task style.
+\end{enumerate}
+
+The final benchmark contains 62 tasks: 12 Huawei/platform tasks and 50
+LongBench tasks. We intentionally prefer a smaller, auditable benchmark
+over a large automatically harvested set because the study's purpose is
+deployment guidance, not training-data scale.
+
+\subsection{Deployment-Equivalence Criterion}
+\label{sec:deployment-criterion}
+
+We score agent outputs under a production-equivalence criterion: a PASS
+means the generated diff is close enough to the merged human PR that a
+reviewer could plausibly accept it after ordinary review. This criterion
+combines functional correctness, completeness of the edited scope, and
+behavioural equivalence to the accepted design. It is intentionally
+stricter than test-only resolution because industrial feature work often
+has multiple files, generated artifacts, and reviewer conventions that
+are not fully captured by a single fail-to-pass test. Section~\ref{sec:study-design}
+defines the evaluator panel and precise rubric.
+
+\subsection{Scope and Non-Goals}
+\label{sec:scope}
+
+We do not measure productivity impact, developer satisfaction, or
+long-term maintenance outcomes; those require live deployment studies.
+We also do not study pair-programming loops with intermediate human
+feedback. Every run is fully autonomous because that is the strongest
+claim a procurement or platform team would need before routing feature
+work to an agent. Finally, we deliberately exclude UI/design tasks,
+documentation-only PRs, and PRs that were reverted or superseded.

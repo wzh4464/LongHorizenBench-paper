@@ -1,0 +1,51 @@
+% !TEX root = ../main.tex
+\section{Introduction}
+\label{sec:introduction}
+
+Software engineering organizations are under growing pressure to turn coding agents from research demonstrations into deployable engineering infrastructure.
+The decision they face is not whether an agent can suggest code in an IDE, but whether it can produce a reviewable pull request for substantive feature work in a production codebase.
+At Huawei, this question is operational: multiple stack-level teams---Kubernetes, the CANN compiler stack (CANN), the MindSpeed training framework, and \texttt{torch\_npu}---are deciding in 2026 whether to route portions of their feature backlog through coding agents.
+The deployment decision turns on a concrete question: \emph{when an agent is given a feature specification and the corresponding repository, can it produce a candidate PR that a human reviewer would accept with at most light revision?}
+
+\paragraph{Why existing benchmarks do not answer this question.}
+Current coding-agent benchmarks focus on bug repair and short, well-localised tasks: SWE-bench Verified~\cite{jimenez2024swebench} reports over 70\% resolution, but these tasks target a small file set, often supply a failing test, and reward minimal local edits.
+Feature implementation differs in kind: it requires multi-file coordination, test authoring, and adherence to repository conventions.
+Industry surveys~\cite{github2024survey} confirm that feature work---not localised bug fixes---is the bottleneck developers most want help with.
+
+\paragraph{An industrial audit.}
+We answer the deployment question directly by auditing four leading commercial coding agents on a two-tier benchmark.
+The \emph{main evaluation corpus} comprises 50 long-horizon feature tasks from LongBench, drawn from 15 production-grade open source projects (Kafka, CPython, Airflow, Kubernetes, OpenJDK, etc.) with a median of 57 ground-truth files and 6{,}905 lines of diff per task.
+A 12-task \emph{calibration subset} from Huawei codebases (CANN/\texttt{torch\_npu}, MindSpeed, Kubernetes) validates the scoring rubric via a blinded human-rater pilot.
+Each task is paired with a \emph{long} prompt (a multi-paragraph design proposal that mirrors a real feature spec) and a \emph{short} prompt (a one-sentence ticket-style description), giving us $62\times2=124$ task instances per agent.
+We evaluate four agents---Claude Code (Opus 4.6), OpenAI Codex (GPT-5.4), Cursor Composer-2, and OpenCode/GLM-5.1---producing $124\times4=496$ end-to-end agent runs.
+Each run is independently scored on three production-relevant axes (functional correctness, completeness/coverage, and behavioral equivalence to the reference implementation) by an automated four-evaluator panel; the verdict is decided by 3-of-4 majority.
+
+This setup directly addresses the deployment question: \emph{can today's coding agents take over feature delivery for our internal codebases?}
+
+\paragraph{Why the verdict can be trusted.}
+Two design choices preempt the obvious objections to LLM-judged benchmarks. \emph{(i)~Human-rater calibration.} We blind-rated all 96 calibration-subset runs (12 tasks $\times$ 4 agents $\times$ 2 prompts) with three senior reviewers who had domain expertise in these Huawei codebases, and confirmed 92.7\% SE-PASS-vs-non-SE-PASS agreement with the four-LLM judge panel; the panel is the stricter of the two, never crowning a human-rejected run as SE-PASS. \emph{(ii)~Anti-leakage sanitization.} An early Codex run on a Kubernetes task surfaced its ground-truth diff via \texttt{git log}; we treated this as a first-class threat, rebased every benchmark repo to a parent commit with target commits unreachable, blocked network access to upstream remotes, and re-ran the affected configurations. The numbers we report are after this re-run. Both procedures are detailed in \S\ref{sec:study-design}.
+
+\paragraph{Contributions.} This paper makes three contributions to industrial coding-agent deployment, ordered by deployment impact.
+
+\emph{(C1) A four-gate deployment policy adopted in Huawei's internal rollout} (primary contribution).
+Each gate is motivated by evidence from the audit:
+\begin{enumerate}\itemsep0pt
+  \item \emph{Task-class gate} $\leftarrow$ On the 49 non-trivially-scoped long-horizon tasks in the main corpus, 0/392 runs reach SE-PASS; the calibration subset's Kubernetes track returns 0/32. Only bounded single-file work is routed to agents.
+  \item \emph{Long-form specification template} $\leftarrow$ Long prompts lift mean composite scores by +1.0 to +2.1 across all agents on the main corpus; structured specs are mandatory for agent invocation.
+  \item \emph{Pre-review CI gate (scope + tests)} $\leftarrow$ 25.5\% of main-corpus failures are coverage gaps (files discovered but tests or cross-module wiring omitted); a scope/test check filters these before human review.
+  \item \emph{3-of-4 LLM-judge panel} $\leftarrow$ Pairwise evaluator agreement is as low as 42.5\%; no single judge is reliable, so a conservative multi-judge consensus is required.
+\end{enumerate}
+
+\emph{(C2) Empirical evidence base for the policy.} A leakage-safe audit of 496 runs under a strict-equivalence criterion yields 1.0\% SE-PASS on the 50-task main corpus (0.0\% excluding one trivially scoped outlier); the failure mass is dominated by semantic errors (44.7\%) rather than incomplete coverage, contradicting the assumption that better retrieval alone would close the deployment gap. A 12-task calibration subset validates the rubric via a 96-run blinded human pilot (92.7\% SE-PASS-vs-non-SE-PASS agreement).
+
+\emph{(C3) Reusable anti-leakage audit protocol.} A sanitisation procedure (parent-commit rebasing, remote blocking, CLI shimming) that survived an attempted ground-truth exfiltration by a frontier agent; a four-LLM judge panel with conservative tie-break; and a 96-run blind human calibration ($\kappa=0.43$, panel strictly stricter). We present this as a methodology checklist for any team benchmarking agents on real merged code.
+
+\paragraph{Headline findings.} The audit evidence behind the policy:
+
+\begin{itemize}
+\item \textbf{0\% SE-PASS on non-trivial long-horizon tasks motivates gating, not rejection.} On the 50-task main corpus, 4/400 runs reach SE-PASS (1.0\%), but all four are on T10, a trivially scoped single-file task. Excluding T10: 0/392. The remaining 396 non-SE-PASS runs split across PARTIAL (146, 37\%) and FAIL (250, 63\%). Ungated deployment is not viable; every agent draft must pass through the policy pipeline.
+\item \textbf{All agents tie on the main corpus; product-level differences emerge only on calibration tasks.} All four agents reach exactly 1.0\% SE-PASS on the main corpus. Mean composite score provides a finer-grained signal: Claude (5.54/15) and Codex (5.43) lead Cursor (4.67) and OpenCode (3.88), consistent with the calibration subset where Claude and Codex each reach 8.3\% SE-PASS while Cursor and OpenCode reach 0\%.
+\item \textbf{Specification quality improves drafts but does not produce SE-PASS on hard tasks.} Long prompts lift mean composite scores by +1.0 to +2.1 on the main corpus, but the SE-PASS gain (0\%\,$\to$\,2.0\%) is entirely T10. This justifies Gate~2 (mandatory spec template) as a draft-quality lever, not a SE-PASS lever.
+\item \textbf{Failure decomposition identifies what gates can catch.} The 396 main-corpus non-SE-PASS runs split into semantic failures (44.7\%), coverage gaps (25.5\%), behavioral mismatches (10.9\%), and borderline partials (18.9\%). The coverage-gap slice (25.5\%) is directly targeted by Gate~3 (scope/test checks); the borderline slice (18.9\%) is partially recoverable through scope and test enforcement; the semantic slice (44.7\%) requires model or specification improvements beyond current gating.
+\end{itemize}
+

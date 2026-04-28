@@ -1,0 +1,17 @@
+{
+  "source": "../reports/eval_scores_v2_long.csv",
+  "updated": "2026-04-24",
+  "bins": ["[0,1)", "[1,2)", "[2,3)", "[3,4)", "[4,5]"],
+  "histogram": {
+    "claude-opus-max": [5, 69, 45, 2, 3],
+    "codex-gpt-5_4": [13, 50, 51, 7, 3],
+    "cursor-composer2": [25, 52, 42, 5, 0],
+    "opencode-glm51": [30, 74, 18, 1, 1]
+  },
+  "pass_counts": {
+    "claude-opus-max": 3,
+    "codex-gpt-5_4": 3,
+    "cursor-composer2": 1,
+    "opencode-glm51": 1
+  }
+}

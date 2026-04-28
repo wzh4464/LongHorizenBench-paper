@@ -1,0 +1,14 @@
+# Build artifacts
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+*.bak
+
+# Reference source PDFs/images (too large for git)
+ref_sources/

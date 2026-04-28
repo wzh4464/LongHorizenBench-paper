@@ -1,0 +1,69 @@
+% !TEX root = ../main.tex
+\section{Harness Engineering: A Cross-Vendor Comparison}
+\label{sec:harness}
+
+A frontier LLM does not run a feature pull request alone. In production, every coding agent is the composition of \emph{(model, harness)}: the harness wraps the model with file-system tools, an execution loop, retrieval, and an acceptance policy. Section~\ref{sec:results} reported results agent-by-agent (Claude Code, Codex CLI, Cursor Agent, OpenCode), but read another way the four configurations are also four \emph{harness designs}---built by four different vendors---running on top of frontier models that are individually capable on bug-fix benchmarks. This section reframes the gap we measured as a harness comparison: holding the task constant, how much do harness choices move the needle on industrial feature implementation?
+
+We use ``harness'' in the same sense as Xia et al.\ (Agentless)~\cite{agentless}: the deterministic scaffolding around an LLM that determines what files it sees, when it stops, and how its output is validated. In our setup we cannot fully isolate the harness from the underlying model, so the comparison is necessarily a \emph{product} comparison rather than an ablation. We make the framing explicit so future work can intervene at the right layer.
+
+\subsection{Four harnesses, one task suite}
+\label{sec:harness-products}
+
+Across 62~tasks and 2~prompt levels, the four harnesses produce strikingly different operating points (Table~\ref{tab:config-pass}). On the \emph{long}-prompt setting Claude Code and Codex CLI reach 4.8\% PASS, while Cursor Agent and OpenCode stall near 1.6\%. The 3$\times$ spread, with the same underlying tasks and similar-class models, is itself the central harness-engineering observation: a fully equipped 2025-vintage agent harness raises the production-feature pass rate by single-digit points on top of the underlying model, and the rest is left on the table.
+
+%% ------------------------------------------------------------------
+\iffalse
+\subsection{Three Harness Layers}
+\label{sec:harness-layers}
+
+We map the differences between the four agents we studied onto three classical harness layers:
+
+\begin{itemize}
+  \item \textbf{Input-side (specification harness).} How a user request is turned into agent context. In our experiment, this is operationalized by the long-vs-short prompt manipulation. All four agents accept the same Markdown task spec; they differ only in how aggressively they expand it into sub-tasks before acting.
+  \item \textbf{Output-side (validation harness).} What checks run between an agent edit and an accept signal. The four products differ widely here: Cursor and Claude Code execute language-server diagnostics on every edit; Codex executes shell commands but does not run tests by default; OpenCode performs almost no automatic verification.
+  \item \textbf{Process-side (orchestration harness).} How the agent decides when a task is done. Claude Code and Codex use long-horizon planning loops; Cursor relies on user-in-the-loop confirmation; OpenCode is single-turn.
+\end{itemize}
+
+These layered differences explain a large fraction of the cross-agent variance we measure: the agents that combine a stronger validation harness with a longer planning horizon (Claude Code, Codex CLI) reach the higher PASS bucket; the agents that omit one of these layers (Cursor, OpenCode) drop into the lower bucket on multi-file tasks.
+
+%% ------------------------------------------------------------------
+\subsection{Input-side Specification Harness: The Prompt-Length Effect}
+\label{sec:harness-prompt}
+
+Within a single agent, the cleanest harness experiment we can run is the prompt-length manipulation reported in Table~\ref{tab:prompt}. The long prompt is itself an \emph{input-side harness}: instead of changing the model or runtime, we change the contract the user signs with the agent before the run starts.
+
+For Claude Code and Codex CLI the input-side harness is decisive: PASS rate climbs from 0.0\% (short) to 4.8\% (long). Cursor and OpenCode also improve from 0.0\% to 1.6\%, but the absolute effect remains a single PASS each. In other words, longer specifications help most when the agent already has the output- and process-side machinery to act on the extra information; otherwise the extra context improves scores without reliably producing production-equivalent PRs.
+
+\fi
+\iffalse
+\subsection{Where Today's Harnesses Fail}
+\label{sec:harness-failures}
+
+Even at the best operating point (Claude Code or Codex CLI with a long prompt) the agent passes only 4.8\% of tasks. Section~\ref{sec:failure-modes} shows that some failures are semantic, but the coverage-gap and borderline-partial buckets expose three recurring patterns that are directly \emph{harness-addressable}:
+
+\begin{itemize}
+  \item \textbf{Scope collapse.} The agent edits 30--60\% of the ground-truth files, then declares the change complete. This is a process failure, not a reasoning failure: a process-side harness that compares the agent's edit set against a discovered call graph would catch it.
+  \item \textbf{No test artifact.} In the test-artifact audit, roughly 71\% of non-PASS runs never write or update a test, even when the ground-truth PR adds tests. A validation-side harness that requires \emph{some} test edit before merge would force the agent to produce a checkable artifact.
+  \item \textbf{Inconsistent cross-file edits.} Multi-file features (Kubernetes feature-gate, MindSpeed parallelism, CANN operator registration) require coordinated edits in 5--15 files; today's harnesses mostly let the agent stop at the first plausible-looking patch. A pre-commit consistency check (signature parity, registry membership) would expose these.
+\end{itemize}
+
+Each pattern is a harness gap even when other runs still reflect foundation-model or specification limits: the practical goal is to stop recoverable partial drafts before they consume reviewer time.
+
+%% ──────────────────────────────────────────────────────────────────
+\iffalse  % Concrete Recommendations subsection moved to §6b to avoid duplication
+\subsection{Concrete Recommendations}
+\label{sec:harness-recommendations}
+
+For practitioners deploying coding agents in industrial codebases today, our data supports a four-step checklist that acts as a partial harness:
+
+\begin{enumerate}
+  \item \textbf{Start from a long-form task brief.} Long prompts lift PASS from 0\% to 4.8\% on the strongest harnesses with no model change. The brief should state the motivation, design constraints, expected tests, and non-goals before the agent edits code.
+  \item \textbf{Require a scope contract before implementation.} The agent must enumerate candidate files, generated artifacts, tests, registries, and cross-module integration points; the run should fail early if the later diff touches only a small fragment of that declared surface.
+  \item \textbf{Gate the output on tests and coverage checks.} Coverage failures and unmodified-tests-pass should each block, since a large share of non-PASS runs would have been caught by asking whether the agent touched the files, tests, and generated artifacts implied by the change request.
+  \item \textbf{Use multi-evaluator acceptance before human review.} Pairwise judge agreement ranges from 42\% (Codex--GLM) to 74\% (Claude--Cursor); single-judge gating is too noisy, but a 3-of-4 panel gives a conservative pre-review filter.
+\end{enumerate}
+
+\paragraph{Limitation.}
+Our results characterise four \emph{deployed} agent harnesses (Claude Code, Cursor, Codex CLI, OpenCode). We did not run controlled ablations of individual harness components (e.g., the same model with vs.\ without scope-check); that experiment is the natural follow-up.
+\fi
+\fi
