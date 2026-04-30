@@ -16,12 +16,14 @@ Table~\ref{tab:benchmark-positioning} summarizes this positioning. The key disti
 \label{tab:benchmark-positioning}
 \centering
 \small
-\begin{tabularx}{\columnwidth}{@{}lYY@{}}
+\begin{tabularx}{\columnwidth}{@{}YYY@{}}
 \toprule
 \textbf{Benchmark family} & \textbf{Typical success signal} & \textbf{Gap addressed here} \\
 \midrule
 Issue repair & Tests or issue-level resolution & Feature PRs may require new APIs, tests, and architecture-aware integration. \\
+\midrule
 Long-horizon generation & Repository-scale generation or evolution & Merge readiness must be judged against a reviewed implementation, not only plausibility. \\
+\midrule
 Industrial experience reports & Adoption outcomes and lessons learned & Controlled multi-agent comparison and calibrated scoring are often missing. \\
 \bottomrule
 \end{tabularx}

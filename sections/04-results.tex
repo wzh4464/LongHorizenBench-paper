@@ -57,13 +57,13 @@ The single passing main-corpus task also acts as a protocol sanity check. T10 is
 \caption{SE-PASS rate by task family and agent.}
 \label{tab:result-diagnostics-family}
 \centering
-\scriptsize
-\setlength{\tabcolsep}{2.5pt}
+\small
+% \setlength{\tabcolsep}{2.5pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrrr@{}}
 \toprule
 \textbf{Family} & \textbf{Claude} & \textbf{Codex} & \textbf{Cursor} & \textbf{OpenCode} & \textbf{Overall} \\
 \midrule
-CANN/\texttt{torch\_npu} & 10.0\% & 20.0\% & 0.0\% & 0.0\% & 7.5\% \\
+CANN & 10.0\% & 20.0\% & 0.0\% & 0.0\% & 7.5\% \\
 MindSpeed                & 16.7\% & 0.0\%  & 0.0\% & 0.0\% & 4.2\% \\
 Kubernetes               & 0.0\%  & 0.0\%  & 0.0\% & 0.0\% & 0.0\% \\
 LongBench                & 1.0\%  & 1.0\%  & 1.0\% & 1.0\% & 1.0\% \\
