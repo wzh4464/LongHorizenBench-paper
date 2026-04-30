@@ -8,12 +8,8 @@ The results suggest that current agents should be integrated cautiously: they ca
 \paragraph{Implication 1: Route only subsystem-contained tasks to agents.}
 SE-PASS outcomes appear only on subsystem-contained operator/framework tasks (C1, C4, M1) and the single-file T10 outlier, while the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Industrial users should therefore treat agent invocation as a task-shape decision. Local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates; cross-component platform features should remain human-authored until a new evaluation demonstrates otherwise.
 
-This implication is deliberately narrower than a blanket adoption claim. The study does not show that agents cannot help with large features; it shows that a single autonomous attempt should not be treated as a merge-ready owner for such work. For broad features, agents may still be useful for exploration, test sketching, or localized subchanges after a human decomposes the task.
-
 \paragraph{Implication 2: Treat structured specifications as engineering artifacts.}
 Long prompts improve mean score for every agent (Table~\ref{tab:prompt}), even though they do not solve non-trivial long-horizon tasks. This makes structured task briefs worthwhile as a low-cost intervention. A useful brief should state motivation, expected behavior, constraints, affected subsystems, non-goals, and expected tests before the agent edits code.
-
-The prompt result is especially relevant for industrial teams because it points to process leverage outside the model vendor. A long-form engineering proposal can be reviewed before any code is generated, reused across agents, and attached to the eventual PR as design rationale. Even when the agent output remains partial, the structured brief reduces ambiguity for both the agent and the human reviewer.
 
 \paragraph{Implication 3: Add scope and test checks before human review.}
 Table~\ref{tab:failure-signatures} shows that 25.5\% of main-corpus failures are coverage gaps and 18.9\% are borderline partials. These are the failures most likely to be filtered by file-plan checks, required test evidence, type/syntax checks, and subsystem-specific consistency checks. Such checks will not fix semantic failures, but they can prevent incomplete drafts from consuming reviewer attention.
@@ -22,8 +18,6 @@ A practical pre-review gate should therefore ask for evidence, not confidence. E
 
 \paragraph{Implication 4: Use coverage-grounded, calibrated multi-evaluator review.}
 HW/GT coverage reports make missing scope visible, but pairwise LLM-judge agreement is still too low for single-judge evaluation, and same-family/self-preference bias remains a credible threat in any LLM-as-judge setup~\cite{wataoka2024selfpreference}. A practical evaluation workflow should use deterministic coverage evidence, multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
-
-This does not imply that LLM judges can replace code review. The safer interpretation is that calibrated judges can triage agent outputs before they reach reviewers, flagging obvious failures and producing structured rationales. Human review remains necessary for accepted candidates, especially when the implementation is an alternative design rather than a close match to a known reference.
 
 \paragraph{Generalizability to industrial settings.}
 The benchmark is intentionally harsher than many day-to-day programming tasks. That harshness is useful for industrial planning: if agents fail at system-level feature ownership, organizations can still deploy them at smaller units while measuring progress on the harder boundary. The findings are therefore most actionable as routing guidance. Teams should maintain a portfolio of eligible task classes, measure agent outputs against local review criteria, and expand eligibility only when pass rates improve under the same calibrated protocol.
