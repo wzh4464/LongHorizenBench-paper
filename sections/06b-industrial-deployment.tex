@@ -3,21 +3,19 @@
 \label{sec:discussion}
 \label{sec:industrial-deployment}
 
-The results suggest that current agents should be integrated cautiously: they can draft subsystem-contained changes, but they do not yet own system-level feature delivery. We summarize four implications in the style of empirical benchmarking studies.
+The results suggest four implications: agents can draft subsystem-contained changes, but they do not yet own system-level feature delivery.
 
 \paragraph{Implication 1: Route only subsystem-contained tasks to agents.}
-SE-PASS outcomes appear only on subsystem-contained operator/framework tasks (C1, C4, M1) and the single-file T10 outlier, while the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Industrial users should therefore treat agent invocation as a task-shape decision. Local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates; cross-component platform features should remain human-authored until a new evaluation demonstrates otherwise.
+SE-PASS outcomes appear only on subsystem-contained operator/framework tasks (C1, C4, M1) and the single-file T10 outlier; the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Agent invocation should therefore be routed by task shape: local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates, but cross-component platform features should remain human-authored.
 
 \paragraph{Implication 2: Treat structured specifications as engineering artifacts.}
 Long prompts improve mean score for every agent (Table~\ref{tab:prompt}), even though they do not solve non-trivial long-horizon tasks. This makes structured task briefs worthwhile as a low-cost intervention. A useful brief should state motivation, expected behavior, constraints, affected subsystems, non-goals, and expected tests before the agent edits code.
 
 \paragraph{Implication 3: Add scope and test checks before human review.}
-Table~\ref{tab:failure-signatures} shows that 25.5\% of main-corpus failures are coverage gaps and 18.9\% are borderline partials. These are the failures most likely to be filtered by file-plan checks, required test evidence, type/syntax checks, and subsystem-specific consistency checks. Such checks will not fix semantic failures, but they can prevent incomplete drafts from consuming reviewer attention.
-
-A practical pre-review gate should therefore ask for evidence, not confidence. Examples include a discovered-file plan, an explanation of touched subsystems, a list of tests added or intentionally omitted, and project-specific syntax or type checks. These gates are inexpensive compared with senior review time and directly target the recoverable failure mass identified in \S\ref{sec:addressable-failures}.
+Table~\ref{tab:failure-signatures} shows that 25.5\% of main-corpus failures are coverage gaps and 18.9\% are borderline partials. File-plan checks, required test evidence, type/syntax checks, and subsystem-specific consistency checks will not fix semantic failures, but they can prevent incomplete drafts from consuming reviewer attention.
 
 \paragraph{Implication 4: Use coverage-grounded, calibrated multi-evaluator review.}
 HW/GT coverage reports make missing scope visible, but pairwise LLM-judge agreement is still too low for single-judge evaluation, and same-family/self-preference bias remains a credible threat in any LLM-as-judge setup~\cite{wataoka2024selfpreference}. A practical evaluation workflow should use deterministic coverage evidence, multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
 
 \paragraph{Generalizability to industrial settings.}
-The benchmark is intentionally harsher than many day-to-day programming tasks. That harshness is useful for industrial planning: if agents fail at system-level feature ownership, organizations can still deploy them at smaller units while measuring progress on the harder boundary. The findings are therefore most actionable as routing guidance. Teams should maintain a portfolio of eligible task classes, measure agent outputs against local review criteria, and expand eligibility only when pass rates improve under the same calibrated protocol.
+The benchmark is intentionally harsher than many day-to-day programming tasks, which makes it useful for routing guidance: teams can deploy agents on smaller task classes while measuring progress on the harder boundary. Eligibility should expand only when pass rates improve under the same calibrated protocol.

@@ -8,10 +8,10 @@ This section answers RQ3 and RQ4. We first measure whether richer task specifica
 \subsection{Effect of Prompt Granularity (RQ3)}
 \label{sec:results-prompt}
 
-Each task was run with a short ticket-style prompt and a long engineering-proposal (EP) prompt. Table~\ref{tab:prompt} aggregates the effect by agent. No short-prompt run reaches SE-PASS. Long prompts improve mean composite scores for all four agents, but the SE-PASS increase comes only from subsystem-contained calibration tasks and T10.
+Table~\ref{tab:prompt} compares short ticket-style prompts with long engineering-proposal (EP) prompts. No short-prompt run reaches SE-PASS; long prompts improve mean scores, but SE-PASS gains come only from subsystem-contained calibration tasks and T10.
 
 \begin{table*}[t]
-\caption{Prompt effect. Each agent has $N_{\mathrm{short}}{=}62$ and $N_{\mathrm{long}}{=}62$ runs. $\Delta$ = long $-$ short, percentage points for SE-PASS and score points for mean.}
+\caption{Prompt effect ($N_{\mathrm{short}}{=}N_{\mathrm{long}}{=}62$ per agent). $\Delta$ = long $-$ short.}
 \label{tab:prompt}
 \centering
 \small

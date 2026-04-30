@@ -71,7 +71,7 @@ LongBench                & 1.0\%  & 1.0\%  & 1.0\% & 1.0\% & 1.0\% \\
 \end{table}
 
 \begin{table}[t]
-\caption{Per-dimension mean-score buckets by agent across all 496 runs. Each run's 0--15 composite score is divided by three to obtain a 0--5 per-dimension mean.}
+\caption{Per-dimension mean-score buckets by agent (0--15 composite score divided by three).}
 \label{tab:result-diagnostics-score}
 \centering
 \small
@@ -87,7 +87,7 @@ OpenCode & 30 & 74 & 18 & 1 & 1 \\
 \end{tabular*}
 \end{table}
 
-Tables~\ref{tab:result-diagnostics-family} and~\ref{tab:result-diagnostics-score} provide two diagnostics for interpreting Tables~\ref{tab:main-agent} and~\ref{tab:config-pass}. The family-level table shows that pass rates are shaped more by task family than by product choice: SE-PASS outcomes concentrate in subsystem-contained CANN/MindSpeed tasks and the single LongBench outlier, while Kubernetes remains at 0\%. The per-dimension score-bucket table shows that most runs occupy the low-to-mid 0--5 score range, explaining why mean-score gains often indicate better drafts rather than merge-ready PRs.
+Tables~\ref{tab:result-diagnostics-family} and~\ref{tab:result-diagnostics-score} explain Tables~\ref{tab:main-agent} and~\ref{tab:config-pass}: SE-PASS outcomes concentrate in subsystem-contained CANN/MindSpeed tasks and the single LongBench outlier, while most runs remain in low-to-mid 0--5 per-dimension score buckets.
 
 \finding{1}{Current commercial coding agents rarely produce merge-ready feature PRs under a strict-equivalence criterion. The main corpus yields 4/400 SE-PASS outcomes (1.0\%), and all four disappear when the trivially scoped T10 task is excluded.}
 
