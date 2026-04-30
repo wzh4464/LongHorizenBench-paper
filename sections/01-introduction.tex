@@ -36,7 +36,7 @@ We construct a two-tier benchmark with 62 tasks. The 50-task main corpus, LongBe
 \paragraph{Key findings overview.}
 \begin{itemize}
   \item \textbf{Merge-ready feature PRs are rare.} The main corpus yields 4/400 SE-PASS outcomes (1.0\%), all on one trivially scoped single-file task. Excluding that task, the rate is 0/392.
-  \item \textbf{Task shape dominates product choice.} On the main corpus all four agents tie at 1.0\% SE-PASS. The 12-task calibration subset shows bounded tasks occasionally pass, while Kubernetes-class platform tasks return 0/32 SE-PASS.
+  \item \textbf{Task shape dominates product choice.} On the main corpus all four agents tie at 1.0\% SE-PASS. The 12-task calibration subset shows that subsystem-contained operator/framework tasks occasionally pass, while Kubernetes-class platform tasks return 0/32 SE-PASS.
   \item \textbf{Long prompts improve drafts, not hard-task pass rates.} Detailed prompts raise mean scores by +0.99 to +2.12 on the main corpus, but produce no SE-PASS on non-trivial long-horizon tasks.
   \item \textbf{Evaluation requires calibration.} Deterministic HW/GT coverage reports ground the completeness score, while pairwise LLM-judge agreement still ranges from 42.5\% to 74.4\%; the four-judge panel reaches 92.7\% SE-PASS-vs-non-SE-PASS agreement with blinded senior reviewers on the calibration subset.
 \end{itemize}
@@ -46,5 +46,5 @@ This paper makes three contributions:
 \begin{enumerate}\itemsep0pt
   \item A two-tier benchmark and 496-run empirical evaluation for industrial, system-level feature implementation, combining a reproducible 50-task main corpus with a 12-task human-calibrated industrial subset.
   \item A hybrid evaluation protocol that combines deterministic HW/GT coverage reports, three 0--5 scoring dimensions, four LLM judges, conservative tie-breaking, anti-leakage controls, and blinded human review.
-  \item Empirical findings and industrial implications showing that current agents should be treated as bounded-task drafters, not autonomous feature owners, and require structured specifications, scope/test checks, and calibrated multi-evaluator review.
+  \item Empirical findings and a failure analysis suggesting that current agents are useful mainly as subsystem-contained task drafters, not autonomous feature owners, and require structured specifications, scope/test checks, and calibrated multi-evaluator review.
 \end{enumerate}

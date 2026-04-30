@@ -1,12 +1,12 @@
 % !TEX root = ../main.tex
-\section{Discussion and Future Work}
+\section{Discussion and Implications}
 \label{sec:discussion}
 \label{sec:industrial-deployment}
 
-The results suggest that current agents should be integrated cautiously: they can draft bounded changes, but they do not yet own system-level feature delivery. We summarize four implications in the style of empirical benchmarking studies.
+The results suggest that current agents should be integrated cautiously: they can draft subsystem-contained changes, but they do not yet own system-level feature delivery. We summarize four implications in the style of empirical benchmarking studies.
 
-\paragraph{Implication 1: Route only bounded tasks to agents.}
-SE-PASS outcomes appear only on bounded tasks (C1, C4, M1, T10), while the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Industrial users should therefore treat agent invocation as a task-shape decision. Local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates; cross-component platform features should remain human-authored until a new evaluation demonstrates otherwise.
+\paragraph{Implication 1: Route only subsystem-contained tasks to agents.}
+SE-PASS outcomes appear only on subsystem-contained operator/framework tasks (C1, C4, M1) and the single-file T10 outlier, while the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Industrial users should therefore treat agent invocation as a task-shape decision. Local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates; cross-component platform features should remain human-authored until a new evaluation demonstrates otherwise.
 
 This implication is deliberately narrower than a blanket adoption claim. The study does not show that agents cannot help with large features; it shows that a single autonomous attempt should not be treated as a merge-ready owner for such work. For broad features, agents may still be useful for exploration, test sketching, or localized subchanges after a human decomposes the task.
 
@@ -27,6 +27,3 @@ This does not imply that LLM judges can replace code review. The safer interpret
 
 \paragraph{Generalizability to industrial settings.}
 The benchmark is intentionally harsher than many day-to-day programming tasks. That harshness is useful for industrial planning: if agents fail at system-level feature ownership, organizations can still deploy them at smaller units while measuring progress on the harder boundary. The findings are therefore most actionable as routing guidance. Teams should maintain a portfolio of eligible task classes, measure agent outputs against local review criteria, and expand eligibility only when pass rates improve under the same calibrated protocol.
-
-\paragraph{Future work.}
-Three next steps follow directly from the threats in \S\ref{sec:threats}. First, repeated runs of the SE-PASS-yielding cells would turn the current point estimates into confidence intervals. Second, a stratified human re-rating of main-corpus PARTIAL outputs would estimate the gap between strict SE-PASS and relaxed reviewer-acceptable PASS (RA-PASS). Third, future benchmarks should evaluate agent improvements targeted at the dominant failure modes: long-context semantic reasoning, cross-module registration, test generation, and invariant preservation.

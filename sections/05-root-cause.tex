@@ -8,10 +8,10 @@ This section answers RQ3 and RQ4. We first measure whether richer task specifica
 \subsection{Effect of Prompt Granularity (RQ3)}
 \label{sec:results-prompt}
 
-Each task was run with a short ticket-style prompt and a long engineering-proposal (EP) prompt. Table~\ref{tab:prompt} aggregates the effect by agent. No short-prompt run reaches SE-PASS. Long prompts improve mean composite scores for all four agents, but the SE-PASS increase comes only from bounded calibration tasks and T10.
+Each task was run with a short ticket-style prompt and a long engineering-proposal (EP) prompt. Table~\ref{tab:prompt} aggregates the effect by agent. No short-prompt run reaches SE-PASS. Long prompts improve mean composite scores for all four agents, but the SE-PASS increase comes only from subsystem-contained calibration tasks and T10.
 
 \begin{table*}[t]
-\caption{Prompt effect. $\Delta$ = long $-$ short, percentage points for SE-PASS and score points for mean.}
+\caption{Prompt effect. Each agent has $N_{\mathrm{short}}{=}62$ and $N_{\mathrm{long}}{=}62$ runs. $\Delta$ = long $-$ short, percentage points for SE-PASS and score points for mean.}
 \label{tab:prompt}
 \centering
 \small
@@ -29,7 +29,7 @@ OpenCode & 0.0\% & 1.6\% & +1.6 & 3.72 & 4.60 & +0.88 \\
 
 On the main corpus, all four agents move from 0/50 short-prompt SE-PASS to 1/50 long-prompt SE-PASS, but the single passing task is always T10. Excluding T10, long prompts improve mean score by +0.99 to +2.12 across agents while producing zero SE-PASS. Thus, richer specifications improve partial draft quality but do not overcome the coordination barrier in non-trivial long-horizon tasks.
 
-This result should not be read as proving that the short prompt lacked all necessary information. The EP prompt adds motivation, constraints, affected subsystems, non-goals, and expected checks, but it still avoids leaking GT file paths or implementation structure. The remaining gap is therefore consistent with two explanations that our design cannot fully separate: agents may still lack task-critical repository information, and they may fail to operationalize a long specification into a correct cross-module plan. The narrower conclusion is that structured prompt detail improves drafts, but prompt detail alone does not close the system-level feature gap.
+This result should not be read as proving that the short prompt lacked all necessary information. The EP prompt adds motivation, constraints, affected subsystems, non-goals, and expected checks, but it still avoids leaking the GT diff, exact GT file list, or implementation structure. The remaining gap is therefore consistent with two explanations that our design cannot fully separate: agents may still lack task-critical repository information, and they may fail to operationalize a long specification into a correct cross-module plan. The narrower conclusion is that structured prompt detail improves drafts, but prompt detail alone does not close the system-level feature gap.
 
 \finding{3}{Long prompts improve drafts, but do not resolve whether failures come from missing task information or failed long-context operationalization. They raise mean scores for every agent, yet produce no merge-ready output on the 49 non-trivially scoped main-corpus tasks.}
 
@@ -72,7 +72,7 @@ Long prompt  & 248 & 40.2\% & 36.7\% & 39.6\% & 2.14 & 1.86 & 1.76 \\
 
 Table~\ref{tab:coverage-subscores} separates the deterministic coverage evidence from the LLM judgment dimensions. The average run covers only 32.9\% of HW files and 29.7\% of all GT files; the median HW and GT coverage rates are 27.3\% and 24.2\%, respectively. Only 5.4\% of runs cover all HW files, and 9.9\% cover no HW or GT files at all. Long prompts nearly double HW coverage relative to short prompts (40.2\% vs. 25.6\%), but the corresponding A/B/C scores remain below the SE-PASS threshold, which explains why prompt detail improves draft quality without producing autonomous merge-ready PRs.
 
-The sub-scores also clarify why file coverage is necessary but insufficient. Claude and Codex cover more HW/GT scope and receive higher A/B/C scores than Cursor and OpenCode, matching the headline draft-quality ranking. However, the family-level pattern is not reducible to file hits: Kubernetes runs cover 51.8\% of HW files on average but only 33.5\% of GT files and still produce 0/32 SE-PASS, because generated/API surfaces, validation paths, and tests remain incomplete or behaviorally divergent. Conversely, bounded C-family tasks reach 60.9\% HW and 59.4\% GT coverage and account for most calibration passes. We therefore treat coverage as a grounding signal for completeness, while keeping functional correctness and behavioral equivalence as separate judging dimensions.
+The sub-scores also clarify why file coverage is necessary but insufficient. Claude and Codex cover more HW/GT scope and receive higher A/B/C scores than Cursor and OpenCode, matching the headline draft-quality ranking. However, the family-level pattern is not reducible to file hits: Kubernetes runs cover 51.8\% of HW files on average but only 33.5\% of GT files and still produce 0/32 SE-PASS, because generated/API surfaces, validation paths, and tests remain incomplete or behaviorally divergent. Conversely, C-family operator tasks reach 60.9\% HW and 59.4\% GT coverage and account for most calibration passes despite including high-complexity C4. We therefore treat coverage as a grounding signal for completeness, while keeping functional correctness and behavioral equivalence as separate judging dimensions.
 
 \subsection{Failure Signatures (RQ4)}
 \label{sec:failure-modes}

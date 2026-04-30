@@ -12,7 +12,7 @@ Figure~\ref{fig:pipeline} summarizes the end-to-end protocol. We build a two-tie
 The benchmark contains 62 feature-implementation tasks and 496 agent runs. We use \textbf{GT} to denote the merged ground-truth implementation and \textbf{HW} to denote the handwritten, human-authored subset of GT files after excluding auto-generated artifacts. Each task corresponds to one merged PR and is evaluated at the PR level rather than at the level of a single function or file.
 
 \textbf{Main corpus (LongBench, T01--T50).}
-The main corpus consists of 50 long-horizon feature tasks from 15 widely used open-source projects, including Kafka, CPython, Airflow, Kubernetes, Terraform, and Spring. These tasks provide a reproducible stress test for system-level feature work while avoiding proprietary-source release constraints. Table~\ref{tab:main-corpus-scope} summarizes the corpus distribution.
+The main corpus consists of 50 long-horizon feature tasks from 15 widely used open-source projects, including Kafka, CPython, Airflow, Kubernetes, Terraform, and Spring. We selected projects that are actively maintained, have public merged PRs with review or CI history, expose tests or documentation that define expected behavior, and span system, framework, platform, and developer-tooling code. The resulting task set provides a reproducible stress test for system-level feature work while avoiding proprietary-source release constraints. Table~\ref{tab:main-corpus-scope} summarizes the corpus distribution.
 
 \begin{table}[t]
 \caption{Main-corpus scope. GT = ground truth merged implementation.}
@@ -27,15 +27,15 @@ Tasks / projects & 50 tasks from 15 open-source projects \\
 Languages & Java 20, Python 13, Go 8, C++ 6, TypeScript 2, Rust 1 \\
 GT files & Median 57; range 1--340 \\
 GT diff size & Median 6{,}905 LOC; range 3--68{,}000 LOC \\
-Task type & Merged feature or refactor PRs, not localized bug repairs \\
+Task type & Merged feature or feature-enabling refactor PRs, not localized bug repairs \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-We use the term \emph{long-horizon} operationally. A task is long-horizon when the agent must (i) interpret a high-level feature request into an architectural plan, (ii) coordinate edits across more than one subsystem, and (iii) preserve intent over a multi-step trajectory where intermediate feedback is sparse. The median main-corpus task touches 57 GT files and 6{,}905 lines of diff, but we retain natural outliers at both ends. T10, for example, is a single-file task that remains in the corpus because it was part of the selection process and later serves as an informative sanity check: agents can pass a bounded task under the same protocol.
+We use the term \emph{long-horizon} operationally. A task is long-horizon when the agent must (i) interpret a high-level feature request into an architectural plan, (ii) coordinate edits across more than one subsystem, and (iii) preserve intent over a multi-step trajectory where intermediate feedback is sparse. Feature-enabling refactors are included only when the merged PR changes architecture or infrastructure needed for new behavior, rather than performing a cosmetic rename or mechanical cleanup. The median main-corpus task touches 57 GT files and 6{,}905 lines of diff, but we retain natural outliers at both ends. T10, for example, is a single-file task that remains in the corpus because it was part of the selection process and later serves as an informative sanity check: agents can pass a subsystem-contained task under the same protocol.
 
 \textbf{Industrial calibration subset (C1--C5, M1--M3, K1--K4).}
-The second tier contains 12 tasks from an industrial partner's accelerator, distributed-training, and platform-engineering ecosystem. It serves two purposes: (i) human-rater calibration, because three senior reviewers with domain expertise scored all 96 calibration runs; and (ii) discriminant-validity checking, because the subset spans bounded operator work through Kubernetes-class platform changes. Table~\ref{tab:tasks} lists the tasks. CANN denotes Compute Architecture for Neural Networks; \texttt{torch\_npu} is its PyTorch integration layer.
+The second tier contains 12 tasks from an industrial partner's accelerator, distributed-training, and platform-engineering ecosystem. It serves two purposes: (i) human-rater calibration, because three senior reviewers with domain expertise scored all 96 calibration runs; and (ii) discriminant-validity checking, because the subset spans subsystem-contained operator work through Kubernetes-class platform changes. Table~\ref{tab:tasks} lists the tasks. CANN denotes Compute Architecture for Neural Networks; \texttt{torch\_npu} is its PyTorch integration layer.
 
 \begin{table*}[t]
   \caption{Industrial calibration subset. Complexity reflects file count, cross-component coordination, generated-code surface, and domain knowledge.}
@@ -65,12 +65,12 @@ The second tier contains 12 tasks from an industrial partner's accelerator, dist
 \end{table*}
 
 \textbf{Complexity classification.}
-For the calibration subset, Low tasks are localized edits with little cross-component coordination, Medium tasks require bounded multi-file changes inside a narrow subsystem, and High tasks require cross-component changes, generated or API-facing surfaces, and stronger domain knowledge. Complexity is therefore a coordination label, not a pure file-count label. This is important for the Kubernetes tasks: K1 is smaller than some accelerator tasks by file count, but it still requires platform-level reasoning about API behavior, validation, and tests.
+For the calibration subset, Low tasks are localized edits with little cross-component coordination, Medium tasks require multi-file changes inside a narrow subsystem, and High tasks require cross-component changes, generated or API-facing surfaces, and stronger domain knowledge. Complexity is therefore a coordination label, not a pure file-count label. This is important for the Kubernetes tasks: K1 is smaller than some accelerator tasks by file count, but it still requires platform-level reasoning about API behavior, validation, and tests.
 
 \subsection{Benchmark Construction}
 \label{sec:benchmark-construction}
 
-The main corpus was curated to contain merged PRs that add new behavior, require coordination beyond a single localized edit except for retained natural outliers, and provide enough tests and review history to serve as meaningful references. The industrial calibration subset covers the partner's target stack across low, medium, and high coordination requirements. This two-tier design balances reproducibility with industrial calibration: open-source tasks carry the large-scale aggregate comparison, while industrial tasks test whether the rubric matches expert judgment on deployment-like codebases. We do not claim either tier is statistically representative of all feature work; the benchmark is designed to stress-test current agents near the boundary of system-level merge readiness.
+The main corpus was curated from candidate merged PRs in mature repositories. We kept PRs that added user-visible behavior or feature-enabling infrastructure, required coordination beyond a single localized edit except for retained natural outliers, and had enough tests, documentation, or review context to support a meaningful reference implementation. We excluded localized bug repairs, pure dependency bumps, mechanical formatting changes, and PRs whose behavior was not inferable from public artifacts. The 15-project mix was chosen to avoid measuring one ecosystem only: it includes systems infrastructure, language/runtime code, data platforms, web/developer tools, and ML/runtime frameworks across Java, Python, Go, C++, TypeScript, and Rust. The industrial calibration subset covers the partner's target stack across low, medium, and high coordination requirements. This two-tier design balances reproducibility with industrial calibration: open-source tasks carry the large-scale aggregate comparison, while industrial tasks test whether the rubric matches expert judgment on deployment-like codebases. We do not claim either tier is statistically representative of all feature work; the benchmark is designed to stress-test current agents near the boundary of system-level merge readiness.
 
 \subsection{Agent and Prompt Setup}
 \label{sec:configs}
@@ -95,7 +95,7 @@ We evaluate four product-level agent configurations, shown in Table~\ref{tab:con
   \end{tabular}
 \end{table}
 
-Each task is paired with a short and a long prompt. We use \textbf{EP} for engineering proposal: a natural-language task brief that states the requested behavior without revealing the GT patch. Table~\ref{tab:prompt-template} shows the prompt fields. Neither prompt variant includes GT file paths, function names, or code snippets.
+Each task is paired with a short and a long prompt. We use \textbf{EP} for engineering proposal: a natural-language task brief that states the requested behavior without revealing the GT patch. Table~\ref{tab:prompt-template} shows the prompt fields. Neither prompt variant includes the GT diff, the exact GT file list, or code snippets. Long prompts may name public subsystems or API surfaces when those names are part of the task brief, but they do not provide the reference implementation path through the repository.
 
 \begin{table}[t]
 \caption{Prompt variants. EP = engineering proposal.}
@@ -110,13 +110,16 @@ Ticket summary & Included & Included \\
 Motivation / user need & Brief & Detailed \\
 Design constraints & Omitted or brief & Numbered constraints \\
 Expected behavior & 1--2 sentences & Multi-paragraph EP \\
-Affected subsystems & Not named from GT & Described at subsystem level \\
+Affected subsystems & Not named from GT & Described at subsystem/API-surface level \\
 Test expectations & Brief if present & Explicit expected tests/checks \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 The short prompt approximates the information available in a compact ticket or issue summary. The long prompt approximates a structured engineering brief written before implementation. It can mention affected subsystems at a conceptual level, but it cannot disclose the reference patch's concrete file list. This distinction matters because the study asks whether richer requirements help agents reason about the task, not whether hints from the GT patch can steer them to the answer.
+
+\paragraph{Concrete prompt example.}
+Task K3 in the released corpus illustrates the difference between the two prompt granularities; the following is translated from its short and long prompt files in \texttt{base\_repo}. The short prompt says that Kubernetes image volumes mounted from OCI images do not expose the resolved digest in Pod status, and asks the agent to add digest information so users and controllers can identify the mounted image version. Its proposal mentions an \texttt{ImageVolumeWithDigest} feature gate, a status extension to \texttt{VolumeMountStatus}, kubelet runtime lookup, gate-off stripping, validation, and tests. The long EP keeps the same summary and proposal but adds the motivation: mutable tags such as \texttt{latest} create an observability gap for security audit, compliance, and rollback. It then expands the design into concrete requirements: extend internal and external Pod status types with a nested image-status structure; update conversion, deepcopy, protobuf-style, and other generated surfaces; register an Alpha feature gate; strip new fields when the gate is disabled while preserving already stored non-empty data for ratcheting; validate image-reference format and restrict the new status field to image volume mounts; query the CRI runtime for the resolved image reference in kubelet status construction; and test gate-on/gate-off behavior, drop logic, validation, kubelet digest filling, CRI interaction, and API compatibility. Neither variant includes the GT diff, exact GT file list, or implementation code.
 
 \subsection{Evaluation Metrics}
 \label{sec:eval-framework}

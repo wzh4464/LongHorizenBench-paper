@@ -58,7 +58,6 @@ The single passing main-corpus task also acts as a protocol sanity check. T10 is
 \label{tab:result-diagnostics-family}
 \centering
 \small
-% \setlength{\tabcolsep}{2.5pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrrr@{}}
 \toprule
 \textbf{Family} & \textbf{Claude} & \textbf{Codex} & \textbf{Cursor} & \textbf{OpenCode} & \textbf{Overall} \\
@@ -72,7 +71,7 @@ LongBench                & 1.0\%  & 1.0\%  & 1.0\% & 1.0\% & 1.0\% \\
 \end{table}
 
 \begin{table}[t]
-\caption{Per-run mean-score buckets by agent across all 496 runs.}
+\caption{Per-dimension mean-score buckets by agent across all 496 runs. Each run's 0--15 composite score is divided by three to obtain a 0--5 per-dimension mean.}
 \label{tab:result-diagnostics-score}
 \centering
 \small
@@ -88,14 +87,14 @@ OpenCode & 30 & 74 & 18 & 1 & 1 \\
 \end{tabular*}
 \end{table}
 
-Tables~\ref{tab:result-diagnostics-family} and~\ref{tab:result-diagnostics-score} provide two diagnostics for interpreting Tables~\ref{tab:main-agent} and~\ref{tab:config-pass}. The family-level table shows that pass rates are shaped more by task family than by product choice: SE-PASS outcomes concentrate in bounded CANN/MindSpeed tasks and the single LongBench outlier, while Kubernetes remains at 0\%. The score-bucket table shows that most runs occupy the low-to-mid score buckets, explaining why mean-score gains often indicate better drafts rather than merge-ready PRs.
+Tables~\ref{tab:result-diagnostics-family} and~\ref{tab:result-diagnostics-score} provide two diagnostics for interpreting Tables~\ref{tab:main-agent} and~\ref{tab:config-pass}. The family-level table shows that pass rates are shaped more by task family than by product choice: SE-PASS outcomes concentrate in subsystem-contained CANN/MindSpeed tasks and the single LongBench outlier, while Kubernetes remains at 0\%. The per-dimension score-bucket table shows that most runs occupy the low-to-mid 0--5 score range, explaining why mean-score gains often indicate better drafts rather than merge-ready PRs.
 
 \finding{1}{Current commercial coding agents rarely produce merge-ready feature PRs under a strict-equivalence criterion. The main corpus yields 4/400 SE-PASS outcomes (1.0\%), and all four disappear when the trivially scoped T10 task is excluded.}
 
 \subsection{Effect of Task Shape and System-Level Coordination (RQ2)}
 \label{sec:results-family}
 
-Task family explains more of the SE-PASS distribution than product choice. Table~\ref{tab:family} separates the 12-task calibration subset from the 50-task main corpus. Bounded accelerator and framework tasks produce a small number of passes, whereas Kubernetes-family platform tasks produce none across 32 runs.
+Task family explains more of the SE-PASS distribution than product choice. Table~\ref{tab:family} separates the 12-task calibration subset from the 50-task main corpus. Accelerator and framework tasks produce a small number of passes when the change remains within a subsystem boundary, whereas Kubernetes-family platform tasks produce none across 32 runs.
 
 \begin{table*}[t]
 \caption{SE-PASS rate by task family. Each calibration task has 8 runs; the main corpus has 400 runs.}
@@ -127,6 +126,6 @@ T (LongBench, mixed)           & 15 OSS projects         & 50 & 400 &  1.0\% \\
 
 Figure~\ref{fig:capability-cliff} visualizes the same pattern at task level. T10 is the lone main-corpus task above the approximate SE-PASS threshold. The calibration subset shows that low-coordination tasks can occasionally pass, but cross-module platform work remains below the threshold even when the GT file count is lower than some main-corpus tasks. This indicates that task difficulty is not captured by file count alone; cross-component coordination and test scaffolding matter.
 
-The Kubernetes-family tasks illustrate the coordination effect most clearly. They do not simply require many files; they require changes that remain consistent across API behavior, validation, generated surfaces, and tests. Agents often discover part of the relevant area but fail to complete the integration path. Conversely, the passing C and M tasks are bounded enough that a correct local plan can close the feature. This supports a routing interpretation: task family and coordination structure should determine whether an agent is used, not only the apparent size of the ticket.
+The Kubernetes-family tasks illustrate the coordination effect most clearly. They do not simply require many files; they require changes that remain consistent across API behavior, validation, generated surfaces, and tests. Agents often discover part of the relevant area but fail to complete the integration path. Conversely, the passing C and M tasks remain inside operator/framework subsystem boundaries where a correct local plan can close the feature. This supports a routing interpretation: task family and coordination structure should determine whether an agent is used, not only the apparent size of the ticket.
 
-\finding{2}{SE-PASS outcomes concentrate in bounded tasks. The 8 passing runs cluster in four tasks (C1, C4, M1, and T10), while Kubernetes-class platform tasks return 0/32 and the 49 non-trivially scoped main-corpus tasks return 0/392.}
+\finding{2}{SE-PASS outcomes avoid platform-level tasks. The 8 passing runs cluster in four tasks (C1, C4, M1, and T10), all either subsystem-contained operator/framework changes or the single-file T10 outlier, while Kubernetes-class platform tasks return 0/32 and the 49 non-trivially scoped main-corpus tasks return 0/392.}
