@@ -44,11 +44,9 @@ Commented-out sections: `02-industrial-context.tex` (merged into §1), `06-harne
 ## Figures
 
 - `figures/fig_pipeline.tex` — TikZ evaluation pipeline diagram
-- `figures/fig_pass_heatmap.tex` — TikZ PASS-rate heatmap (agent × task family)
-- `figures/fig_score_hist.tex` — TikZ score distribution histogram
-- `figures/src/score_dist.json` — data backing the histogram
+- Result diagnostics that were previously shown as heatmap/histogram figures now appear as `Table~\ref{tab:result-diagnostics}` in `sections/04-results.tex`.
 
-All figures are TikZ (no external image files). Edit the `.tex` files directly.
+Figures combine TikZ wrappers and PNG assets under `svg/`. Edit the `.tex` files directly when the figure layout changes.
 
 ## Canonical Data
 

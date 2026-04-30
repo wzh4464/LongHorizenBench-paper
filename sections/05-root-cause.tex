@@ -29,7 +29,9 @@ OpenCode & 0.0\% & 1.6\% & +1.6 & 3.72 & 4.60 & +0.88 \\
 
 On the main corpus, all four agents move from 0/50 short-prompt SE-PASS to 1/50 long-prompt SE-PASS, but the single passing task is always T10. Excluding T10, long prompts improve mean score by +0.99 to +2.12 across agents while producing zero SE-PASS. Thus, richer specifications improve partial draft quality but do not overcome the coordination barrier in non-trivial long-horizon tasks.
 
-\finding{3}{Long prompts are a draft-quality lever, not a hard-task SE-PASS lever. They raise mean scores for every agent, but do not produce any merge-ready output on the 49 non-trivially scoped main-corpus tasks.}
+This result should not be read as proving that the short prompt lacked all necessary information. The EP prompt adds motivation, constraints, affected subsystems, non-goals, and expected checks, but it still avoids leaking GT file paths or implementation structure. The remaining gap is therefore consistent with two explanations that our design cannot fully separate: agents may still lack task-critical repository information, and they may fail to operationalize a long specification into a correct cross-module plan. The narrower conclusion is that structured prompt detail improves drafts, but prompt detail alone does not close the system-level feature gap.
+
+\finding{3}{Long prompts improve drafts, but do not resolve whether failures come from missing task information or failed long-context operationalization. They raise mean scores for every agent, yet produce no merge-ready output on the 49 non-trivially scoped main-corpus tasks.}
 
 \subsection{Reliability of LLM-Based Evaluation (RQ4)}
 \label{sec:results-agreement}
@@ -87,23 +89,6 @@ OpenCode & 69 & 18 & 3  & 9 \\
 \end{tabular*}
 \end{table}
 
-\begin{table}[t]
-\centering
-\scriptsize
-\caption{Failure signatures by corpus segment, excluding SE-PASS runs.}
-\label{tab:failure-family}
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrr@{}}
-\toprule
-\textbf{Segment} & \textbf{Semantic} & \textbf{Coverage} & \textbf{Borderline} & \textbf{Design} \\
-\midrule
-Main corpus (T01--T50) & 177 & 101 & 75 & 43 \\
-Calibration (C/K/M)    & 25  & 27  & 34 & 6  \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-Table~\ref{tab:failure-family} shows a segment-level difference. The main corpus is dominated by semantic failures, consistent with unfamiliar projects and long cross-module changes. The calibration subset has proportionally more borderline partials and coverage gaps, consistent with agents getting closer on bounded or more familiar task families.
-
 \finding{5}{Non-SE-PASS outputs are dominated by semantic failures (44.7\%), but coverage gaps (25.5\%) and borderline partials (18.9\%) identify a substantial recoverable minority. This supports scope/test validation as a practical filter, not as a replacement for stronger agent reasoning.}
 
 \subsection{Engineering-Addressable and Capability-Limited Failures}
@@ -112,29 +97,3 @@ Table~\ref{tab:failure-family} shows a segment-level difference. The main corpus
 The failure taxonomy separates two kinds of improvement. Coverage gaps and some borderline partials are \emph{engineering-addressable}: a better harness can require the agent to enumerate affected files, generate or update tests, run static checks, and explain why the implementation reaches the feature boundary. These checks do not make the agent smarter, but they can prevent early stopping from being mistaken for a reviewable PR. In the main corpus, this addressable region covers at least the 101 coverage-gap failures and part of the 75 borderline partials.
 
 Semantic failures are different. When $\bar{A}<2$, adding more file-discovery scaffolding is unlikely to repair the run because the agent has misunderstood the feature, the invariant, or the implementation layer. These failures motivate model and agent-design improvements: stronger repository-level semantic reasoning, better plans that preserve invariants across edits, and validation loops that test behavior rather than only syntax. This distinction is why the discussion frames scope/test gates as a burden-reduction mechanism rather than a path to autonomous system-level feature delivery.
-
-\subsection{Representative Failure Examples}
-\label{sec:case-studies}
-
-Table~\ref{tab:case-studies} gives two concrete examples. They are not additional aggregate evidence; they illustrate how the failure signatures manifest in real PRs.
-
-\begin{table}[t]
-\centering
-\scriptsize
-\caption{Representative failure examples from the main corpus.}
-\label{tab:case-studies}
-\begin{tabularx}{\columnwidth}{@{}lY Y@{}}
-\toprule
-\textbf{Task} & \textbf{Closest agent output} & \textbf{Missing element} \\
-\midrule
-T01 Kafka KRaft & Claude-long covers 51/127 GT files, including wire schemas and a partial \texttt{KafkaRaftClient}. & Log replication, leader election, and most tests; the feature stops before natural closure. \\
-T13 Godot markers & Codex-long covers 16/18 GT files with marker CRUD methods. & Two cross-module registrations, leaving the feature invisible in the UI. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-In T01, the strongest draft starts in a plausible direction: it touches wire schemas and introduces a partial \texttt{KafkaRaftClient}. The problem is closure. The implementation stops before log replication, leader election, and most tests, so a reviewer would not be polishing a nearly finished PR; they would be restarting the central design. In T13, the draft is closer by coverage, but the missing registrations make the feature unreachable from the user-facing path. The two cases therefore receive the same non-SE-PASS verdict for different engineering reasons.
-
-These examples also explain why pure file overlap is not enough. T13 covers most GT files but misses high-leverage integration points; T01 covers many files but not the core protocol behavior. A realistic evaluation must combine semantic judgment, coverage, and behavioral equivalence.
-
-\finding{6}{The same non-SE-PASS label hides different engineering problems: scope collapse, cross-module registration gaps, wrong-layer implementation, and missing invariants require different review and validation checks.}

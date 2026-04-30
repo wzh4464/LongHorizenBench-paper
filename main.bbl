@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{38}
+\begin{thebibliography}{39}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -411,6 +411,17 @@
 \newblock
 \showeprint[arxiv]{2509.14745}
 \href{https://doi.org/10.48550/arXiv.2509.14745}{doi:\nolinkurl{10.48550/arXiv.2509.14745}}
+
+
+\bibitem[Wataoka et~al\mbox{.}(2024)]%
+        {wataoka2024selfpreference}
+\bibfield{author}{\bibinfo{person}{Koki Wataoka}, \bibinfo{person}{Tsubasa
+  Takahashi}, {and} \bibinfo{person}{Ryokan Ri}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Self-Preference Bias in {LLM}-as-a-Judge}.
+\newblock
+\showeprint[arxiv]{2410.21819}
+\href{https://doi.org/10.48550/arXiv.2410.21819}{doi:\nolinkurl{10.48550/arXiv.2410.21819}}
 
 
 \bibitem[Wu et~al\mbox{.}(2024)]%

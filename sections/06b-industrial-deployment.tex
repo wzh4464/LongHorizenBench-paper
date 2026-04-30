@@ -5,10 +5,6 @@
 
 The results suggest that current agents should be integrated cautiously: they can draft bounded changes, but they do not yet own system-level feature delivery. We summarize four implications in the style of empirical benchmarking studies.
 
-\input{figures/fig_implication_panels}
-
-Figure~\ref{fig:implication-panels} visualizes the discussion structure. The routing pipeline in Figure~\ref{fig:deployment-gates} is not presented as an already deployed process; it is a compact summary of implications supported by the empirical results. Figure~\ref{fig:failure-gate-map} links each gate to the failure signatures in \S\ref{sec:failure-modes}.
-
 \paragraph{Implication 1: Route only bounded tasks to agents.}
 SE-PASS outcomes appear only on bounded tasks (C1, C4, M1, T10), while the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Industrial users should therefore treat agent invocation as a task-shape decision. Local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates; cross-component platform features should remain human-authored until a new evaluation demonstrates otherwise.
 
@@ -25,7 +21,7 @@ Table~\ref{tab:failure-signatures} shows that 25.5\% of main-corpus failures are
 A practical pre-review gate should therefore ask for evidence, not confidence. Examples include a discovered-file plan, an explanation of touched subsystems, a list of tests added or intentionally omitted, and project-specific syntax or type checks. These gates are inexpensive compared with senior review time and directly target the recoverable failure mass identified in \S\ref{sec:addressable-failures}.
 
 \paragraph{Implication 4: Use calibrated multi-evaluator review.}
-Pairwise LLM-judge agreement is too low for single-judge evaluation, and same-family bias remains a credible threat in any LLM-as-judge setup. A practical evaluation workflow should use multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
+Pairwise LLM-judge agreement is too low for single-judge evaluation, and same-family/self-preference bias remains a credible threat in any LLM-as-judge setup~\cite{wataoka2024selfpreference}. A practical evaluation workflow should use multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
 
 This does not imply that LLM judges can replace code review. The safer interpretation is that calibrated judges can triage agent outputs before they reach reviewers, flagging obvious failures and producing structured rationales. Human review remains necessary for accepted candidates, especially when the implementation is an alternative design rather than a close match to a known reference.
 
