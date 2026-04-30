@@ -1,65 +1,36 @@
 % !TEX root = ../main.tex
-\section{Deployment Policy Derived from the Audit}
+\section{Discussion and Future Work}
+\label{sec:discussion}
 \label{sec:industrial-deployment}
 
-We summarise the deployment policy that emerged from this audit as a
-four-gate pipeline applied to every incoming feature ticket
-(Figure~\ref{fig:deployment-pipeline}). Routing decisions, prompt curation,
-agent invocation, and judging are now mechanised; humans remain in the
-loop only at the final review stage and for tickets explicitly routed
-out of the agent track.
+The results suggest that current agents should be integrated cautiously: they can draft bounded changes, but they do not yet own system-level feature delivery. We summarize four implications in the style of empirical benchmarking studies.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{svg/deployment_gate_pipeline.png}
-\caption{Four-gate deployment pipeline. Each gate addresses a specific failure mode surfaced by the audit: task-class routing (0/32 Kubernetes SE-PASS), spec template (long prompts lift scores by +1.0--2.1), scope/test CI (25.5\% coverage-gap failures), and multi-judge panel (pairwise agreement as low as 42.5\%).}
-\label{fig:deployment-pipeline}
-\end{figure}
+\input{figures/fig_implication_panels}
 
-\paragraph{Route only bounded feature work to agents.}
-The tasks that pass are bounded, reviewable changes with limited
-cross-component coordination. In a production rollout, these correspond
-to local operator fixes, focused Python framework changes, and
-well-scoped test or registry updates. Multi-module platform changes,
-especially Kubernetes-family work, should remain human-owned until an
-explicit process harness demonstrates a different result.
+Figure~\ref{fig:implication-panels} visualizes the discussion structure. The routing pipeline in Figure~\ref{fig:deployment-gates} is not presented as an already deployed process; it is a compact summary of implications supported by the empirical results. Figure~\ref{fig:failure-gate-map} links each gate to the failure signatures in \S\ref{sec:failure-modes}.
 
-\paragraph{Treat task specification as an engineering artifact.}
-On the main corpus, long prompts lift mean composite scores by
-$+1.0$ to $+2.1$ across all four agents (Table~\ref{tab:prompt}),
-though the SE-PASS gain is confined to the trivially scoped T10.
-On the calibration subset, Claude and Codex rise from 0\% to 8.3\%
-SE-PASS with long prompts.
-For practitioners, this means the cheapest near-term intervention is not
-model switching but requiring a structured task brief: motivation,
-expected behaviour, constraints, affected subsystems, and test
-expectations.
+\paragraph{Implication 1: Route only bounded tasks to agents.}
+SE-PASS outcomes appear only on bounded tasks (C1, C4, M1, T10), while the 49 non-trivially scoped main-corpus tasks and all Kubernetes-family tasks produce no SE-PASS. Industrial users should therefore treat agent invocation as a task-shape decision. Local operator changes, focused framework edits, and well-scoped test or registry updates are plausible candidates; cross-component platform features should remain human-authored until a new evaluation demonstrates otherwise.
 
-\paragraph{Require scope and test gates before review.}
-A common and directly addressable failure pattern is not that agents
-always write nonsensical code; it is that they stop early. A production acceptance workflow
-should therefore reject an agent draft before human review unless it
-passes three cheap gates: a discovered-file plan, a generated-or-updated
-test plan, and project-specific syntax/type checks. These gates do not
-guarantee correctness, but they filter out the common incomplete drafts
-that currently consume reviewer time.
+This implication is deliberately narrower than a blanket adoption claim. The study does not show that agents cannot help with large features; it shows that a single autonomous attempt should not be treated as a merge-ready owner for such work. For broad features, agents may still be useful for exploration, test sketching, or localized subchanges after a human decomposes the task.
 
-\paragraph{Use evaluator panels, not a single judge.}
-Raw pairwise agreement spans 42.5\% (Codex vs.\ GLM) to 74.4\%
-(Claude vs.\ Cursor), and Fleiss' $\kappa$ is only 0.30. Any production
-gate that builds on LLM-as-judge must therefore use at least two
-independent evaluator families and a conservative tie-break. Single
-judge gates will drift simply by swapping the judge model.
+\paragraph{Implication 2: Treat structured specifications as engineering artifacts.}
+Long prompts improve mean score for every agent (Table~\ref{tab:prompt}), even though they do not solve non-trivial long-horizon tasks. This makes structured task briefs worthwhile as a low-cost intervention. A useful brief should state motivation, expected behavior, constraints, affected subsystems, non-goals, and expected tests before the agent edits code.
 
-In short, agents are conservative drafters for bounded work today, not autonomous feature owners. The investment that converts the 1.0\% main-corpus SE-PASS rate into something deployable is harness engineering: forcing scope discovery, test evidence, and multi-judge acceptance \emph{before} a human reviewer ever sees the change.
+The prompt result is especially relevant for industrial teams because it points to process leverage outside the model vendor. A long-form engineering proposal can be reviewed before any code is generated, reused across agents, and attached to the eventual PR as design rationale. Even when the agent output remains partial, the structured brief reduces ambiguity for both the agent and the human reviewer.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{svg/failure_to_gate_mapping.png}
-  \caption{Mapping from failure signatures (\S\ref{sec:root-cause}) to deployment gates. Coverage gaps (25.5\%) are directly filterable by Gate~3; borderline partials (18.9\%) are partially recoverable; the semantic-failure slice (44.7\%) requires model or specification improvements beyond current gating.}
-  \label{fig:failure-gate-map}
-\end{figure}
+\paragraph{Implication 3: Add scope and test checks before human review.}
+Table~\ref{tab:failure-signatures} shows that 25.5\% of main-corpus failures are coverage gaps and 18.9\% are borderline partials. These are the failures most likely to be filtered by file-plan checks, required test evidence, type/syntax checks, and subsystem-specific consistency checks. Such checks will not fix semantic failures, but they can prevent incomplete drafts from consuming reviewer attention.
 
-\paragraph{Huawei adoption.}
-The four interventions compose into a single routing pipeline (Figure~\ref{fig:deployment-pipeline}). The audit's contribution is precisely to identify which gates remove the non-SE-PASS draft mass observed in \S\ref{sec:results}.
-All four gates are now operational: CANN/MindSpeed operator work is approved for agent-first drafting (Gate~1), every agent-eligible ticket requires the long-form template (Gate~2), drafts failing scope/test checks are returned to the agent (Gate~3), and the calibrated 3-of-4 LLM panel runs on every agent PR (Gate~4). Kubernetes-class work remains human-authored.
+A practical pre-review gate should therefore ask for evidence, not confidence. Examples include a discovered-file plan, an explanation of touched subsystems, a list of tests added or intentionally omitted, and project-specific syntax or type checks. These gates are inexpensive compared with senior review time and directly target the recoverable failure mass identified in \S\ref{sec:addressable-failures}.
+
+\paragraph{Implication 4: Use calibrated multi-evaluator review.}
+Pairwise LLM-judge agreement is too low for single-judge evaluation, and same-family bias remains a credible threat in any LLM-as-judge setup. A practical evaluation workflow should use multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
+
+This does not imply that LLM judges can replace code review. The safer interpretation is that calibrated judges can triage agent outputs before they reach reviewers, flagging obvious failures and producing structured rationales. Human review remains necessary for accepted candidates, especially when the implementation is an alternative design rather than a close match to a known reference.
+
+\paragraph{Generalizability to industrial settings.}
+The benchmark is intentionally harsher than many day-to-day programming tasks. That harshness is useful for industrial planning: if agents fail at system-level feature ownership, organizations can still deploy them at smaller units while measuring progress on the harder boundary. The findings are therefore most actionable as routing guidance. Teams should maintain a portfolio of eligible task classes, measure agent outputs against local review criteria, and expand eligibility only when pass rates improve under the same calibrated protocol.
+
+\paragraph{Future work.}
+Three next steps follow directly from the threats in \S\ref{sec:threats}. First, repeated runs of the SE-PASS-yielding cells would turn the current point estimates into confidence intervals. Second, a stratified human re-rating of main-corpus PARTIAL outputs would estimate the gap between strict SE-PASS and relaxed reviewer-acceptable PASS (RA-PASS). Third, future benchmarks should evaluate agent improvements targeted at the dominant failure modes: long-context semantic reasoning, cross-module registration, test generation, and invariant preservation.

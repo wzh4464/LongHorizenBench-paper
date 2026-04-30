@@ -1,28 +1,60 @@
 % !TEX root = ../main.tex
-\section{Root Cause Analysis}
+\section{Empirical Results of Prompting, Evaluation, and Failure Modes}
+\label{sec:prompting-failures}
 \label{sec:root-cause}
 
-Of the 400 main-corpus runs (T01--T50, four agents $\times$ two prompts $\times$ 50 tasks), only 4 achieved SE-PASS (1.0\%), all on T10-long; 396 were non-SE-PASS.
-We focus the root-cause analysis on these 396 main-corpus failures, which represent the long-horizon feature tasks from which our deployment-policy conclusions derive.
-(The 12 calibration tasks contribute an additional 92 non-SE-PASS runs with a qualitatively similar profile; see below.)
+This section answers RQ3 and RQ4. We first measure whether richer task specifications help, then examine evaluator reliability and the structure of non-SE-PASS failures.
 
-%% ------------------------------------------------------------------
-\subsection{CSV-Derived Failure Signatures}
+\subsection{Effect of Prompt Granularity (RQ3)}
+\label{sec:results-prompt}
+
+Each task was run with a short ticket-style prompt and a long engineering-proposal (EP) prompt. Table~\ref{tab:prompt} aggregates the effect by agent. No short-prompt run reaches SE-PASS. Long prompts improve mean composite scores for all four agents, but the SE-PASS increase comes only from bounded calibration tasks and T10.
+
+\begin{table*}[t]
+\caption{Prompt effect. $\Delta$ = long $-$ short, percentage points for SE-PASS and score points for mean.}
+\label{tab:prompt}
+\centering
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
+\toprule
+\textbf{Agent} & \textbf{Short SE-PASS} & \textbf{Long SE-PASS} & \textbf{$\Delta$SE-PASS} & \textbf{Short mean} & \textbf{Long mean} & \textbf{$\Delta$mean} \\
+\midrule
+Claude   & 0.0\% & 4.8\% & +4.8 & 5.08 & 6.28 & +1.20 \\
+Codex    & 0.0\% & 4.8\% & +4.8 & 5.20 & 6.44 & +1.24 \\
+Cursor   & 0.0\% & 1.6\% & +1.6 & 4.00 & 5.77 & +1.77 \\
+OpenCode & 0.0\% & 1.6\% & +1.6 & 3.72 & 4.60 & +0.88 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+On the main corpus, all four agents move from 0/50 short-prompt SE-PASS to 1/50 long-prompt SE-PASS, but the single passing task is always T10. Excluding T10, long prompts improve mean score by +0.99 to +2.12 across agents while producing zero SE-PASS. Thus, richer specifications improve partial draft quality but do not overcome the coordination barrier in non-trivial long-horizon tasks.
+
+\finding{3}{Long prompts are a draft-quality lever, not a hard-task SE-PASS lever. They raise mean scores for every agent, but do not produce any merge-ready output on the 49 non-trivially scoped main-corpus tasks.}
+
+\subsection{Reliability of LLM-Based Evaluation (RQ4)}
+\label{sec:results-agreement}
+
+Pairwise verdict agreement among the four LLM evaluators ranges from 42.5\% (Codex--GLM) to 74.4\% (Claude--Cursor); full four-way consensus holds for 33.7\% of runs. Because single-judge disagreement is substantial, all headline verdicts use the four-judge majority rule described in \S\ref{sec:eval-framework}.
+
+\par\noindent\fbox{\parbox{0.96\columnwidth}{\small%
+\textbf{Human calibration summary.}
+The 12-task calibration subset contains 96 runs, each blind-rated by three senior reviewers with domain expertise.
+SE-PASS-vs-non-SE-PASS agreement between the human reviewers and the LLM panel is \textbf{92.7\%} ($\kappa{=}0.43$).
+The LLM panel is stricter: it never promotes a human-rejected run to SE-PASS and demotes 6 of 9 human-SE-PASS runs.}}\par
+
+We also test same-family bias by recomputing each agent's headline verdict after removing the judge from the same model family. SE-PASS counts are unchanged for Claude (3$\to$3), Codex (3$\to$3), and Cursor (1$\to$1); OpenCode drops from 1 to 0. Only 6.9\% of verdict cells change under leave-one-family-out, and Codex's own judge is the strictest evaluator of Codex output. These checks do not remove all LLM-as-judge threats, but they indicate that the 1.0\% main-corpus SE-PASS rate is not caused by same-family judge leniency.
+
+\finding{4}{A single LLM judge is too unstable for open-ended feature-PR evaluation, but a conservative multi-judge panel calibrated against human reviewers gives a reproducible lower-bound estimate of merge readiness.}
+
+\subsection{Failure Signatures (RQ4)}
 \label{sec:failure-modes}
 
-We classify each non-SE-PASS run using the same four-evaluator record used for the headline tables.
-For a run, we average the four judges' $A$ (functional correctness), $B$ (completeness/coverage), and $C$ (behavioral equivalence) scores, then assign the first matching signature:
-\begin{itemize}
-  \item \textbf{Semantic/correctness failure}: $\bar{A} < 2$.
-  \item \textbf{Coverage gap}: $\bar{A} \ge 2$ and $\bar{B} < 2$.
-  \item \textbf{Behavioral/design mismatch}: $\bar{A} \ge 2$, $\bar{B} \ge 2$, and $\bar{C} < 2$.
-  \item \textbf{Borderline partial}: no dimension is critically deficient, but the run does not reach the SE-PASS thresholds.
-\end{itemize}
+For each non-SE-PASS run, we average the four judges' A/B/C scores and classify the run using the first matching rule in Table~\ref{tab:failure-signatures}. The classification is computed from the per-run evaluator CSV used for the headline tables.
 
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Failure signatures over the 396 non-SE-PASS main-corpus runs (T01--T50), computed from the averaged A/B/C evaluator scores.}
+\caption{Failure signatures over the 396 non-SE-PASS main-corpus runs.}
 \label{tab:failure-signatures}
 \begin{tabularx}{\columnwidth}{@{}lYrr@{}}
 \toprule
@@ -36,21 +68,12 @@ Borderline partial & all $\ge 2$, not SE-PASS & 75 & 18.9\% \\
 \end{tabularx}
 \end{table}
 
-Table~\ref{tab:failure-signatures} changes the interpretation of the failures in an important way.
-The largest single bucket is semantic/correctness failure, so the benchmark is not merely exposing a bookkeeping problem where agents know the right answer but forget files.
-At the same time, coverage gaps account for 25.5\% of all non-SE-PASS runs, and another 18.9\% are borderline partials with no critically deficient dimension.
-Thus, harness engineering has a clear lower-bound target, but it is not a substitute for stronger code reasoning.
-
-\textbf{Finding 6 (Failure mass is dominated by semantic errors).} Among the 396 main-corpus failures, 44.7\% are semantic/correctness failures, while 25.5\% are coverage gaps with some demonstrated understanding. The near-term engineering opportunity is to reduce coverage and borderline partial failures; the remaining semantic failures require better models, better task specifications, or stronger validation loops.
-
-%% ------------------------------------------------------------------
-\subsection{Agent and Family Signatures}
-\label{sec:family-signatures}
+The largest bucket is semantic failure, so the benchmark is not simply exposing incomplete file discovery. At the same time, coverage gaps and borderline partials account for 44.4\% of failures, showing that a meaningful minority of non-SE-PASS outputs contain recoverable structure. Table~\ref{tab:failure-agent} further shows that agents fail differently: Codex has the largest borderline bucket, while OpenCode has the largest semantic-failure bucket.
 
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Failure signatures by agent on the main corpus (T01--T50), excluding SE-PASS runs ($n{=}99$ non-SE-PASS per agent).}
+\caption{Failure signatures by agent on the main corpus, excluding SE-PASS runs ($n{=}99$ per agent).}
 \label{tab:failure-agent}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrr@{}}
 \toprule
@@ -63,11 +86,6 @@ OpenCode & 69 & 18 & 3  & 9 \\
 \bottomrule
 \end{tabular*}
 \end{table}
-
-Table~\ref{tab:failure-agent} explains why mean composite score and SE-PASS count tell slightly different stories.
-Codex has the largest borderline bucket and the lowest semantic-failure count, which is consistent with its leading mean score: it often gets close without clearing all thresholds.
-OpenCode has the largest semantic-failure bucket, explaining its lower mean score even though it shares the same one-SE-PASS count as Cursor.
-Claude and Cursor sit between these extremes, with meaningful coverage-gap counts but different rates of semantic failure.
 
 \begin{table}[t]
 \centering
@@ -84,26 +102,39 @@ Calibration (C/K/M)    & 25  & 27  & 34 & 6  \\
 \end{tabular*}
 \end{table}
 
-The two segments fail differently.
-In the main corpus, semantic failure dominates (44.7\%), reflecting the diversity of unfamiliar projects, languages, and build systems across the 50 LongBench tasks.
-The calibration set (C/K/M, 92 runs) has a higher share of borderline partials (37\%) and coverage gaps (29\%), consistent with agents getting closer on tasks from repositories they encounter more often in training data.
+Table~\ref{tab:failure-family} shows a segment-level difference. The main corpus is dominated by semantic failures, consistent with unfamiliar projects and long cross-module changes. The calibration subset has proportionally more borderline partials and coverage gaps, consistent with agents getting closer on bounded or more familiar task families.
 
-\textbf{Finding 7 (Root-cause profiles differ by corpus segment).} The main corpus is dominated by semantic failures that require stronger model reasoning, while the calibration tasks show proportionally more coverage and borderline failures amenable to harness-level interventions.
+\finding{5}{Non-SE-PASS outputs are dominated by semantic failures (44.7\%), but coverage gaps (25.5\%) and borderline partials (18.9\%) identify a substantial recoverable minority. This supports scope/test validation as a practical filter, not as a replacement for stronger agent reasoning.}
 
-%% ------------------------------------------------------------------
-\subsection{Engineering-Addressable vs.\ Model-Capability Gaps}
-\label{sec:root-cause-addressable}
+\subsection{Engineering-Addressable and Capability-Limited Failures}
+\label{sec:addressable-failures}
 
-Coverage gaps (101 runs, 25.5\%) are directly targetable by file-discovery plans and mandatory test checks; borderline partials (75, 18.9\%) are mixed. The 177 semantic failures (44.7\%) represent a lower bound on model-capability limits where expanding the touched file set is insufficient. Harnesses can recover a meaningful minority of failures, but production feature work still requires human ownership for high-complexity changes.
+The failure taxonomy separates two kinds of improvement. Coverage gaps and some borderline partials are \emph{engineering-addressable}: a better harness can require the agent to enumerate affected files, generate or update tests, run static checks, and explain why the implementation reaches the feature boundary. These checks do not make the agent smarter, but they can prevent early stopping from being mistaken for a reviewable PR. In the main corpus, this addressable region covers at least the 101 coverage-gap failures and part of the 75 borderline partials.
 
-%% ------------------------------------------------------------------
-\subsection{Failure-Mode Case Studies}
+Semantic failures are different. When $\bar{A}<2$, adding more file-discovery scaffolding is unlikely to repair the run because the agent has misunderstood the feature, the invariant, or the implementation layer. These failures motivate model and agent-design improvements: stronger repository-level semantic reasoning, better plans that preserve invariants across edits, and validation loops that test behavior rather than only syntax. This distinction is why the discussion frames scope/test gates as a burden-reduction mechanism rather than a path to autonomous system-level feature delivery.
+
+\subsection{Representative Failure Examples}
 \label{sec:case-studies}
 
-We illustrate two representative failure modes; two additional cases (T20 wrong-layer; T34 missing-invariant) are in the artefact bundle.
+Table~\ref{tab:case-studies} gives two concrete examples. They are not additional aggregate evidence; they illustrate how the failure signatures manifest in real PRs.
 
-\paragraph{T01 (Kafka KRaft) --- scope collapse.} The reference patch touches 127 HW files. The strongest run (Claude, long prompt) covered 51/127 (40\%), implementing wire schemas and a stub \texttt{KafkaRaftClient} (34/91 methods) but omitting log replication, leader-election, and most tests (3/65). The pattern is \emph{scope collapse}: the agent starts correctly but stops well below the change set's natural closure.
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Representative failure examples from the main corpus.}
+\label{tab:case-studies}
+\begin{tabularx}{\columnwidth}{@{}lY Y@{}}
+\toprule
+\textbf{Task} & \textbf{Closest agent output} & \textbf{Missing element} \\
+\midrule
+T01 Kafka KRaft & Claude-long covers 51/127 GT files, including wire schemas and a partial \texttt{KafkaRaftClient}. & Log replication, leader election, and most tests; the feature stops before natural closure. \\
+T13 Godot markers & Codex-long covers 16/18 GT files with marker CRUD methods. & Two cross-module registrations, leaving the feature invisible in the UI. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\paragraph{T13 (Godot markers) --- cross-module wire-up.} The strongest run (Codex, long prompt) reaches 16/18 HW files (89\%) with correct marker-CRUD methods, but skips two cross-module registrations (editor plugin, blend-tree dispatch), rendering the feature invisible in the UI. \emph{Harness lesson}: features requiring registration in multiple dispatch tables are systematically under-wired.
+In T01, the strongest draft starts in a plausible direction: it touches wire schemas and introduces a partial \texttt{KafkaRaftClient}. The problem is closure. The implementation stops before log replication, leader election, and most tests, so a reviewer would not be polishing a nearly finished PR; they would be restarting the central design. In T13, the draft is closer by coverage, but the missing registrations make the feature unreachable from the user-facing path. The two cases therefore receive the same non-SE-PASS verdict for different engineering reasons.
 
-\textbf{Finding 8 (Distinct failure modes motivate distinct gates).} Scope collapse, cross-module wire-up gaps, wrong-layer implementation, and missing invariants each require a different harness-side check (file-plan enforcement, reachability scans, layer-aware planning, invariant enumeration).
+These examples also explain why pure file overlap is not enough. T13 covers most GT files but misses high-leverage integration points; T01 covers many files but not the core protocol behavior. A realistic evaluation must combine semantic judgment, coverage, and behavioral equivalence.
+
+\finding{6}{The same non-SE-PASS label hides different engineering problems: scope collapse, cross-module registration gaps, wrong-layer implementation, and missing invariants require different review and validation checks.}

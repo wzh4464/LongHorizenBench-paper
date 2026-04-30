@@ -1,40 +1,44 @@
 % !TEX root = ../main.tex
-\section{Study Design}\label{sec:study-design}
+\section{Methodology}
+\label{sec:study-design}
 
 \input{figures/fig_pipeline}
 
-Figure~\ref{fig:pipeline} summarizes our experiment pipeline.
-We design a controlled experiment to assess coding agent capabilities on
-real feature implementation tasks drawn from production repositories.
-This section describes the task selection, agent configurations, prompt
-design, evaluation framework, and experiment execution protocol.
+Figure~\ref{fig:pipeline} summarizes the end-to-end protocol. We build a two-tier benchmark, run each task with four commercial agents and two prompt variants, then score every generated diff with a calibrated four-evaluator panel.
 
-%% ------------------------------------------------------------------
-\subsection{Task Selection}\label{sec:tasks}
+\subsection{Scope of Tasks}
+\label{sec:tasks}
 
-Our benchmark comprises two complementary tiers.
+The benchmark contains 62 feature-implementation tasks and 496 agent runs. We use \textbf{GT} to denote the merged ground-truth implementation. Each task corresponds to one merged PR and is evaluated at the PR level rather than at the level of a single function or file.
 
-\textbf{Main evaluation corpus (LongBench, T01--T50).}
-The primary tier consists of 50 long-horizon feature-implementation tasks drawn from 15 widely used open-source projects (Kafka, CPython, Airflow, Kubernetes, Terraform, Spring, etc.) spanning six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1). Each task corresponds to a single merged pull request implementing one coherent feature or refactor; the median task touches 57 ground-truth files and 6{,}905 lines of diff. The full LongBench task inventory is included in the replication package.
+\textbf{Main corpus (LongBench, T01--T50).}
+The main corpus consists of 50 long-horizon feature tasks from 15 widely used open-source projects, including Kafka, CPython, Airflow, Kubernetes, Terraform, and Spring. These tasks provide a reproducible stress test for system-level feature work while avoiding proprietary-source release constraints. Table~\ref{tab:main-corpus-scope} summarizes the corpus distribution.
 
-We use the term \emph{long-horizon} in the sense crystallized across recent coding-agent benchmarks~\cite{swebenchpro2025, sweevo, featbench2025}: a task is long-horizon when it requires the agent to (i)~interpret a high-level requirement into an architectural plan spanning multiple modules, (ii)~coordinate edits across many files while preserving cross-file invariants, and (iii)~sustain coherent intent over a prolonged action trajectory in which intermediate feedback is sparse and errors compound. Our LongBench tasks have a median of 57 ground-truth files changed and 6{,}905 lines of diff---an order of magnitude beyond SWE-Bench Pro (avg 4.1 files, 107~LOC) and two orders of magnitude beyond SWE-bench Verified (avg 1.7 files, 33~LOC).
+\begin{table}[t]
+\caption{Main-corpus scope. GT = ground truth merged implementation.}
+\label{tab:main-corpus-scope}
+\centering
+\small
+\begin{tabularx}{\columnwidth}{@{}lY@{}}
+\toprule
+\textbf{Property} & \textbf{Distribution} \\
+\midrule
+Tasks / projects & 50 tasks from 15 open-source projects \\
+Languages & Java 20, Python 13, Go 8, C++ 6, TypeScript 2, Rust 1 \\
+GT files & Median 57; range 1--340 \\
+GT diff size & Median 6{,}905 LOC; range 3--68{,}000 LOC \\
+Task type & Merged feature or refactor PRs, not localized bug repairs \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\textbf{Calibration subset (C1--C5, M1--M3, K1--K4).}
-The second tier consists of 12 industrial tasks from the Huawei/platform ecosystem---the CANN/\texttt{torch\_npu} accelerator stack, MindSpeed, and Kubernetes---summarised in Table~\ref{tab:tasks}. These tasks serve two roles: (i)~\emph{human-rater pilot calibration}: 96 runs (12~tasks $\times$ 4~agents $\times$ 2~prompts) were scored by three blinded senior reviewers with domain expertise in these codebases, producing 92.7\% SE-PASS-vs-non-SE-PASS agreement with the LLM panel (\S\ref{sec:eval-framework}); and (ii)~\emph{rubric discriminant validity}: simple bounded tasks (Low/Medium) achieve \textsc{se-pass} while cross-cutting Kubernetes work (High) does not, confirming the rubric separates difficulty levels as intended.
+We use the term \emph{long-horizon} operationally. A task is long-horizon when the agent must (i) interpret a high-level feature request into an architectural plan, (ii) coordinate edits across more than one subsystem, and (iii) preserve intent over a multi-step trajectory where intermediate feedback is sparse. The median main-corpus task touches 57 GT files and 6{,}905 lines of diff, but we retain natural outliers at both ends. T10, for example, is a single-file task that remains in the corpus because it was part of the selection process and later serves as an informative sanity check: agents can pass a bounded task under the same protocol.
 
-\textbf{Combined benchmark.}
-Combining both tiers gives \textbf{62 tasks $\times$ 4 agents $\times$ 2 prompt variants = 496 runs}.
-Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibration set validates the evaluation pipeline, while the primary experiment measures the capability boundary and derives the deployment gates.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{svg/study_architecture_overview.png}
-  \caption{Two-track study architecture. The calibration set (12 industrial tasks, 96 runs) validates the LLM-judge panel against human raters; the primary experiment (50 long-horizon tasks, 400 runs) measures the agent capability boundary and derives the four deployment gates.}
-  \label{fig:study-arch}
-\end{figure}
+\textbf{Industrial calibration subset (C1--C5, M1--M3, K1--K4).}
+The second tier contains 12 tasks from an industrial partner's accelerator, distributed-training, and platform-engineering ecosystem. It serves two purposes: (i) human-rater calibration, because three senior reviewers with domain expertise scored all 96 calibration runs; and (ii) discriminant-validity checking, because the subset spans bounded operator work through Kubernetes-class platform changes. Table~\ref{tab:tasks} lists the tasks. CANN denotes Compute Architecture for Neural Networks; \texttt{torch\_npu} is its PyTorch integration layer.
 
 \begin{table*}[t]
-  \caption{Calibration subset: 12 Huawei/platform tasks used for human-rater pilot calibration and rubric discriminant-validity checks. GT = ground truth (merged code). Complexity reflects file count, cross-component coordination, generated-code surface, and domain-specific knowledge. The remaining 50 tasks (LongBench main corpus) are detailed in the replication package.}
+  \caption{Industrial calibration subset. Complexity reflects file count, cross-component coordination, generated-code surface, and domain knowledge.}
   \label{tab:tasks}
   \centering
   \small
@@ -61,23 +65,25 @@ Figure~\ref{fig:study-arch} summarizes how the two tiers interact: the calibrati
 \end{table*}
 
 \textbf{Complexity classification.}
-Tasks are classified into Low (localised edits, C1/M1), Medium (bounded multi-file changes in a narrow subsystem, C2/C3/M2/M3), and High (cross-component changes requiring generated/API surfaces and extensive testing, C4/C5/K1--K4). Thresholds reflect coordination requirements, not pure file count.
-The calibration subset spans four languages (C++, AscendC, Python, Go), all three complexity tiers, and Huawei's target deployment codebases: CANN/MindSpeed (Ascend NPU stack, agent-first drafting under active rollout) and Kubernetes (platform engineering, the most operationally urgent deployment question).
+For the calibration subset, Low tasks are localized edits with little cross-component coordination, Medium tasks require bounded multi-file changes inside a narrow subsystem, and High tasks require cross-component changes, generated or API-facing surfaces, and stronger domain knowledge. Complexity is therefore a coordination label, not a pure file-count label. This is important for the Kubernetes tasks: K1 is smaller than some accelerator tasks by file count, but it still requires platform-level reasoning about API behavior, validation, and tests.
 
-\paragraph{LongBench selection criteria.}
-We curated 50 tasks from 15 production-grade open-source projects under three criteria: (i)~the merged PR adds new behaviour rather than fixing a regression, (ii)~the change touches at least two source modules, and (iii)~each task ships with the upstream PR's test suite as the behavioural oracle.
-Selection was convenience-sampled from projects matching Huawei's technology stack, not stratified by difficulty. The distribution covers six languages (Java~20, Python~13, Go~8, C++~6, TypeScript~2, Rust~1) and a wide complexity range (1--340 GT files, 3--68{,}000 LOC diff). We make no claim that this represents the full Huawei feature backlog; the corpus stress-tests the boundary of long-horizon feature delivery.
+\subsection{Benchmark Construction}
+\label{sec:benchmark-construction}
 
-%% ------------------------------------------------------------------
-\subsection{Agent Configurations}\label{sec:configs}
+The main corpus was curated under three criteria: the merged PR must add new behavior rather than merely fix a regression; the change must require coordination beyond a single localized edit, except for natural outliers retained by the selection process; and the upstream repository must contain enough tests and review history to make the merged PR a meaningful reference. The industrial calibration subset was selected to cover the partner's target technology stack and to include low, medium, and high coordination requirements.
 
-We evaluate four primary agent configurations, summarised in
-Table~\ref{tab:configs}.  Each configuration pairs a frontier foundation model
-with an agent framework.
+Using both tiers addresses two competing requirements. Open-source tasks make the main evidence reproducible and reduce proprietary-data exposure. Industrial tasks calibrate whether the scoring rubric matches expert judgment on the deployment-like codebases that motivated the study. We do not claim either tier is a statistically representative sample of all feature work; the benchmark is designed to stress-test current agents near the boundary of system-level merge readiness.
+
+The two tiers also prevent a common evaluation failure. A purely open-source corpus would make reproduction easy but would leave open whether the scoring rubric transfers to industrial code review. A purely industrial corpus would answer the partner's question but would be difficult for reviewers to inspect and rerun. We therefore use the calibration subset as a bridge: it contains tasks close to the industrial application context, while the main corpus carries the large-scale aggregate comparison.
+
+\subsection{Agent and Prompt Setup}
+\label{sec:configs}
+\label{sec:prompts}
+
+We evaluate four product-level agent configurations, shown in Table~\ref{tab:configs}. $N$ denotes the number of task--prompt runs per agent. Because each product pairs a model with a distinct agent framework, the comparison should be read as a deployed-product comparison rather than a controlled model-only ablation.
 
 \begin{table}[t]
-  \caption{Agent configurations evaluated across the full 62-task benchmark (50 LongBench main corpus + 12 calibration subset).
-    Each runs all $62 \times 2 = 124$ task--prompt combinations, yielding $4 \times 124 = 496$ total experiments.}
+  \caption{Agent configurations evaluated across the full benchmark.}
   \label{tab:configs}
   \centering
   \small
@@ -93,72 +99,59 @@ with an agent framework.
   \end{tabular}
 \end{table}
 
-\textbf{Product-level comparisons.}
-Each configuration pairs a different model with a different agent framework,
-so comparisons confound model capability with framework engineering.
-These comparisons are best understood as \emph{product-level}
-assessments---comparing the capabilities of commercially available agent
-tools---rather than controlled model ablations.
-We discuss this confound further in \S\ref{sec:threats}.
+Each task is paired with a short and a long prompt. We use \textbf{EP} for engineering proposal: a natural-language task brief that states the requested behavior without revealing the GT patch. Table~\ref{tab:prompt-template} shows the prompt fields. Neither prompt variant includes GT file paths, function names, or code snippets.
 
-%% ------------------------------------------------------------------
-\subsection{Prompt Design}\label{sec:prompts}
+\begin{table}[t]
+\caption{Prompt variants. EP = engineering proposal.}
+\label{tab:prompt-template}
+\centering
+\small
+\begin{tabularx}{\columnwidth}{@{}lYY@{}}
+\toprule
+\textbf{Field} & \textbf{Short prompt} & \textbf{Long prompt} \\
+\midrule
+Ticket summary & Included & Included \\
+Motivation / user need & Brief & Detailed \\
+Design constraints & Omitted or brief & Numbered constraints \\
+Expected behavior & 1--2 sentences & Multi-paragraph EP \\
+Affected subsystems & Not named from GT & Described at subsystem level \\
+Test expectations & Brief if present & Explicit expected tests/checks \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-Each task is paired with a \textbf{short prompt} (summary + proposal, 2--4 sentences) and a \textbf{long prompt} (adds motivation and numbered design details, 15--30 sentences). Neither variant reveals file paths, function names, or code snippets from the ground truth, so agents must independently navigate the codebase. This two-level design measures the \emph{prompt granularity effect}: the extent to which richer specification compensates for agent limitations.
+The short prompt approximates the information available in a compact ticket or issue summary. The long prompt approximates a structured engineering brief written before implementation. It can mention affected subsystems at a conceptual level, but it cannot disclose the reference patch's concrete file list. This distinction matters because the study asks whether richer requirements help agents reason about the task, not whether hints from the GT patch can steer them to the answer.
 
-%% ------------------------------------------------------------------
-\subsection{Evaluation Framework}\label{sec:eval-framework}
+\subsection{Evaluation Metrics}
+\label{sec:eval-framework}
 
-\textbf{Ground truth.}
-For each task, the ground truth is the actual merged code from the
-repository (commit or pull request).  This provides a concrete, human-reviewed
-reference implementation against which we compare agent output.
-
-\textbf{Scoring dimensions.}
-Each experiment is scored by an LLM evaluator on three dimensions, each
-on a 0--5 scale:
+Each run is scored on three 0--5 dimensions: \textbf{A} for functional correctness, \textbf{B} for completeness/coverage, and \textbf{C} for behavioral equivalence to the merged implementation. Scores 0--1 indicate a critically deficient dimension, 2--3 indicate partial evidence, and 4--5 indicate reviewable correctness or coverage. We define:
 \begin{itemize}
-  \item \textbf{Score~A (Functional Correctness)}: Does the generated
-    code correctly implement the intended functionality?
-  \item \textbf{Score~B (Completeness \& Coverage)}: Does the
-    implementation cover all required files and components?
-  \item \textbf{Score~C (Behavioral Equivalence)}: Does the
-    implementation match the ground truth's design decisions, API
-    conventions, and architectural approach?
-\end{itemize}
-
-\textbf{Verdict rules.}
-We assign a three-level verdict based on the dimension scores:
-\begin{itemize}
-  \item \textsc{se-pass} (strict-equivalence PASS): $A \geq 4$ \textbf{and} $B \geq 4$ \textbf{and} $C \geq 3$.
-  \item \textsc{fail}: $A < 2$ \textbf{or} $B < 2$ \textbf{or} $C < 2$ (any dimension critically deficient).
+  \item \textsc{se-pass} (strict-equivalence PASS): $A \geq 4$, $B \geq 4$, and $C \geq 3$.
+  \item \textsc{fail}: $A < 2$, $B < 2$, or $C < 2$.
   \item \textsc{partial}: all other cases.
 \end{itemize}
 
-We deliberately adopt a strict-equivalence criterion rather than a relaxed ``functionally correct'' criterion, because our deployment question is whether an agent draft can \emph{replace} a human-authored PR, not merely whether it contains a correct local fix. SE-PASS therefore requires not only functional correctness but also alignment with the reference implementation in file organisation, API surface, and test structure. This means our SE-PASS rate is a conservative lower bound on merge-readiness: valid alternative implementations that a reviewer might accept are counted as non-SE-PASS under this rubric.
+SE-PASS is intentionally stricter than test passing. It asks whether the agent's PR is close enough to the human-merged PR in functionality, file organization, API surface, and test structure to be considered merge-ready. This strict-equivalence rule can mark valid alternative implementations as non-SE-PASS, so the headline pass rates should be read as conservative lower bounds on merge readiness. RA-PASS, used only in the threats discussion, denotes a relaxed reviewer-acceptable verdict that would allow such alternatives.
 
-\textbf{Production-equivalence scope.}
-The rubric measures production-level equivalence to the merged implementation, not purely functional correctness. A valid alternative implementation will score lower on Behavioral Equivalence~(C); \textsc{fail} verdicts should be read as ``not production-equivalent'' rather than ``functionally impossible.''
-File coverage ($|\mathit{generated} \cap \mathit{GT}| / |\mathit{GT}|$) provides a coarse quantitative complement.
+The threshold is chosen to match reviewer risk. Functional correctness and coverage both need scores of at least 4 because a feature PR with a missing core behavior or missing subsystem integration is not review-light, even if the visible code is plausible. Behavioral equivalence uses a lower threshold of 3 because industrial reviewers may accept a different internal design when it preserves compatibility, API shape, and observable behavior. This asymmetry is why SE-PASS is stricter than a simple mean-score cutoff.
 
-\textbf{Multi-evaluator cross-validation.}
-To mitigate evaluator bias, every experiment is independently scored by
-four LLM evaluators from different model families: Claude Opus~4.6,
-Codex GPT-5.4, Cursor Composer-2, and GLM-5.1.  We report the
-\emph{majority verdict} (strict majority where possible, with a conservative
-tie-break that orders labels FAIL$<$PARTIAL$<$SE-PASS and selects the lower label
-when evaluators are split) and scores averaged across the four.  Unanimity on the
-verdict label holds for 33.7\% of experiments; pairwise verdict agreement
-ranges from 42.5\% (Codex vs GLM, the two strictest evaluators) to 74.4\%
-(Claude vs Cursor).  When the four evaluators split evenly between SE-PASS and
-non-SE-PASS (a 2--2 tie), our tie-break records the run as non-SE-PASS, which
-keeps headline SE-PASS rates conservative.
+Every run is independently scored by four LLM evaluators from different model families: Claude Opus~4.6, Codex GPT-5.4, Cursor Composer-2, and GLM-5.1. We report the majority verdict with a conservative tie-break that orders FAIL$<$PARTIAL$<$SE-PASS and chooses the lower label when evaluators split. This design addresses known single-judge instability and self-preference risks in LLM-as-judge evaluation~\cite{gu2024llmjudgesurvey,thakur2024judgingjudges,jung2024trustescalate}.
 
-\textbf{Human pilot calibration.}
-Three blinded senior reviewers scored all 96 calibration-subset runs under the same rubric. Human verdicts: 9~SE-PASS / 55~PARTIAL / 32~FAIL; LLM panel: 4~SE-PASS / 57~PARTIAL / 35~FAIL. SE-PASS-vs-non-SE-PASS agreement is 92.7\% ($\kappa{=}0.43$). The panel is strictly stricter: it demoted 6 of 9 human-SE-PASS cells and never promoted a human-FAIL. Both methods see under 10\% SE-PASS (humans 9.4\%, panel 4.2\%), confirming that the 1.0\% headline rate is a conservative lower bound. Per-rater rationales are in the artefact bundle.
+\textbf{Human calibration.}
+Three blinded senior reviewers scored all 96 calibration-subset runs under the same rubric. Human verdicts were 9~SE-PASS / 55~PARTIAL / 32~FAIL; the LLM panel produced 4~SE-PASS / 57~PARTIAL / 35~FAIL. SE-PASS-vs-non-SE-PASS agreement is 92.7\% ($\kappa{=}0.43$). The panel is stricter: it demoted 6 of 9 human-SE-PASS cells and never promoted a human-FAIL.
 
-%% ------------------------------------------------------------------
-\subsection{Experiment Execution}\label{sec:execution}
-Each (task, agent, prompt) cell runs once in a fresh sandbox built per task. The repository is rebased to the parent commit of the merged PR, with upstream remotes removed and \texttt{gh}/\texttt{git fetch} shimmed off, so the agent cannot recover ground truth from history. We discovered the importance of the second precaution after an early Codex run on K4 reached the merged patch via \texttt{git log}; we now treat anti-leakage as a benchmark requirement rather than an afterthought.
+We use the LLM panel for scale and the human subset for calibration, not as interchangeable authorities. The calibration result supports the headline conclusion because the disagreement is conservative with respect to SE-PASS: the automated panel is more likely to demote a human-accepted run than to promote a rejected one. For this reason, the reported SE-PASS rates should be read as lower-bound estimates of strict merge readiness rather than optimistic automation claims.
 
-% Experiment scale: 496 runs (62 tasks x 4 agents x 2 prompts) is described in the results section.
+\input{figures/fig_evaluation_safeguards}
+
+Figure~\ref{fig:evaluation-safeguards} summarizes the two safeguards behind the evaluation protocol. The anti-leakage controls in Figure~\ref{fig:anti-leakage} protect the benchmark from reference-patch recovery, while Figure~\ref{fig:human-calibration} shows why the LLM panel is interpreted as conservative rather than permissive.
+
+\subsection{Implementation Details}
+\label{sec:execution}
+
+Each task--agent--prompt cell runs once in a fresh sandbox at the parent commit of the target PR. Upstream remotes are removed, network access to upstream repositories is blocked, and \texttt{gh}/\texttt{git fetch} paths are shimmed to prevent the agent from recovering the GT commit. This anti-leakage protocol, summarized in Figure~\ref{fig:anti-leakage}, was added after an early run on a Kubernetes task surfaced the reference patch through repository history; all reported numbers use the fixed protocol.
+
+The artefact bundle records per-run agent version, operating-system metadata, CPU model, memory, wall-clock timing, sandbox path, and sanitization checks. The reported runs were launched from an Apple M5 Max MacBook Pro (Mac17,7; 18 CPU cores) with 128~GB memory running macOS~26.4.1 (build 25E253). Hardware is not used as an explanatory variable because the agents execute through vendor CLIs with different remote components; we therefore report it for reproducibility rather than as a controlled factor.
+
+Each run ends with the diff produced by the agent in the sandbox. We preserve the raw diff, command transcript when available, evaluator prompts, per-judge scores, majority verdict, and sanitization record. We do not manually repair agent outputs before judging. This keeps the unit of analysis aligned with the industrial workflow question: what arrives at review after a single autonomous agent attempt?

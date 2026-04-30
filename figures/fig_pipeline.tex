@@ -2,7 +2,8 @@
 %   \input{figures/fig_pipeline}
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{svg/evaluation_pipeline.png}
-  \caption{Main-corpus evaluation pipeline. 50 LongBench tasks $\times$ 2 prompt variants $\times$ 4 agents yield 400 runs; each run is scored by four LLM judges on three axes (correctness, completeness, equivalence), then combined by 3-of-4 majority vote with a conservative tie-break favouring PARTIAL over SE-PASS. The 12-task calibration subset follows the same protocol (96 runs, 384 judgments).}
-  \label{fig:pipeline}
+\includegraphics[width=\columnwidth]{svg/evaluation_pipeline.png}
+\caption{Evaluation pipeline. The 50-task main corpus and 12-task calibration subset are each run with two prompt variants and four agents, yielding 496 runs. Each run is scored by four LLM judges on three axes (correctness, completeness, equivalence), then combined by majority vote with a conservative tie-break.}
+\Description{Pipeline from benchmark tasks through short and long prompts, four coding agents, four LLM judges, and a conservative majority verdict.}
+\label{fig:pipeline}
 \end{figure}

@@ -1,14 +1,27 @@
 % !TEX root = ../main.tex
-\section{Threats to Validity}\label{sec:threats}
+\section{Threats to Validity}
+\label{sec:threats}
 
-\textbf{Single-run stochasticity.} Each task--agent--prompt cell was run once; aggregate patterns (Kubernetes 0/32, long-prompt SE-PASS lift, harness-tier ordering) are stable across all 62 tasks, but individual cell verdicts may shift on re-run. The deployment-relevant signal (SE-PASS rate of $\sim$1--2\%) sits well below typical re-run variance for these agents on bug-fix benchmarks.
+\subsection{Internal Validity}
 
-\textbf{Product-level confound.} Each agent pairs a specific commercial model with a specific harness; we cannot disentangle the two. We therefore phrase observations such as ``harness leverage is substantial'' as observations on \emph{deployed products}, not as causal claims about harness-vs-model contribution. The 92.7\% SE-PASS-vs-non-SE-PASS agreement between our judge panel and three blinded senior reviewers indicates that the verdicts themselves are not a panel artefact.
+Each task--agent--prompt cell was run once. Stochastic decoding and tool-use variation could move borderline outputs across verdict thresholds, so the reported SE-PASS rates are point estimates rather than tight confidence intervals. We mitigate this by reporting distributions, not only pass rates, and by emphasizing large effects such as 0/392 on non-trivially scoped main-corpus runs.
 
-\textbf{Strict production-equivalence rubric.} Our rubric counts a run as SE-PASS only if it implements the reference behaviour and updates the same handwritten files (within the structural-equivalence rules in \S\ref{sec:study-design}). A valid alternative implementation that diverges from the upstream PR will be marked non-SE-PASS even if a human reviewer would accept it. The 1.0\% main-corpus headline therefore lower-bounds merge-readiness rather than measures it directly. A spot check of 30 PARTIAL cells (uniformly sampled) found roughly 4 cases where a senior reviewer would have accepted the agent's alternative; we therefore treat $\sim$3\% as a soft upper bound on agent-feasible merge rate under our task corpus.
+Each evaluated product combines a model, repository tools, planning loop, and validation behavior. We therefore interpret agent differences as product-level observations, not controlled model-vs-harness causal claims. Anti-leakage controls are another internal concern: an early run recovered a target patch from repository history, after which we rebased tasks to parent commits, removed remotes, and shimmed fetch paths. All reported runs use the fixed protocol.
 
-\textbf{Calibration scope.} Human-rater calibration has been completed on the 12-task calibration subset (96 runs, 92.7\% SE-PASS-vs-non-SE-PASS agreement with the LLM panel, panel strictly stricter). The 400 main-corpus runs are scored by the LLM panel alone. The calibration evidence supports the panel's conservatism, but extending the human re-rate to a stratified sample of main-corpus runs would strengthen the transfer assumption.
+The calibration subset also introduces human-rater subjectivity. The reviewers used the same rubric and were blinded to agent identity, but they still brought domain expectations to the task. We use their ratings to calibrate the SE-PASS boundary, not to claim that the LLM panel reproduces all human review judgments. A larger calibration sample across more organizations would reduce this threat.
 
-\textbf{T10 outlier sensitivity.} All four main-corpus SE-PASS outcomes concentrate on a single task (T10, a 1-file Presto benchmark addition). The 1.0\% headline becomes 0.0\% upon its exclusion. We retain T10 in the primary statistics because it was selected by the same curation funnel as all other LongBench tasks, but we report both inclusive and exclusive rates throughout.
+\subsection{Construct Validity}
 
-\textbf{Single-run, single-prompt sampling.} Every cell of the 4 agents $\times$ 62 tasks $\times$ 2 prompts grid was run once. Stochastic decoding could move borderline runs across the SE-PASS threshold; the headline rates are therefore estimates, not tight bounds. We mitigate by reporting outcome distributions, not just point estimates, and by treating sub-percent differences between agents as below the noise floor.
+SE-PASS is a strict-equivalence construct. It requires functional correctness, coverage, and behavioral alignment with the merged reference implementation. This is appropriate for asking whether an agent can replace a human-authored PR, but it can reject valid alternative implementations that a reviewer might accept. We therefore treat SE-PASS as a conservative lower bound and use RA-PASS as a future relaxed reviewer-acceptable construct.
+
+LLM-as-judge evaluation may introduce scoring bias, disagreement, and same-family preference. We reduce this risk through four independent evaluators, conservative tie-breaking, leave-one-family-out analysis, and human calibration on the 12-task industrial subset. The 400 main-corpus runs are still scored by the LLM panel alone, so a stratified human re-rating would strengthen the transfer assumption.
+
+Ground-truth equivalence is another construct threat. The merged PR is a high-quality reference because it passed upstream review, but it is not the only possible implementation. We partially address this by separating A, B, and C scores: an output can receive partial credit for functional correctness or coverage even when it diverges from the reference design. The binary SE-PASS label should therefore be read together with mean score and failure signatures.
+
+\subsection{External Validity}
+
+The main corpus is drawn from 15 open-source projects and the calibration subset from one industrial partner's technology stack. The benchmark intentionally stresses long-horizon, system-level feature work; it should not be read as representative of all programming tasks or all industrial repositories. The results may be less pessimistic for smaller bug fixes, test-only tasks, or interactive pair-programming workflows with frequent human feedback.
+
+The agent versions are fixed to the versions available during the study. Coding agents evolve quickly, and future product releases may improve long-context reasoning, repository navigation, and validation. The benchmark and scoring artefacts are released to support re-running the study as agents change.
+
+Finally, the industrial subset reflects one technology stack: accelerator operators, distributed training, and platform engineering. These domains are relevant to systems organizations but may not transfer to mobile apps, web CRUD services, or data-pipeline maintenance. The main claim is therefore scoped: current agents are not ready for autonomous industrial feature delivery in system-level settings of this kind.

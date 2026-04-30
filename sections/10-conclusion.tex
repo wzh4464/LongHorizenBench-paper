@@ -1,14 +1,9 @@
 % !TEX root = ../main.tex
-\section{Conclusion}
+\section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-The primary outcome of this work is a four-gate deployment policy adopted in Huawei's Ascend NPU rollout: a task-class gate that routes only bounded operator-tier work to agents, a mandatory long-form specification template, a pre-review CI gate enforcing file scope and test coverage, and a 3-of-4 LLM-judge acceptance panel. Each gate is motivated by evidence from a 496-run industrial audit, and the pipeline as a whole converts agents from unreliable autonomous coders into useful \emph{gated drafters} for bounded tasks.
+This paper revisits coding-agent evaluation from the perspective of industrial, system-level feature implementation. Across 496 runs on 62 tasks, current commercial agents produce very few merge-ready PRs under a strict-equivalence rubric: the 50-task main corpus yields 4/400 SE-PASS outcomes, all on one trivially scoped single-file task, and 0/392 on the remaining non-trivial tasks. The calibration subset reinforces the task-shape conclusion: bounded tasks occasionally pass, while Kubernetes-class platform tasks do not.
 
-The audit supports the following deployment decision: on the 50-task main corpus of long-horizon feature tasks, only 1.0\% of runs reach SE-PASS (0/392 excluding one trivially scoped single-file outlier). The failure mass splits into semantic errors (44.7\%) and coverage gaps (25.5\%) that the scope/test gate directly targets. The 12-task calibration subset confirms rubric discriminant validity (bounded operator tasks pass, Kubernetes-class platform work returns 0/32). Under our protocol and on these task families, current agents are not ready for autonomous feature delivery---but the routing pipeline makes their output reviewable.
+The study also identifies what helps and what remains unsolved. Long engineering-proposal prompts improve draft quality, but do not make hard feature tasks merge-ready. Multi-evaluator judging is necessary because single LLM judges disagree substantially, and human calibration is needed to anchor the panel. Failure analysis shows that semantic errors dominate, while coverage gaps and borderline partials remain practical targets for better scope and test validation.
 
-\paragraph{Future work.}
-The audit leaves three concrete follow-ups, each addressing one of the threats catalogued in \S\ref{sec:threats}.
-(i) \emph{Reproducibility:} re-execute each SE-PASS-yielding cell $k=5$ times to convert the headline point estimate into a confidence interval.
-(ii) \emph{Construct validity:} run a randomised human re-rating on the 146 main-corpus PARTIAL outputs to quantify the gap between SE-PASS and a relaxed reviewer-acceptable verdict (RA-PASS).
-(iii) \emph{Calibration extension:} the 12-task human calibration (92.7\% agreement) anchors the current results; extending this pilot to a LongBench stratified sample would report panel-vs-human alignment across the main corpus as well.
-Each closes a known gap that limits how strongly the deployment-policy claims in \S\ref{sec:industrial-deployment} generalise outside Huawei's repositories.
+Future work should re-run key cells to estimate variance, extend human re-rating to a stratified main-corpus sample, and evaluate agent designs that directly target cross-module reasoning, test generation, and invariant preservation. Until those improvements appear in measured SE-PASS rates, coding agents are best viewed as bounded-task drafters rather than autonomous owners of industrial feature delivery.

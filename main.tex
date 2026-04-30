@@ -14,19 +14,29 @@
 
 \emergencystretch=1em
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
-\newcommand{\finding}[1]{\smallskip\noindent\textit{\textbf{Finding:} #1}\smallskip}
+\newcommand{\finding}[2]{%
+  \par\noindent
+  \fcolorbox{black!18}{black!4}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+      \small\textbf{Finding #1.} #2%
+    }%
+  }%
+  \par%
+}
 
 \acmConference[ASE '26 Industry Showcase]{41st IEEE/ACM International Conference on Automated Software Engineering}{October 2026}{Munich, Germany}
 \acmYear{2026}
 \copyrightyear{2026}
 \setcopyright{none}
+\settopmatter{printacmref=true, printccs=false}
 
 \begin{document}
 
-\title{Can Coding Agents Produce Merge-Ready Feature Pull Requests?\\
-An Industrial Audit of 62 Real Tasks}
+\title[Merge-Ready Feature PRs]{Can Coding Agents Produce Merge-Ready Feature Pull Requests?
+An Industrial Evaluation of 62 Real Tasks}
 
-\author{Zihan Wu\textsuperscript{$*$}}
+\author{Zihan Wu}
+\authornote{Equal contribution.}
 \affiliation{\institution{Department of Electrical Engineering, City University of Hong Kong}
 \city{Hong Kong}
 \country{China}}
@@ -36,11 +46,18 @@ An Industrial Audit of 62 Real Tasks}
 \city{Hong Kong}
 \country{China}}
 
-\author{Yun Peng\textsuperscript{$*$,$\dagger$}}
+\author{Yun Peng}
+\authornotemark[1]
+\authornote{Corresponding author: ypeng@cse.cuhk.edu.hk.}
+\email{ypeng@cse.cuhk.edu.hk}
 \affiliation{\institution{Department of Computer Science and Engineering, The Chinese University of Hong Kong}
 \city{Hong Kong}
 \country{China}}
-\email{ypeng@cse.cuhk.edu.hk}
+
+\author{Zeyang Zhuang}
+\affiliation{\institution{Department of Computer Science and Engineering, The Chinese University of Hong Kong}
+\city{Hong Kong}
+\country{China}}
 
 \author{Chun Yong Chong}
 \affiliation{\institution{School of Information Technology, Monash University Malaysia}
@@ -52,28 +69,22 @@ An Industrial Audit of 62 Real Tasks}
 \city{Singapore}
 \country{Singapore}}
 
-\author{Zeyang Zhuang}
-\affiliation{\institution{The Chinese University of Hong Kong}
-\city{Hong Kong}
-\country{China}}
-
 \author{Rui Shu}
 \affiliation{\institution{Independent Researcher}
 \city{Singapore}
 \country{Singapore}}
 
-\author{Kui Liu}
-\affiliation{\institution{Huawei Technologies Co., Ltd.}
-\city{Shenzhen}
-\country{China}}
-
 \author{Yuan Wang}
-\affiliation{\institution{Huawei Technologies Co., Ltd.}
-\city{Shenzhen}
+\affiliation{\institution{Software Engineering Lab, Huawei Technologies Co., Ltd.}
+\city{Hong Kong}
 \country{China}}
 
-\renewcommand{\shortauthors}{Wu, Peng, et al.}
-\thanks{\textsuperscript{$*$}Equal contribution. \textsuperscript{$\dagger$}Corresponding author: ypeng@cse.cuhk.edu.hk}
+\renewcommand{\shortauthors}{Wu et al.}
+
+\ccsdesc[500]{Software and its engineering~Software development process management}
+\ccsdesc[500]{Software and its engineering~Software testing and debugging}
+\ccsdesc[300]{Computing methodologies~Artificial intelligence}
+\keywords{coding agents, feature implementation, software engineering benchmarks, industrial evaluation, LLM-as-judge}
 
 \begin{abstract}
 \input{sections/abstract}
@@ -82,13 +93,11 @@ An Industrial Audit of 62 Real Tasks}
 \maketitle
 
 \input{sections/01-introduction}
-% \input{sections/02-industrial-context}  % merged into §1 per ASE Industry Showcase length budget
+\input{sections/02-industrial-context}
 \input{sections/03-study-design}
 \input{sections/04-results}
 \input{sections/05-root-cause}
-% \input{sections/06-harness}  % consolidated into §6b deployment guidance
 \input{sections/06b-industrial-deployment}
-\input{sections/07-related-work}
 \input{sections/08-threats}
 \input{sections/10-conclusion}
 
