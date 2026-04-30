@@ -25,27 +25,26 @@ Following the empirical-study structure of prior benchmarking work, we organize 
 RQ1 & How effective are current commercial coding agents at producing merge-ready feature PRs? \\
 RQ2 & How do task scale and system-level coordination affect agent performance? \\
 RQ3 & Does richer task specification improve merge readiness or only partial draft quality? \\
-RQ4 & How reliable is LLM-based evaluation, and what failure modes dominate non-SE-PASS outputs? \\
+RQ4 & How reliable is coverage-grounded LLM evaluation, and what failure modes dominate non-SE-PASS outputs? \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \paragraph{Benchmark and evaluation.}
-We construct a two-tier benchmark with 62 tasks. The 50-task main corpus, LongBench, contains long-horizon feature PRs from 15 production-grade open-source projects. A 12-task industrial calibration subset covers accelerator-operator, distributed-training, and platform-engineering tasks and is used to validate the scoring rubric against blinded senior reviewers. We evaluate four agents---Claude Code (Opus 4.6), OpenAI Codex (GPT-5.4), Cursor Composer-2, and OpenCode/GLM-5.1---under short and long prompt variants, producing 496 runs. Each run is scored by four independent LLM evaluators on functional correctness, completeness/coverage, and behavioral equivalence; a conservative majority rule assigns SE-PASS, PARTIAL, or FAIL.
+We construct a two-tier benchmark with 62 tasks. The 50-task main corpus, LongBench, contains long-horizon feature PRs from 15 production-grade open-source projects. A 12-task industrial calibration subset covers accelerator-operator, distributed-training, and platform-engineering tasks and is used to validate the scoring rubric against blinded senior reviewers. We evaluate four agents---Claude Code (Opus 4.6), OpenAI Codex (GPT-5.4), Cursor Composer-2, and OpenCode/GLM-5.1---under short and long prompt variants, producing 496 runs. Each run receives a deterministic handwritten ground-truth (HW/GT) coverage report, then four independent LLM evaluators score functional correctness, completeness/coverage, and behavioral equivalence using the report and the diffs; a conservative majority rule assigns SE-PASS, PARTIAL, or FAIL.
 
 \paragraph{Key findings overview.}
 \begin{itemize}
   \item \textbf{Merge-ready feature PRs are rare.} The main corpus yields 4/400 SE-PASS outcomes (1.0\%), all on one trivially scoped single-file task. Excluding that task, the rate is 0/392.
   \item \textbf{Task shape dominates product choice.} On the main corpus all four agents tie at 1.0\% SE-PASS. The 12-task calibration subset shows bounded tasks occasionally pass, while Kubernetes-class platform tasks return 0/32 SE-PASS.
   \item \textbf{Long prompts improve drafts, not hard-task pass rates.} Detailed prompts raise mean scores by +0.99 to +2.12 on the main corpus, but produce no SE-PASS on non-trivial long-horizon tasks.
-  \item \textbf{Evaluation requires calibration.} Pairwise LLM-judge agreement ranges from 42.5\% to 74.4\%, but the four-judge panel reaches 92.7\% SE-PASS-vs-non-SE-PASS agreement with blinded senior reviewers on the calibration subset.
+  \item \textbf{Evaluation requires calibration.} Deterministic HW/GT coverage reports ground the completeness score, while pairwise LLM-judge agreement still ranges from 42.5\% to 74.4\%; the four-judge panel reaches 92.7\% SE-PASS-vs-non-SE-PASS agreement with blinded senior reviewers on the calibration subset.
 \end{itemize}
 
 \paragraph{Contributions.}
-This paper makes four contributions:
+This paper makes three contributions:
 \begin{enumerate}\itemsep0pt
-  \item A two-tier benchmark for industrial, system-level feature implementation, combining a reproducible 50-task main corpus with a 12-task human-calibrated industrial subset.
-  \item A 496-run empirical evaluation of four commercial coding agents under short and long task specifications.
-  \item A calibrated evaluation protocol based on three 0--5 scoring dimensions, four LLM judges, conservative tie-breaking, anti-leakage controls, and blinded human review.
-  \item Practical implications for industrial use: current agents should be treated as bounded-task drafters, not autonomous feature owners, and require structured specifications, scope/test checks, and multi-evaluator review.
+  \item A two-tier benchmark and 496-run empirical evaluation for industrial, system-level feature implementation, combining a reproducible 50-task main corpus with a 12-task human-calibrated industrial subset.
+  \item A hybrid evaluation protocol that combines deterministic HW/GT coverage reports, three 0--5 scoring dimensions, four LLM judges, conservative tie-breaking, anti-leakage controls, and blinded human review.
+  \item Empirical findings and industrial implications showing that current agents should be treated as bounded-task drafters, not autonomous feature owners, and require structured specifications, scope/test checks, and calibrated multi-evaluator review.
 \end{enumerate}

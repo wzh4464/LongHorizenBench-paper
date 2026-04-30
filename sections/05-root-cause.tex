@@ -33,10 +33,10 @@ This result should not be read as proving that the short prompt lacked all neces
 
 \finding{3}{Long prompts improve drafts, but do not resolve whether failures come from missing task information or failed long-context operationalization. They raise mean scores for every agent, yet produce no merge-ready output on the 49 non-trivially scoped main-corpus tasks.}
 
-\subsection{Reliability of LLM-Based Evaluation (RQ4)}
+\subsection{Reliability of Coverage-Grounded LLM Evaluation (RQ4)}
 \label{sec:results-agreement}
 
-Pairwise verdict agreement among the four LLM evaluators ranges from 42.5\% (Codex--GLM) to 74.4\% (Claude--Cursor); full four-way consensus holds for 33.7\% of runs. Because single-judge disagreement is substantial, all headline verdicts use the four-judge majority rule described in \S\ref{sec:eval-framework}.
+Pairwise verdict agreement among the four LLM evaluators ranges from 42.5\% (Codex--GLM) to 74.4\% (Claude--Cursor); full four-way consensus holds for 33.7\% of runs. Because single-judge disagreement remains substantial even when all judges receive the same HW/GT coverage report, all headline verdicts use the four-judge majority rule described in \S\ref{sec:eval-framework}.
 
 \par\noindent\fbox{\parbox{0.96\columnwidth}{\small%
 \textbf{Human calibration summary.}
@@ -46,7 +46,33 @@ The LLM panel is stricter: it never promotes a human-rejected run to SE-PASS and
 
 We also test same-family bias by recomputing each agent's headline verdict after removing the judge from the same model family. SE-PASS counts are unchanged for Claude (3$\to$3), Codex (3$\to$3), and Cursor (1$\to$1); OpenCode drops from 1 to 0. Only 6.9\% of verdict cells change under leave-one-family-out, and Codex's own judge is the strictest evaluator of Codex output. These checks do not remove all LLM-as-judge threats, but they indicate that the 1.0\% main-corpus SE-PASS rate is not caused by same-family judge leniency.
 
-\finding{4}{A single LLM judge is too unstable for open-ended feature-PR evaluation, but a conservative multi-judge panel calibrated against human reviewers gives a reproducible lower-bound estimate of merge readiness.}
+\finding{4}{Deterministic HW/GT coverage reports ground completeness scoring, but a single LLM judge is still too unstable for open-ended feature-PR evaluation; a conservative multi-judge panel calibrated against human reviewers gives a reproducible lower-bound estimate of merge readiness.}
+
+\begin{table*}[t]
+\caption{Coverage and judging sub-scores. HW and GT are deterministic file-coverage rates; function coverage is computed over GT function contexts when present ($n{=}483$). A/B/C are four-judge mean scores on the 0--5 rubric.}
+\label{tab:coverage-subscores}
+\centering
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
+\toprule
+\textbf{Group} & $N$ & \textbf{HW file} & \textbf{GT file} & \textbf{Func.} & \textbf{A} & \textbf{B} & \textbf{C} \\
+\midrule
+All runs & 496 & 32.9\% & 29.7\% & 34.6\% & 1.96 & 1.61 & 1.56 \\
+\midrule
+Claude   & 124 & 37.5\% & 34.5\% & 38.4\% & 2.13 & 1.82 & 1.73 \\
+Codex    & 124 & 36.9\% & 32.7\% & 37.8\% & 2.26 & 1.77 & 1.79 \\
+Cursor   & 124 & 29.9\% & 27.3\% & 32.1\% & 1.91 & 1.48 & 1.50 \\
+OpenCode & 124 & 27.3\% & 24.5\% & 30.2\% & 1.56 & 1.35 & 1.25 \\
+\midrule
+Short prompt & 248 & 25.6\% & 22.8\% & 29.7\% & 1.78 & 1.35 & 1.37 \\
+Long prompt  & 248 & 40.2\% & 36.7\% & 39.6\% & 2.14 & 1.86 & 1.76 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+Table~\ref{tab:coverage-subscores} separates the deterministic coverage evidence from the LLM judgment dimensions. The average run covers only 32.9\% of HW files and 29.7\% of all GT files; the median HW and GT coverage rates are 27.3\% and 24.2\%, respectively. Only 5.4\% of runs cover all HW files, and 9.9\% cover no HW or GT files at all. Long prompts nearly double HW coverage relative to short prompts (40.2\% vs. 25.6\%), but the corresponding A/B/C scores remain below the SE-PASS threshold, which explains why prompt detail improves draft quality without producing autonomous merge-ready PRs.
+
+The sub-scores also clarify why file coverage is necessary but insufficient. Claude and Codex cover more HW/GT scope and receive higher A/B/C scores than Cursor and OpenCode, matching the headline draft-quality ranking. However, the family-level pattern is not reducible to file hits: Kubernetes runs cover 51.8\% of HW files on average but only 33.5\% of GT files and still produce 0/32 SE-PASS, because generated/API surfaces, validation paths, and tests remain incomplete or behaviorally divergent. Conversely, bounded C-family tasks reach 60.9\% HW and 59.4\% GT coverage and account for most calibration passes. We therefore treat coverage as a grounding signal for completeness, while keeping functional correctness and behavioral equivalence as separate judging dimensions.
 
 \subsection{Failure Signatures (RQ4)}
 \label{sec:failure-modes}

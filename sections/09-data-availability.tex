@@ -1,1 +1,8 @@
-The replication package will be archived with a DOI and will include task metadata, prompts, generated diffs, evaluator scores, human-calibration records, sanitization checks, and scripts for recomputing all aggregate tables, with proprietary industrial code replaced by sanitized metadata and reviewer-accessible evaluation records.
+The replication package will be archived with a DOI and will include:
+\begin{enumerate}
+  \item \textbf{Task registry.} For each of the 62 tasks: the parent-commit SHA, the ground-truth commit SHA, the upstream PR URL, and the repository name. This allows independent checkout and reproduction without redistributing source code.
+  \item \textbf{Prompts.} Both short and long prompt variants for every task.
+  \item \textbf{Scoring rubric.} The full three-dimensional rubric (A/B/C, 0--5) with SE-PASS/PARTIAL/FAIL thresholds, the deterministic HW/GT coverage computation, and the four-evaluator majority-voting protocol.
+  \item \textbf{Evaluation data.} Per-run evaluator scores, majority verdicts, and the canonical evaluation CSV covering all 496 runs.
+  \item \textbf{Evaluation scripts.} Batch runners, deterministic coverage reporters, aggregate-table generators, and anti-leakage audit utilities.
+\end{enumerate}

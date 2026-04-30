@@ -20,8 +20,8 @@ Table~\ref{tab:failure-signatures} shows that 25.5\% of main-corpus failures are
 
 A practical pre-review gate should therefore ask for evidence, not confidence. Examples include a discovered-file plan, an explanation of touched subsystems, a list of tests added or intentionally omitted, and project-specific syntax or type checks. These gates are inexpensive compared with senior review time and directly target the recoverable failure mass identified in \S\ref{sec:addressable-failures}.
 
-\paragraph{Implication 4: Use calibrated multi-evaluator review.}
-Pairwise LLM-judge agreement is too low for single-judge evaluation, and same-family/self-preference bias remains a credible threat in any LLM-as-judge setup~\cite{wataoka2024selfpreference}. A practical evaluation workflow should use multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
+\paragraph{Implication 4: Use coverage-grounded, calibrated multi-evaluator review.}
+HW/GT coverage reports make missing scope visible, but pairwise LLM-judge agreement is still too low for single-judge evaluation, and same-family/self-preference bias remains a credible threat in any LLM-as-judge setup~\cite{wataoka2024selfpreference}. A practical evaluation workflow should use deterministic coverage evidence, multiple evaluator families, conservative tie-breaking, and periodic human calibration on a representative subset of tasks.
 
 This does not imply that LLM judges can replace code review. The safer interpretation is that calibrated judges can triage agent outputs before they reach reviewers, flagging obvious failures and producing structured rationales. Human review remains necessary for accepted candidates, especially when the implementation is an alternative design rather than a close match to a known reference.
 
