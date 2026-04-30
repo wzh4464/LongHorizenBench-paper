@@ -53,26 +53,30 @@ The gap between mean score and SE-PASS is important. Claude and Codex produce mo
 
 The single passing main-corpus task also acts as a protocol sanity check. T10 is not an industrial-scale feature; it is a single-file benchmark addition. The fact that all agents pass it under the long prompt shows that the evaluation is not mechanically impossible. The failure is concentrated in the intended target regime: tasks requiring sustained cross-file reasoning and closure.
 
-\begin{table*}[t]
-\caption{Result diagnostics in tabular form. Panel A reports SE-PASS rate by task family and agent. Panel B reports the number of runs in each per-dimension mean-score bucket across all 496 runs.}
-\label{tab:result-diagnostics}
+\begin{table}[t]
+\caption{SE-PASS rate by task family and agent.}
+\label{tab:result-diagnostics-family}
 \centering
-\small
-\textbf{Panel A: SE-PASS rate by task family and agent}\\[-0.2em]
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrr@{}}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrrr@{}}
 \toprule
 \textbf{Family} & \textbf{Claude} & \textbf{Codex} & \textbf{Cursor} & \textbf{OpenCode} & \textbf{Overall} \\
 \midrule
-C (CANN/\texttt{torch\_npu}) & 10.0\% & 20.0\% & 0.0\% & 0.0\% & 7.5\% \\
-M (MindSpeed)                & 16.7\% & 0.0\%  & 0.0\% & 0.0\% & 4.2\% \\
-K (Kubernetes)               & 0.0\%  & 0.0\%  & 0.0\% & 0.0\% & 0.0\% \\
-T (LongBench main corpus)    & 1.0\%  & 1.0\%  & 1.0\% & 1.0\% & 1.0\% \\
+CANN/\texttt{torch\_npu} & 10.0\% & 20.0\% & 0.0\% & 0.0\% & 7.5\% \\
+MindSpeed                & 16.7\% & 0.0\%  & 0.0\% & 0.0\% & 4.2\% \\
+Kubernetes               & 0.0\%  & 0.0\%  & 0.0\% & 0.0\% & 0.0\% \\
+LongBench                & 1.0\%  & 1.0\%  & 1.0\% & 1.0\% & 1.0\% \\
 \bottomrule
 \end{tabular*}
-\vspace{0.6em}
+\end{table}
 
-\textbf{Panel B: Per-run mean-score buckets by agent}\\[-0.2em]
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrr@{}}
+\begin{table}[t]
+\caption{Per-run mean-score buckets by agent across all 496 runs.}
+\label{tab:result-diagnostics-score}
+\centering
+\small
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrrrrr@{}}
 \toprule
 \textbf{Agent} & \textbf{[0, 1)} & \textbf{[1, 2)} & \textbf{[2, 3)} & \textbf{[3, 4)} & \textbf{[4, 5]} \\
 \midrule
@@ -82,9 +86,9 @@ Cursor   & 25 & 52 & 42 & 5 & 0 \\
 OpenCode & 30 & 74 & 18 & 1 & 1 \\
 \bottomrule
 \end{tabular*}
-\end{table*}
+\end{table}
 
-Table~\ref{tab:result-diagnostics} provides two diagnostics for interpreting Tables~\ref{tab:main-agent} and~\ref{tab:config-pass}. Panel A shows that pass rates are shaped more by task family than by product choice: SE-PASS outcomes concentrate in bounded CANN/MindSpeed tasks and the single LongBench outlier, while Kubernetes remains at 0\%. Panel B shows that most runs occupy the low-to-mid score buckets, explaining why mean-score gains often indicate better drafts rather than merge-ready PRs.
+Tables~\ref{tab:result-diagnostics-family} and~\ref{tab:result-diagnostics-score} provide two diagnostics for interpreting Tables~\ref{tab:main-agent} and~\ref{tab:config-pass}. The family-level table shows that pass rates are shaped more by task family than by product choice: SE-PASS outcomes concentrate in bounded CANN/MindSpeed tasks and the single LongBench outlier, while Kubernetes remains at 0\%. The score-bucket table shows that most runs occupy the low-to-mid score buckets, explaining why mean-score gains often indicate better drafts rather than merge-ready PRs.
 
 \finding{1}{Current commercial coding agents rarely produce merge-ready feature PRs under a strict-equivalence criterion. The main corpus yields 4/400 SE-PASS outcomes (1.0\%), and all four disappear when the trivially scoped T10 task is excluded.}
 
